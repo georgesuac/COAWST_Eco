@@ -100,6 +100,13 @@ else
 ##                   -fconvert=big-endian
 endif
 
+# Save compiler flags without the MCT or ESMF libraries additions
+# to keep the string (MY_FFLAGS) in "mod_strings.o" short. Otherwise,
+# it will exceed the maximum number of characters allowed for
+# free-format compilation.
+
+        MY_FFLAGS := $(FFLAGS)
+
 ifdef USE_MPI
            FFLAGS += -I/usr/include
 endif
