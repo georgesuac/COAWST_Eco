@@ -30,8 +30,8 @@
 # First the defaults
 #
                FC := gfortran
-#           FFLAGS := -frepack-arrays
-           FFLAGS := -frepack-arrays -w -fallow-argument-mismatch -mcmodel=large
+           FFLAGS := -frepack-arrays -w -fallow-argument-mismatch -mcmodel=large -ffree-line-length-none
+#           FFLAGS := -w -fallow-argument-mismatch
               CPP := /usr/bin/cpp
          CPPFLAGS := -P -traditional
                CC := gcc
