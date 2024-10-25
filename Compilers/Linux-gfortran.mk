@@ -96,7 +96,7 @@ ifdef USE_DEBUG
 else
            FFLAGS += -O3
 #           I do not use -ffast-math it does not maintain enough accuracy!
-           FFLAGS += -ftree-vectorize -ftree-loop-linear -funroll-loops -w -ffree-form -ffree-line-length-none -frecord-marker=4 -fconvert=big-endian
+#           FFLAGS += -ftree-vectorize -ftree-loop-linear -funroll-loops -w -ffree-form -ffree-line-length-none -frecord-marker=4 -fconvert=big-endian
 ##                   -fconvert=big-endian
 endif
 
