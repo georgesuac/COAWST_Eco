@@ -341,6 +341,9 @@
           real(r8), pointer :: p_sand(:,:)
 # endif
 #endif
+#ifdef AQUACULTURE
+          real(r8), pointer :: aquac(:,:,:)
+#endif
 !!!<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<TN:Add
         END TYPE T_GRID
 
@@ -574,6 +577,10 @@
       allocate ( GRID(ng) % p_sand(LBi:UBi,LBj:UBj) )
 # endif
 #endif
+#ifdef AQUACULTURE
+      allocate ( GRID(ng) % aquac(5,LBi:UBi,LBj:UBj) )
+#endif
+
 !!!<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<TN:Add
 
       RETURN
@@ -811,6 +818,9 @@
 # ifdef SEDIMENT_ECOSYS
             GRID(ng) % p_sand(i,j) = IniVal
 # endif
+#endif
+#ifdef AQUACULTURE
+            GRID(ng) % aquac(:,i,j) = IniVal
 #endif
 !!!<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<TN:Add
           END DO
