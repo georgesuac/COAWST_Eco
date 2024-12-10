@@ -57,6 +57,12 @@
       integer :: varid_dragW
 #endif
       integer :: Vsize(4)
+!!!>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>TN:Add
+#ifdef AQUACULTURE
+      character (len=256) :: varnum
+      character (len=256) :: aqvarname(5) 
+#endif
+!!!<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<TN:Add
 
       real(r8), parameter :: Fscl = 1.0_r8
 
@@ -299,6 +305,18 @@
       END IF
 #  endif
 # endif
+# ifdef AQUACULTURE
+      DO i=1,5  !!!!<- Need update
+        write(varnum,'(I2.2)') i
+        aqvarname(i) = 'aquaculture_'//varnum
+        IF (.not.find_string(var_name,n_var, trim( aqvarname(i) ), vindex)) THEN
+          IF (Master) WRITE (stdout,10) trim( aqvarname(i) ), TRIM(ncname)
+          exit_flag=2
+          RETURN
+        END IF
+      END DO
+# endif
+
 !!!<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<TN:Add
 !
 !  Read in logical switch for spherical grid configuration.
@@ -1835,6 +1853,11 @@
               exit_flag=2
               ioerror=status
               EXIT
+            ELSE
+              IF (Master) THEN
+                WRITE (stdout,30) 'sgd_src',                            &
+     &                            ng, TRIM(ncname), Fmin, Fmax
+              END IF
             END IF
             IF (EWperiodic(ng).or.NSperiodic(ng)) THEN
               CALL exchange_r2d_tile (ng, tile,                         &
@@ -1869,6 +1892,11 @@
               exit_flag=2
               ioerror=status
               EXIT
+            ELSE
+              IF (Master) THEN
+                WRITE (stdout,30) 'Coral coverage: p_coral',            &
+     &                            ng, TRIM(ncname), Fmin, Fmax
+              END IF
             END IF
             IF (EWperiodic(ng).or.NSperiodic(ng)) THEN
               CALL exchange_r2d_tile (ng, tile,                         &
@@ -1900,6 +1928,11 @@
               exit_flag=2
               ioerror=status
               EXIT
+            ELSE
+              IF (Master) THEN
+                WRITE (stdout,30) 'Coral coverage: p_coral2',           &
+     &                            ng, TRIM(ncname), Fmin, Fmax
+              END IF
             END IF
             IF (EWperiodic(ng).or.NSperiodic(ng)) THEN
               CALL exchange_r2d_tile (ng, tile,                         &
@@ -1933,6 +1966,11 @@
               exit_flag=2
               ioerror=status
               EXIT
+            ELSE
+              IF (Master) THEN
+                WRITE (stdout,30) 'Seagrass coverage: p_seagrass',      &
+     &                            ng, TRIM(ncname), Fmin, Fmax
+              END IF
             END IF
             IF (EWperiodic(ng).or.NSperiodic(ng)) THEN
               CALL exchange_r2d_tile (ng, tile,                         &
@@ -1964,6 +2002,11 @@
 !               exit_flag=2
 !               ioerror=status
 !               EXIT
+!             ELSE
+!               IF (Master) THEN
+!                 WRITE (stdout,30) 'Seagrass coverage: p_seagrass2',     &
+!      &                            ng, TRIM(ncname), Fmin, Fmax
+!               END IF
 !             END IF
 !             IF (EWperiodic(ng).or.NSperiodic(ng)) THEN
 !               CALL exchange_r2d_tile (ng, tile,                         &
@@ -1997,6 +2040,11 @@
               exit_flag=2
               ioerror=status
               EXIT
+            ELSE
+              IF (Master) THEN
+                WRITE (stdout,30) 'Macroalgae coverage: p_algae',       &
+     &                            ng, TRIM(ncname), Fmin, Fmax
+              END IF
             END IF
             IF (EWperiodic(ng).or.NSperiodic(ng)) THEN
               CALL exchange_r2d_tile (ng, tile,                         &
@@ -2030,6 +2078,11 @@
               exit_flag=2
               ioerror=status
               EXIT
+            ELSE
+              IF (Master) THEN
+                WRITE (stdout,30) 'Sand coverage: p_sand',              &
+     &                            ng, TRIM(ncname), Fmin, Fmax
+              END IF
             END IF
             IF (EWperiodic(ng).or.NSperiodic(ng)) THEN
               CALL exchange_r2d_tile (ng, tile,                         &
@@ -2045,6 +2098,189 @@
 #   endif
 #  endif
 # endif
+# ifdef AQUACULTURE
+!
+!  Read in aquaculture_01 parameter.
+!
+          CASE ('aquaculture_01')
+            gtype=r2dvar
+            status=nf_fread2d(ng, model, ncname, GRD(ng)%ncid,          &
+     &                        var_name(i), var_id(i),                   &
+     &                        0, gtype, Vsize,                          &
+     &                        LBi, UBi, LBj, UBj,                       &
+     &                        Fscl, Fmin, Fmax,                         &
+#  ifdef MASKING
+     &                        GRID(ng) % rmask,                         &
+#  endif
+     &                        GRID(ng) % aquac(1,:,:))
+            IF (status.ne.nf90_noerr) THEN
+              exit_flag=2
+              ioerror=status
+              EXIT
+            ELSE
+              IF (Master) THEN
+                WRITE (stdout,30) 'aquaculture_01',                     &
+     &                            ng, TRIM(ncname), Fmin, Fmax
+              END IF
+            END IF
+            IF (EWperiodic(ng).or.NSperiodic(ng)) THEN
+              CALL exchange_r2d_tile (ng, tile,                         &
+     &                                LBi, UBi, LBj, UBj,               &
+     &                                GRID(ng) % aquac(1,:,:))
+            END IF
+#  ifdef DISTRIBUTE
+            CALL mp_exchange2d (ng, tile, model, 1,                     &
+     &                          LBi, UBi, LBj, UBj,                     &
+     &                          NghostPoints,                           &
+     &                          EWperiodic(ng), NSperiodic(ng),         &
+     &                          GRID(ng) % aquac(1,:,:))
+#  endif
+!
+!  Read in aquaculture_02 parameter.
+!
+          CASE ('aquaculture_02')
+            gtype=r2dvar
+            status=nf_fread2d(ng, model, ncname, GRD(ng)%ncid,          &
+     &                        var_name(i), var_id(i),                   &
+     &                        0, gtype, Vsize,                          &
+     &                        LBi, UBi, LBj, UBj,                       &
+     &                        Fscl, Fmin, Fmax,                         &
+#  ifdef MASKING
+     &                        GRID(ng) % rmask,                         &
+#  endif
+     &                        GRID(ng) % aquac(2,:,:))
+            IF (status.ne.nf90_noerr) THEN
+              exit_flag=2
+              ioerror=status
+              EXIT
+            ELSE
+              IF (Master) THEN
+                WRITE (stdout,30) 'aquaculture_02',                     &
+     &                            ng, TRIM(ncname), Fmin, Fmax
+              END IF
+            END IF
+            IF (EWperiodic(ng).or.NSperiodic(ng)) THEN
+              CALL exchange_r2d_tile (ng, tile,                         &
+     &                                LBi, UBi, LBj, UBj,               &
+     &                                GRID(ng) % aquac(2,:,:))
+            END IF
+#  ifdef DISTRIBUTE
+            CALL mp_exchange2d (ng, tile, model, 1,                     &
+     &                          LBi, UBi, LBj, UBj,                     &
+     &                          NghostPoints,                           &
+     &                          EWperiodic(ng), NSperiodic(ng),         &
+     &                          GRID(ng) % aquac(2,:,:))
+#  endif
+!
+!  Read in aquaculture_03 parameter.
+!
+          CASE ('aquaculture_03')
+            gtype=r2dvar
+            status=nf_fread2d(ng, model, ncname, GRD(ng)%ncid,          &
+     &                        var_name(i), var_id(i),                   &
+     &                        0, gtype, Vsize,                          &
+     &                        LBi, UBi, LBj, UBj,                       &
+     &                        Fscl, Fmin, Fmax,                         &
+#  ifdef MASKING
+     &                        GRID(ng) % rmask,                         &
+#  endif
+     &                        GRID(ng) % aquac(3,:,:))
+            IF (status.ne.nf90_noerr) THEN
+              exit_flag=2
+              ioerror=status
+              EXIT
+            ELSE
+              IF (Master) THEN
+                WRITE (stdout,30) 'aquaculture_03',                     &
+     &                            ng, TRIM(ncname), Fmin, Fmax
+              END IF
+            END IF
+            IF (EWperiodic(ng).or.NSperiodic(ng)) THEN
+              CALL exchange_r2d_tile (ng, tile,                         &
+     &                                LBi, UBi, LBj, UBj,               &
+     &                                GRID(ng) % aquac(3,:,:))
+            END IF
+#  ifdef DISTRIBUTE
+            CALL mp_exchange2d (ng, tile, model, 1,                     &
+     &                          LBi, UBi, LBj, UBj,                     &
+     &                          NghostPoints,                           &
+     &                          EWperiodic(ng), NSperiodic(ng),         &
+     &                          GRID(ng) % aquac(3,:,:))
+#  endif
+!
+!  Read in aquaculture_04 parameter.
+!
+          CASE ('aquaculture_04')
+            gtype=r2dvar
+            status=nf_fread2d(ng, model, ncname, GRD(ng)%ncid,          &
+     &                        var_name(i), var_id(i),                   &
+     &                        0, gtype, Vsize,                          &
+     &                        LBi, UBi, LBj, UBj,                       &
+     &                        Fscl, Fmin, Fmax,                         &
+#  ifdef MASKING
+     &                        GRID(ng) % rmask,                         &
+#  endif
+     &                        GRID(ng) % aquac(4,:,:))
+            IF (status.ne.nf90_noerr) THEN
+              exit_flag=2
+              ioerror=status
+              EXIT
+            ELSE
+              IF (Master) THEN
+                WRITE (stdout,30) 'aquaculture_04',                     &
+     &                            ng, TRIM(ncname), Fmin, Fmax
+              END IF
+            END IF
+            IF (EWperiodic(ng).or.NSperiodic(ng)) THEN
+              CALL exchange_r2d_tile (ng, tile,                         &
+     &                                LBi, UBi, LBj, UBj,               &
+     &                                GRID(ng) % aquac(4,:,:))
+            END IF
+#  ifdef DISTRIBUTE
+            CALL mp_exchange2d (ng, tile, model, 1,                     &
+     &                          LBi, UBi, LBj, UBj,                     &
+     &                          NghostPoints,                           &
+     &                          EWperiodic(ng), NSperiodic(ng),         &
+     &                          GRID(ng) % aquac(4,:,:))
+#  endif
+!
+!  Read in aquaculture_05 parameter.
+!
+          CASE ('aquaculture_05')
+            gtype=r2dvar
+            status=nf_fread2d(ng, model, ncname, GRD(ng)%ncid,          &
+     &                        var_name(i), var_id(i),                   &
+     &                        0, gtype, Vsize,                          &
+     &                        LBi, UBi, LBj, UBj,                       &
+     &                        Fscl, Fmin, Fmax,                         &
+#  ifdef MASKING
+     &                        GRID(ng) % rmask,                         &
+#  endif
+     &                        GRID(ng) % aquac(5,:,:))
+            IF (status.ne.nf90_noerr) THEN
+              exit_flag=2
+              ioerror=status
+              EXIT
+            ELSE
+              IF (Master) THEN
+                WRITE (stdout,30) 'aquaculture_05',                     &
+     &                            ng, TRIM(ncname), Fmin, Fmax
+              END IF
+            END IF
+            IF (EWperiodic(ng).or.NSperiodic(ng)) THEN
+              CALL exchange_r2d_tile (ng, tile,                         &
+     &                                LBi, UBi, LBj, UBj,               &
+     &                                GRID(ng) % aquac(5,:,:))
+            END IF
+#  ifdef DISTRIBUTE
+            CALL mp_exchange2d (ng, tile, model, 1,                     &
+     &                          LBi, UBi, LBj, UBj,                     &
+     &                          NghostPoints,                           &
+     &                          EWperiodic(ng), NSperiodic(ng),         &
+     &                          GRID(ng) % aquac(5,:,:))
+#  endif
+# endif
+
 !!!<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<TN:Add
         END SELECT
       END DO

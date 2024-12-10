@@ -9254,6 +9254,15 @@
   'r2dvar'
   1.0d0
 
+'aquaculture_'                                          ! Input
+  'density of aquaculture unit'
+  'unit grid-1'                                          ! [unit grid-1]
+  'density, scalar, series'
+  'ocean_time'
+  'idAqua(iAQUA(i))'
+  'r2dvar'
+  1.0d0
+
 !-----------------------------------------------------------------
 
 'TIC'                                              ! Input/Output
