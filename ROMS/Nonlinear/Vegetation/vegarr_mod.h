@@ -61,8 +61,10 @@
         real(r8), pointer :: ru_loc_veg(:,:,:,:)
         real(r8), pointer :: rv_loc_veg(:,:,:,:)
 !!!>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>MY:Add
+# if defined MANGROVE_DRAG
         real(r8), pointer :: ru_loc_veg_root(:,:,:,:)  ! For mangrove roots
         real(r8), pointer :: rv_loc_veg_root(:,:,:,:)  ! For mangrove roots
+# endif
 !!!<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<MY:Add
         real(r8), pointer :: step2d_uveg(:,:)
         real(r8), pointer :: step2d_vveg(:,:)
@@ -131,8 +133,10 @@
       allocate ( VEG(ng) % ru_loc_veg(LBi:UBi,LBj:UBj,N(ng),NVEG) )
       allocate ( VEG(ng) % rv_loc_veg(LBi:UBi,LBj:UBj,N(ng),NVEG) )
 !!!>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>MY:Add
+# if defined MANGROVE_DRAG
       allocate ( VEG(ng) % ru_loc_veg_root(LBi:UBi,LBj:UBj,N(ng),NVEG) )
       allocate ( VEG(ng) % rv_loc_veg_root(LBi:UBi,LBj:UBj,N(ng),NVEG) )
+# endif
 !!!<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<MY:Add
       allocate ( VEG(ng) % step2d_uveg(LBi:UBi,LBj:UBj) )
       allocate ( VEG(ng) % step2d_vveg(LBi:UBi,LBj:UBj) )
@@ -145,8 +149,14 @@
       allocate ( VEG(ng) % visc3d_r_veg(LBi:UBi,LBj:UBj,N(ng)) )
 # endif
 # ifdef VEG_TURB
-      allocate ( VEG(ng) % tke_veg(LBi:UBi,LBj:UBj,N(ng)) )
-      allocate ( VEG(ng) % gls_veg(LBi:UBi,LBj:UBj,N(ng)) )
+!!!>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>MY:Rm
+!      allocate ( VEG(ng) % tke_veg(LBi:UBi,LBj:UBj,N(ng)) )
+!      allocate ( VEG(ng) % gls_veg(LBi:UBi,LBj:UBj,N(ng)) )
+!!!<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<MY:Rm
+!!!>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>MY:Add
+      allocate ( VEG(ng) % tke_veg(LBi:UBi,LBj:UBj,0:N(ng)) )
+      allocate ( VEG(ng) % gls_veg(LBi:UBi,LBj:UBj,0:N(ng)) )
+!!!<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<MY:Add
 # endif
 # if defined VEG_SWAN_COUPLING && defined VEG_STREAMING
       allocate ( VEG(ng) % dissip_veg(LBi:UBi,LBj:UBj) )
@@ -265,8 +275,10 @@
                 VEG(ng) % ru_loc_veg(i,j,k,iveg) = IniVal
                 VEG(ng) % rv_loc_veg(i,j,k,iveg) = IniVal
 !!!>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>MY:Add
+# if defined MANGROVE_DRAG
                 VEG(ng) % ru_loc_veg_root(i,j,k,iveg) = IniVal
                 VEG(ng) % rv_loc_veg_root(i,j,k,iveg) = IniVal
+# endif
 !!!<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<MY:Add
               END DO
             END DO

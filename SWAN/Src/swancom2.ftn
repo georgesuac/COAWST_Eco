@@ -2038,6 +2038,7 @@
      &           PWCAP(10) * (KWAVE(:,1) / KM_WAM)**N1) *
      &           (STP_OV / STP_PM)**N2
 !
+        C_BJ = 0. !!!<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< TN: added for bugfix
       ENDIF
 !
       IF ((IWCAP.EQ.4).OR.

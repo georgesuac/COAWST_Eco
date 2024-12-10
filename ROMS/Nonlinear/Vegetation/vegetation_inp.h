@@ -86,6 +86,7 @@
                 END DO
               END DO
 !!!>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>MY:Add
+#if defined MANGROVE_DRAG
             CASE ('SPE_MANGR')
               IF (.not.allocated(SPE_MANGR))                         &
     &                 allocate(SPE_MANGR(NVEG,Ngrids))
@@ -109,6 +110,7 @@
               Npts=load_r(Nval, Rval, Ngrids, FAI_ROOT)
             CASE ('THETA_ROOT')
               Npts=load_r(Nval, Rval, Ngrids, THETA_ROOT)
+#endif
 !!!<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<MY:Add
 !
 !-----------------------------------------------------------------------

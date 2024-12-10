@@ -329,7 +329,7 @@
 !  Hold this constant for now.  Need to add logic for 
 !  zo if no bbl on, or zo_apparent if use a bbl.
          cff3=MIN(1.39_r8*(sigma(i,j)*(ks/30.0_r8)/                     &
-     &               cff)**0.52_r8,0.2_r8)
+     &               (cff+eps))**0.52_r8,0.2_r8)  !!!<<<<<<<<<<<<<<<<<<<<< TN: mod ( cff -> (cff+eps) )
 !
 !  Wave dissipation rate due to wave bottom drag Reniers et al. (2004b)
 !

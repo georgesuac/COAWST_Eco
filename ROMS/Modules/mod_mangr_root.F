@@ -20,7 +20,7 @@
 ************************************************************************
 */
 
-#if defined VEGETATION
+#if defined VEGETATION && defined MANGROVE_DRAG
 # include <mangr_root_mod.h>
 #endif
 

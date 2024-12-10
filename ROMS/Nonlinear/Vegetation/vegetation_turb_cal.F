@@ -35,7 +35,9 @@
       PRIVATE
       PUBLIC  :: vegetation_turb_cal
 !!!>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>MY:Add
+# if defined MANGROVE_DRAG
       PRIVATE :: mangr_get_dens
+# endif
 !!!<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<MY:Add
 
       CONTAINS
@@ -72,8 +74,10 @@
      &                        VEG(ng) % ru_loc_veg,                     &
      &                        VEG(ng) % rv_loc_veg,                     &
 !!!>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>MY:Add
+# if defined MANGROVE_DRAG
      &                        VEG(ng) % ru_loc_veg_root,                &
      &                        VEG(ng) % rv_loc_veg_root,                &
+# endif
 !!!<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<MY:Add
      &                        VEG(ng) % plant,                          &
 # ifdef VEG_FLEX
@@ -100,7 +104,9 @@
      &                              u, v,                               &
      &                              ru_loc_veg, rv_loc_veg,             &
 !!!>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>MY:Add
+# if defined MANGROVE_DRAG
      &                              ru_loc_veg_root, rv_loc_veg_root,   &
+# endif
 !!!<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<MY:Add
      &                              plant,                              &
 # ifdef VEG_FLEX
@@ -116,7 +122,9 @@
       USE mod_vegarr
       USE vegetation_drag_mod
 !!!>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>MY:Add
+# if defined MANGROVE_DRAG
       USE mod_mangr_root
+# endif
 !!!<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<MY:Add
 !
 !
@@ -136,8 +144,10 @@
       real(r8), intent(in) :: ru_loc_veg(LBi:,LBj:,:,:)
       real(r8), intent(in) :: rv_loc_veg(LBi:,LBj:,:,:)
 !!!>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>MY:Add
+#  if defined MANGROVE_DRAG
       real(r8), intent(in) :: ru_loc_veg_root(LBi:,LBj:,:,:)
       real(r8), intent(in) :: rv_loc_veg_root(LBi:,LBj:,:,:)
+#  endif
 !!!<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<MY:Add
       real(r8), intent(in) :: plant(LBi:,LBj:,:,:)
 # ifdef VEG_FLEX
@@ -156,8 +166,10 @@
       real(r8), intent(in) :: ru_loc_veg(LBi:UBi,LBj:UBj,N(ng),NVEG)
       real(r8), intent(in) :: rv_loc_veg(LBi:UBi,LBj:UBj,N(ng),NVEG)
 !!!>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>MY:Add
+#  if defined MANGROVE_DRAG
       real(r8), intent(in) :: ru_loc_veg_root(LBi:UBi,LBj:UBj,N(ng),NVEG)
       real(r8), intent(in) :: rv_loc_veg_root(LBi:UBi,LBj:UBj,N(ng),NVEG)
+#  endif
 !!!<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<MY:Add
       real(r8), intent(in) :: plant(LBi:UBi,LBj:UBj,NVEG,NVEGP)
 # ifdef VEG_FLEX
@@ -176,10 +188,8 @@
       real(r8), parameter :: one_half=1.0_r8/2.0_r8
       real(r8), parameter :: one_third=1.0_r8/3.0_r8
       real(r8), parameter :: Inival=0.0_r8
-!!!>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>MY:Rm
-!      real(r8), parameter :: cl_veg=1.0_r8, ck=0.09_r8
-!!!<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<MY:Rm
 !!!>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>MY:Add
+# if defined MANGROVE_DRAG
 !
 !  Parameter setting for the coefficient "gamma"
 !
@@ -208,6 +218,13 @@
 !      real(r8), parameter :: ck_root=1.397542_r8      ! gamma = 0.8
 !
 !!!<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<MY:Add
+!!!>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>TN:Add
+# else
+!!!<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<TN:Add
+      real(r8), parameter :: cl_veg=1.0_r8, ck=0.09_r8
+!!!>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>TN:Add
+# endif
+!!!<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<TN:Add
       real(r8), parameter :: max_L=10.0e10_r8
       real(r8), parameter :: eps=1.0e-12_r8
       real(r8) :: wrku1, wrku2, wrku3, wrku4, wrku
@@ -219,6 +236,7 @@
       real(r8), dimension(IminS:ImaxS,JminS:JmaxS) :: vegu
       real(r8), dimension(IminS:ImaxS,JminS:JmaxS) :: vegv
 !!!>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>MY:Add
+# if defined MANGROVE_DRAG
       real(r8) :: L_root            ! For mangrove roots
       real(r8) :: tauveg_root       ! For mangrove roots
       real(r8) :: taueff_root       ! For mangrove roots
@@ -228,6 +246,7 @@
       real(r8), dimension(IminS:ImaxS,JminS:JmaxS,0:N(ng)) :: dab
 !      real(r8), dimension(IminS:ImaxS,JminS:JmaxS) :: dens_out
       real(r8) :: HRmax  ! Maximum root height
+# endif
 !!!<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<MY:Add
 
 # include "set_bounds.h"
@@ -245,7 +264,9 @@
       cff2=1.5_r8+gls_m(ng)/gls_n(ng)
       cff3=-1.0_r8/gls_n(ng)
 !!!>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>MY:Add
+# if defined MANGROVE_DRAG
       dab=Inival
+# endif
 !!!<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<MY:Add
 
       VEG_LOOP: DO iveg=1,NVEG
@@ -270,6 +291,7 @@
               wrkv=0.25_r8*(wrkv1+wrkv2+wrkv3+wrkv4)
               tke_loc_veg=sqrt(wrku*wrku+wrkv*wrkv)
 !!!>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>MY:Add
+# if defined MANGROVE_DRAG
 !
 ! For mangroves
 !
@@ -285,6 +307,7 @@
               wrkv=0.25_r8*(wrkv1+wrkv2+wrkv3+wrkv4)
               tke_loc_veg_root=sqrt(wrku*wrku+wrkv*wrkv)
 !
+# endif
 !!!<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<MY:Add
 !
 !-----------------------------------------------------------------------
@@ -320,9 +343,10 @@
 ! Eddies typical size constrained by distance in between the plants
 !
               L=cl_veg*((1.0_r8-MIN(solid,1.0_r8))/                     &
-     &                 plant(i,j,iveg,pdens))**one_half
+     &                 (plant(i,j,iveg,pdens)+eps))**one_half  !!!<<<<<<<<< TN: mod ( plant(i,j,iveg,pdens) -> (plant(i,j,iveg,pdens)+eps))
               L=MIN(L,max_L)
 !!!>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>MY:Add
+# if defined MANGROVE_DRAG
 ! !!!>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>MY:Removed
 ! !
 ! ! If this is Rhizophora, compute L with the root properties
@@ -379,13 +403,22 @@
               ELSE
                 L_root = cl_veg*plant(i,j,iveg,pdiam)  ! Dummy input
               END IF
+#  if defined TURB_LENGTH_STEM
+              L_root = cl_veg*plant(i,j,iveg,pdiam)
+#  elif defined TURB_LENGTH_ROOT
+              IF (SPE_MANGR(iveg,ng)==1) THEN
+                L = cl_veg*FAI_ROOT
+              END IF
+#  endif
 !
+# endif
 !!!<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<MY:Add
 !
 ! Dissipation time-scale of eddies in between the plants
 !
-              tauveg=(L**2.0_r8/(ck**2.0_r8*tke_loc_veg))**one_third
+              tauveg=(L**2.0_r8/((ck**2.0_r8*tke_loc_veg)+eps))**one_third !!!<<< TN: mod ( ck**2.0_r8*tke_loc_veg -> (ck**2.0_r8*tke_loc_veg)+eps) )
 !!!>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>MY:Add
+# if defined MANGROVE_DRAG
 !
 ! Limit maximum of dissipation time-scale to avoid infinity-value
 !
@@ -398,14 +431,17 @@
      &                     tke_loc_veg_root))**one_third
               tauveg_root=MIN(tauveg_root,10.0e8_r8)
 !
+# else
 !!!<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<MY:Add
-!!!>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>MY:Rm
-!!
-!! Effective dissipation time-scale
-!!
-!              taueff=MIN(taufree,tauveg)
-!!!<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<MY:Rm
+!
+! Effective dissipation time-scale
+!
+              taueff=MIN(taufree,tauveg)
+!!!>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>TN:Add
+# endif
+!!!<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<TN:Add
 !!!>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>MY:Add
+# if defined MANGROVE_DRAG
 !
 ! Choice of effective dissipation time-scale
 !
@@ -416,9 +452,11 @@
               ! taueff=MIN(taufree,tauveg)            ! Default, Time-scale of Beudin et al. (2017)
               ! taueff_root=MIN(taufree,tauveg_root)  ! Default, Time-scale of Beudin et al. (2017)
 !
+# endif
 !!!<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<MY:Add
               gls_loc_veg=gls_c2(ng)*tke_loc_veg/taueff
 !!!>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>MY:Add
+# if defined MANGROVE_DRAG
 !
 ! Dissipation rate of turbulence generated by mangrove roots
 !
@@ -431,6 +469,7 @@
                 gls_loc_veg_root = 0.0_r8
               END IF
 !
+# endif
 !!!<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<MY:Add
 !
 !-----------------------------------------------------------------------
@@ -440,12 +479,14 @@
               tke_veg(i,j,k)=tke_loc_veg + tke_veg(i,j,k)
               gls_veg(i,j,k)=gls_loc_veg + gls_veg(i,j,k)
 !!!>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>MY:Add
+# if defined MANGROVE_DRAG
 !
 ! Add contribution by mangrove roots
 !
               tke_veg(i,j,k)=tke_loc_veg_root + tke_veg(i,j,k)
               gls_veg(i,j,k)=gls_loc_veg_root + gls_veg(i,j,k)
 !
+# endif
 !!!<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<MY:Add
 
             END DO
@@ -456,6 +497,7 @@
       RETURN
       END SUBROUTINE vegetation_turb_tile
 !!!>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>MY:Add
+# if defined MANGROVE_DRAG
 
       !-----------------------------------------------------------------------
       SUBROUTINE mangr_get_dens ( &
@@ -526,7 +568,7 @@
 
       RETURN
       END SUBROUTINE mangr_get_dens
-
+# endif
 !!!<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<MY:Add
 #endif
       END MODULE vegetation_turb_mod

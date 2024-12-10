@@ -37,7 +37,8 @@
      &                     GRID(ng) % umask,                            &
 #endif
 !!!>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>TN:Add
-#if defined SHIRAHO_REEF || defined FUKIDO || defined OFFLINE
+#if defined SHIRAHO_REEF || defined FUKIDO || defined OFFLINE || \
+    defined BAK_EXPERI_BRY || defined ANA_M2OBC_SOUTH
      &                     krhs(ng), kstp(ng),                          &
      &                     OCEAN(ng) % ubar,                            &
      &                     OCEAN(ng) % vbar,                            &
@@ -68,7 +69,8 @@
      &                           umask,                                 &
 #endif
 !!!>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>TN:Add
-#if defined SHIRAHO_REEF || defined FUKIDO || defined OFFLINE
+#if defined SHIRAHO_REEF || defined FUKIDO || defined OFFLINE || \
+    defined BAK_EXPERI_BRY || defined ANA_M2OBC_SOUTH
      &                           krhs, kstp,                            &
      &                           ubar,                                  &
      &                           vbar,                                  &
@@ -95,7 +97,8 @@
       integer, intent(in) :: IminS, ImaxS, JminS, JmaxS
       integer, intent(in) :: knew
 !!!>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>TN:Add
-#if defined SHIRAHO_REEF || defined FUKIDO || defined OFFLINE
+#if defined SHIRAHO_REEF || defined FUKIDO || defined OFFLINE || \
+    defined BAK_EXPERI_BRY || defined ANA_M2OBC_SOUTH
       integer, intent(in) :: krhs, kstp
 #endif
 !!!<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<TN:Add
@@ -110,7 +113,8 @@
       real(r8), intent(in) :: umask(LBi:,LBj:)
 # endif
 !!!>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>TN:Add
-# if defined SHIRAHO_REEF || defined FUKIDO || defined OFFLINE
+# if defined SHIRAHO_REEF || defined FUKIDO || defined OFFLINE || \
+     defined BAK_EXPERI_BRY || defined ANA_M2OBC_SOUTH
       real(r8), intent(in) :: ubar(LBi:,LBj:,:)
       real(r8), intent(in) :: vbar(LBi:,LBj:,:)
 # endif
@@ -126,7 +130,8 @@
       real(r8), intent(in) :: umask(LBi:UBi,LBj:UBj)
 # endif
 !!!>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>TN:Add
-# if defined SHIRAHO_REEF || defined FUKIDO || defined OFFLINE
+# if defined SHIRAHO_REEF || defined FUKIDO || defined OFFLINE || \
+     defined BAK_EXPERI_BRY || defined ANA_M2OBC_SOUTH
       real(r8), intent(in) :: ubar(LBi:UBi,LBj:UBj,3)
       real(r8), intent(in) :: vbar(LBi:UBi,LBj:UBj,3)
 # endif
@@ -144,7 +149,8 @@
      &            model_flux
 #endif
 !!!>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>TN:Add
-#if defined SHIRAHO_REEF || defined FUKIDO || defined OFFLINE
+#if defined SHIRAHO_REEF || defined FUKIDO || defined OFFLINE || \
+    defined BAK_EXPERI_BRY || defined ANA_M2OBC_SOUTH
       integer :: know
 !      real(r8) :: my_area, my_flux, tid_flow, riv_flow, cff1, cff2,     &
 !     &            model_flux

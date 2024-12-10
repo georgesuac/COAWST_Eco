@@ -19,6 +19,7 @@
 !  VEG_MASSDEN   Mass density for each veg type                        !
 !  VEGHMIXCOEF   Viscosity coefficient for vegetation boundary         !
 !!!>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>MY:Add
+#if defined MANGROVE_DRAG
 !  SPE_MANGR     Mangrove species index (0: Seagrass, 1: Rhizophora)   !
 !  HR_A_ROOT     Parameter of HRmax                                    !
 !  HR_B_ROOT     Parameter of HRmax                                    !
@@ -27,6 +28,7 @@
 !  HRMIN_ROOT    Minimum root height (m)                               !
 !  FAI_ROOT      Root diameter (m)                                     !
 !  THETA_ROOT    Root angle (degree)                                   !
+#endif
 !!!<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<MY:Add
 !                                                                      !
 !  Plant Property indices:                                             !
@@ -86,6 +88,7 @@
       real(r8), allocatable :: VEG_MASSDENS(:,:)
       real(r8), allocatable :: VEGHMIXCOEF(:,:)
 !!!>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>MY:Add
+#if defined MANGROVE_DRAG
       real(r8), allocatable :: SPE_MANGR(:,:)
       real(r8) :: HR_A_ROOT
       real(r8) :: HR_B_ROOT
@@ -94,6 +97,7 @@
       real(r8) :: HRMIN_ROOT
       real(r8) :: FAI_ROOT
       real(r8) :: THETA_ROOT
+#endif
 !!!<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<MY:Add
 !
       CONTAINS
