@@ -72,7 +72,7 @@
 #ifdef VEG_DRAG
      &                              , plant                             &
 #endif
-#ifdef WAVE_THRUST_MARSH
+#ifdef MARSH_WAVE_THRUST
      &                              , marsh_mask                        &
 #endif
      & )
@@ -101,7 +101,7 @@
 # endif
 #endif 
 !
-#ifdef WAVE_THRUST_MARSH
+#ifdef MARSH_WAVE_THRUST
 # ifdef ASSUMED_SHAPE
       real(r8), intent(inout) :: marsh_mask(LBi:,LBj:)
 # else
@@ -198,7 +198,7 @@
       END DO
 # endif
 !      
-# ifdef WAVE_THRUST_MARSH
+# ifdef MARSH_WAVE_THRUST
       DO j=Jstr,JendT
         DO i=IstrT,IendT
           marsh_mask(i,j)=1.0_r8 
