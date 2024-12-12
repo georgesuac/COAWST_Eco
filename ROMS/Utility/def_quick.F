@@ -2370,9 +2370,11 @@ Aval(5)=REAL(Iinfo(1,ifield,ng),r8)
 !
 # endif
 !
-#if defined VEGETATION
-#include "vegetation_def_his.h"
-#endif
+!!!>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>TN:rm
+!#if defined VEGETATION
+!#include "vegetation_def_his.h"
+!#endif
+!!!<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<TN:rm
 !
 !  Define surface U-momentum stress.
 !
