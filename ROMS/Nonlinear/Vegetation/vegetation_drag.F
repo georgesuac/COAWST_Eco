@@ -64,6 +64,9 @@
      &                        IminS, ImaxS, JminS, JmaxS,               &
      &                        nrhs(ng),                                 &
      &                        GRID(ng) % Hz,                            &
+!!!>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>TN:Add
+     &                        GRID(ng) % h,                             &
+!!!<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<TN:Add
      &                        OCEAN(ng) % u,                            &
      &                        OCEAN(ng) % v,                            &
      &                        VEG(ng) % plant,                          &
@@ -96,6 +99,9 @@
      &                              IminS, ImaxS, JminS, JmaxS,         &
      &                              nrhs,                               &
      &                              Hz,                                 &
+!!!>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>TN:Add
+     &                              h,                                  &
+!!!<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<TN:Add
      &                              u, v,                               &
      &                              plant,                              &
 # ifdef VEG_FLEX
@@ -121,6 +127,11 @@
       USE mod_mangr_root
 # endif
 !!!<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<MY:Add
+!!!>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>TN:Add
+# if defined AQUACULTURE
+      USE mod_aquaculture
+# endif
+!!!<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<TN:Add
 !
 !  Imported variable declarations.
 !
@@ -131,6 +142,9 @@
 !
 # ifdef ASSUMED_SHAPE
       real(r8), intent(in) :: Hz(LBi:,LBj:,:)
+!!!>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>TN:Add
+      real(r8), intent(in) :: h(LBi:,LBj:)
+!!!<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<TN:Add
       real(r8), intent(in) :: u(LBi:,LBj:,:,:)
       real(r8), intent(in) :: v(LBi:,LBj:,:,:)
       real(r8), intent(in) :: plant(LBi:,LBj:,:,:)
@@ -152,6 +166,9 @@
       real(r8), intent(inout) :: Lveg(LBi:,LBj:,:)
 # else
       real(r8), intent(in) :: Hz(LBi:UBi,LBj:UBj,N(ng))
+!!!>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>TN:Add
+      real(r8), intent(in) :: h(LBi:UBi,LBj:UBj)
+!!!<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<TN:Add
       real(r8), intent(in) :: u(LBi:UBi,LBj:UBj,N(ng),2)
       real(r8), intent(in) :: v(LBi:UBi,LBj:UBj,N(ng),2)
       real(r8), intent(in) :: plant(LBi:UBi,LBj:UBj,NVEG,NVEGP)
@@ -224,24 +241,7 @@
 # endif
 
       VEG_LOOP: DO iveg=1,NVEG
-!!!>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>MY:Add
-!
-# ifdef FISH_FARM
-!
-! Initialization of depth from the water surface (m)
-!
-        dab = Inival
-!
-! Loop for vertical layers
-!
-        K_LOOP: DO k=N(ng),1,-1
-!
-# else
-!!!<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<MY:Add
         K_LOOP: DO k=1,N(ng)
-!!!>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>MY:Add
-# endif
-!!!<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<MY:Add
           DO j=JstrV-1,Jend
             DO i=IstrU-1,Iend
 
@@ -310,30 +310,27 @@
               plant_height_eff=plant(i,j,iveg,phght)
 # endif
 
-!!!>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>MY:Add
-!
-# ifdef FISH_FARM
-!
-! depth from the water surface (m)
-!
-              if (k == N(ng)) then
-                 dab(i,j,k) = Hz(i,j,k)
-              else
-                 dab(i,j,k) = dab(i,j,k+1) + Hz(i,j,k)
-              end if
-!
-# else
-!!!<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<MY:Add
 !
 ! Select the grid cell (full or part) within the canopy layer
 !
               dab(i,j,k)=dab(i,j,k-1)+Hz(i,j,k)
-!!!>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>MY:Add
-# endif
-!!!<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<MY:Add
               Hz_inverse=1.0_r8/Hz(i,j,k)
+!!!>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>TN:Add
+# if defined AQUACULTURE
+              IF (iveg <= Naq) THEN
+                cff1=MIN((dab(i,j,k)-(h(i,j)-plant_height_eff))*Hz_inverse,1.0_r8)
+                Lveg_loc=1.0_r8-MIN(1.0_r8-cff1,1.0_r8)
+              ELSE
+                cff1=MIN((dab(i,j,k)-plant_height_eff)*Hz_inverse,1.0_r8)
+                Lveg_loc=MIN(1.0_r8-cff1,1.0_r8)
+              ENDIF
+# else
+!!!<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<TN:Add
               cff1=MIN((dab(i,j,k)-plant_height_eff)*Hz_inverse,1.0_r8)
               Lveg_loc=MIN(1.0_r8-cff1,1.0_r8)
+!!!>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>TN:Add
+# endif
+!!!<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<TN:Add
 !!!>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>MY:Add
 # if defined MANGROVE_DRAG
 

@@ -327,22 +327,20 @@
 #ifdef SGD_ON
           real(r8), pointer :: sgd_src(:,:)
 #endif
-#ifdef REEF_ECOSYS
-# ifdef CORAL_POLYP
+#ifdef CORAL_POLYP
           real(r8), pointer :: p_coral(:,:,:)
-# endif
-# ifdef SEAGRASS
+#endif
+#ifdef SEAGRASS
           real(r8), pointer :: p_sgrass(:,:,:)
-# endif
-# ifdef MACROALGAE
-          real(r8), pointer :: p_algae(:,:)
-# endif
-# ifdef SEDIMENT_ECOSYS
+#endif
+#ifdef MACROALGAE
+          real(r8), pointer :: p_algae(:,:,:)
+#endif
+#ifdef SEDIMENT_ECOSYS
           real(r8), pointer :: p_sand(:,:)
-# endif
 #endif
 #ifdef AQUACULTURE
-          real(r8), pointer :: aquac(:,:,:)
+          real(r8), pointer :: dens_aqua(:,:,:)
 #endif
 !!!<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<TN:Add
         END TYPE T_GRID
@@ -369,6 +367,13 @@
 #ifdef SEAGRASS
       USE mod_seagrass, ONLY : Nsg
 #endif
+#ifdef MACROALGAE
+      USE mod_macroalgae, ONLY : Nag
+#endif
+#ifdef AQUACULTURE
+      USE mod_aquaculture, ONLY : Naq
+#endif
+
 !!!<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<YT:Add
 
 !
@@ -563,22 +568,20 @@
 #ifdef SGD_ON
       allocate ( GRID(ng) % sgd_src(LBi:UBi,LBj:UBj) )
 #endif
-#ifdef REEF_ECOSYS
-# ifdef CORAL_POLYP
+#ifdef CORAL_POLYP
       allocate ( GRID(ng) % p_coral(Ncl,LBi:UBi,LBj:UBj) )
-# endif
-# ifdef SEAGRASS
+#endif
+#ifdef SEAGRASS
       allocate ( GRID(ng) % p_sgrass(Nsg,LBi:UBi,LBj:UBj) )
-# endif
-# ifdef MACROALGAE
-      allocate ( GRID(ng) % p_algae(LBi:UBi,LBj:UBj) )
-# endif
-# ifdef SEDIMENT_ECOSYS
+#endif
+#ifdef MACROALGAE
+      allocate ( GRID(ng) % p_algae(Nag,LBi:UBi,LBj:UBj) )
+#endif
+#ifdef SEDIMENT_ECOSYS
       allocate ( GRID(ng) % p_sand(LBi:UBi,LBj:UBj) )
-# endif
 #endif
 #ifdef AQUACULTURE
-      allocate ( GRID(ng) % aquac(5,LBi:UBi,LBj:UBj) )
+      allocate ( GRID(ng) % dens_aqua(Naq,LBi:UBi,LBj:UBj) )
 #endif
 
 !!!<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<TN:Add
@@ -803,24 +806,20 @@
 #ifdef SGD_ON
             GRID(ng) % sgd_src(i,j) = IniVal
 #endif
-#ifdef REEF_ECOSYS
-# ifdef CORAL_POLYP
-            ! GRID(ng) % p_coral(1,i,j) = IniVal
-            ! GRID(ng) % p_coral(2,i,j) = IniVal
+#ifdef CORAL_POLYP
             GRID(ng) % p_coral(:,i,j) = IniVal
-# endif
-# ifdef SEAGRASS
+#endif
+#ifdef SEAGRASS
             GRID(ng) % p_sgrass(:,i,j) = IniVal
-# endif
-# ifdef MACROALGAE
-            GRID(ng) % p_algae(i,j) = IniVal
-# endif
-# ifdef SEDIMENT_ECOSYS
+#endif
+#ifdef MACROALGAE
+            GRID(ng) % p_algae(:,i,j) = IniVal
+#endif
+#ifdef SEDIMENT_ECOSYS
             GRID(ng) % p_sand(i,j) = IniVal
-# endif
 #endif
 #ifdef AQUACULTURE
-            GRID(ng) % aquac(:,i,j) = IniVal
+            GRID(ng) % dens_aqua(:,i,j) = IniVal
 #endif
 !!!<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<TN:Add
           END DO

@@ -392,7 +392,7 @@ END SUBROUTINE allocate_reef_ecosys
     real(8), intent(inout) :: p_sgrass(Nsg)   ! yt_edit fix me! make coverage writeable
 #endif
 #ifdef MACROALGAE
-    real(8), intent(in) :: p_algae    
+    real(8), intent(in) :: p_algae(Nag)    
 #endif
 #ifdef SEDIMENT_ECOSYS
     real(8), intent(in) :: p_sand      
@@ -599,6 +599,7 @@ END SUBROUTINE allocate_reef_ecosys
 #endif
     
     real(8) :: dtc     ! Internal time step for coral polyp model (sec)
+    real(8) :: datei   ! Date of internal calculation (day)
     real(8) :: dtsed   ! Internal time step for sediment ecosystem model (sec)
   
     integer :: k, m, itrc          
@@ -709,8 +710,7 @@ END SUBROUTINE allocate_reef_ecosys
 #endif
 #if defined ECOSYS_TESTMODE
 !  Output
-    real(8), parameter :: OUTPUT_INTERVAL = 5.0d0     ! Output interval (min)
-    real(8), save :: time = 0.0d0 !sec
+    real(8), parameter :: OUTPUT_INTERVAL = 1.0d0     ! Output interval (min)
     real(8), save :: dsec = 0.0d0 !sec
 #endif
 
@@ -1257,6 +1257,10 @@ END SUBROUTINE allocate_reef_ecosys
 
     PFDbott=PFD  !!! Photon flux density at sea bottom
 
+#if defined ECOSYS_TESTMODE && defined INPUT_BOTTOM_PFD
+    PFDbott = PFDsurf !!! Photon flux density at sea bottom
+#endif
+
 #if defined ORGANIC_MATTER && !defined ECOSYS_TESTMODE
 !-----------------------------------------------------------------------
 ! Vertical advection (sinking/flaoting) of POM and PIM
@@ -1381,9 +1385,11 @@ END SUBROUTINE allocate_reef_ecosys
 
         DO m=1,isplitc   !!! Loop for coral polyp model: dtc <= 0.05 sec
 
+          datei = date + dtc*(m-1)/86400.0d0
           CALL coral_polyp          &
 !           input parameters
             ( ng, icl, i, j   &   ! ng: nested grid number; n: coral compartment; i,j: position
+            , datei           &   ! Date (days since x or elapsed days)
             , dtc             &   ! Time step (sec)
             , PFDbott         &   ! Photon flux density (umol m-2 s-1)
             , rho_sw(1)       &   ! Density of seawater (g cm-3)
@@ -1576,49 +1582,50 @@ END SUBROUTINE allocate_reef_ecosys
 ! Compute algae model.
 !-----------------------------------------------------------------------
 !
-    IF(p_algae .gt. 0.0d0) THEN
-      CALL macroalgae            &
-!       input parameters
-        ( ng, 1, i, j    &   ! ng: nested grid number; n: seagrass compartment; i,j: position
-        , PFDbott        &   ! Photon flux density (umol m-2 s-1)
-        , rho_sw(1)      &   ! Density of seawater (g cm-3)
-        , DIC(1)         &   ! DIC (umol kg-1)
-        , DOx(1)         &   ! DO  (umol L-1)
+    DO icl=1,Nag    
+      IF(p_algae(icl) .gt. 0.0d0) THEN
+        CALL macroalgae    &
+!         input parameters
+          ( ng, icl, i, j  &   ! ng: nested grid number; n: macroalgae compartment; i,j: position
+          , PFDbott        &   ! Photon flux density (umol m-2 s-1)
+          , rho_sw(1)      &   ! Density of seawater (g cm-3)
+          , DIC(1)         &   ! DIC (umol kg-1)
+          , DOx(1)         &   ! DO  (umol L-1)
 # if defined NUTRIENTS         
-        , NH4(1)         &   ! NH4 concentration (umol L-1)
+          , NH4(1)         &   ! NH4 concentration (umol L-1)
 # endif
 # if defined CARBON_ISOTOPE
-        , DI13C(1)       &   ! 13C of DIC (umol kg-1)
+          , DI13C(1)       &   ! 13C of DIC (umol kg-1)
 # endif
 !       output parameters
-        , Flux_DIC       &   ! DIC uptake rate (mmol m-2 s-1)  * direction of water column to coral is positive
-        , Flux_DO        &   ! DO  uptake rate (mmol m-2 s-1)  * direction of water column to coral is positive
+          , Flux_DIC       &   ! DIC uptake rate (mmol m-2 s-1)  * direction of water column to coral is positive
+          , Flux_DO        &   ! DO  uptake rate (mmol m-2 s-1)  * direction of water column to coral is positive
 # if defined NUTRIENTS         
-        , Flux_NO3       &   ! NO3 uptake rate (mmol m-2 s-1)  * direction of water column to coral is positive
-        , Flux_NH4       &   ! NH4 uptake rate (mmol m-2 s-1)  * direction of water column to coral is positive
-        , Flux_PO4       &   ! PO4 uptake rate (mmol m-2 s-1)  * direction of water column to coral is positive
+          , Flux_NO3       &   ! NO3 uptake rate (mmol m-2 s-1)  * direction of water column to coral is positive
+          , Flux_NH4       &   ! NH4 uptake rate (mmol m-2 s-1)  * direction of water column to coral is positive
+          , Flux_PO4       &   ! PO4 uptake rate (mmol m-2 s-1)  * direction of water column to coral is positive
 # endif
 # if defined CARBON_ISOTOPE
-        , Flux_DI13C     &   ! DI13C uptake rate (mmol m-2 s-1)  * direction of water column to coral is positive
+          , Flux_DI13C     &   ! DI13C uptake rate (mmol m-2 s-1)  * direction of water column to coral is positive
 # endif
-        )
+          )
 
       ! 1 mmol m-2 s-1, 1 mmol m-3 = 1 umol L-1 = 1/1.024 umol kg-1
       ! cff: convert [mmol m-2 s-1] to [umol L-1 s-1]
 
-      cff = 1.0d0/dz(1) * p_algae
+        cff = 1.0d0/dz(1) * p_algae(icl)
 
-      dDIC_dt(1) = dDIC_dt(1) - Flux_DIC * cff/rho_sw(1)
-      dDOx_dt(1) = dDOx_dt(1) - Flux_DO  * cff
+        dDIC_dt(1) = dDIC_dt(1) - Flux_DIC * cff/rho_sw(1)
+        dDOx_dt(1) = dDOx_dt(1) - Flux_DO  * cff
 # if defined NUTRIENTS
-      dNO3_dt(1) = dNO3_dt(1) - Flux_NO3 * cff
-      dNH4_dt(1) = dNH4_dt(1) - Flux_NH4 * cff
-      dPO4_dt(1) = dPO4_dt(1) - Flux_PO4 * cff
+        dNO3_dt(1) = dNO3_dt(1) - Flux_NO3 * cff
+        dNH4_dt(1) = dNH4_dt(1) - Flux_NH4 * cff
+        dPO4_dt(1) = dPO4_dt(1) - Flux_PO4 * cff
 # endif
 # if defined CARBON_ISOTOPE
-      dDI13C_dt(1) = dDI13C_dt(1) - Flux_DI13C * cff/rho_sw(1)
+        dDI13C_dt(1) = dDI13C_dt(1) - Flux_DI13C * cff/rho_sw(1)
 # endif
-
+      END DO
     END IF            
 #endif
 
@@ -1691,10 +1698,12 @@ END SUBROUTINE allocate_reef_ecosys
 
       DO m=1,isplitsed   !!! Loop for sediment model: dtc <= 0.05 sec
 
+        datei = date + dtsed*(m-1)/86400.0d0
         CALL sedecosys      &
 !         input parameters
           ( ng, i, j        &   ! ng: nested grid number; i,j: position
           , Nsed(ng)        &   ! Number of vertical biological sediment layers
+          , datei           &   ! Date (days since x or elapsed days)
           , dtsed           &   ! Time step (sec)
           , Tmp(1)          &   ! Tmp: Temperature (oC)
           , Sal(1)          &   ! Sal: Salinity (PSU)
@@ -1827,19 +1836,23 @@ END SUBROUTINE allocate_reef_ecosys
 #if defined ECOSYS_TESTMODE
 !------------------------------------------------------------------------
 ! Print section
-
-    time = time +dt  ! sec
     
-    IF(time.ge.dsec) THEN
+    IF( date*86400.0d0 >= dsec ) THEN
+      if(dsec == 0.0d0) then
+        dsec=date*86400.0d0+OUTPUT_INTERVAL*60.0d0
+      else
+        dsec=dsec+OUTPUT_INTERVAL*60.0d0
+      endif
+      
 # ifdef CORAL_POLYP 
       cff1=0.01d0*p_coral(1)*P2R(1)*3600.0d0  ! cff1: convert [nmol cm-2 s-1] to [mmol m-2 h-1]
       cff2=0.01d0*p_coral(2)*P2R(2)*3600.0d0  ! cff1: convert [nmol cm-2 s-1] to [mmol m-2 h-1]
 # endif
 # ifdef SEAGRASS
-      cff3 = p_sgrass*3600.0d0        ! cff2: convert [mmol m-2 s-1] to [mmol m-2 h-1]
+      cff3 = p_sgrass(1)*3600.0d0        ! cff2: convert [mmol m-2 s-1] to [mmol m-2 h-1]
 # endif
 # ifdef MACROALGAE
-      cff4 = p_algae *3600.0d0        ! cff3: convert [mmol m-2 s-1] to [mmol m-2 h-1]
+      cff4 = p_algae(1) *3600.0d0        ! cff3: convert [mmol m-2 s-1] to [mmol m-2 h-1]
 # endif
 # if defined SEDIMENT_ECOSYS
 #  if defined  SEDIMENT_EMPIRIXCAL
@@ -1849,7 +1862,7 @@ END SUBROUTINE allocate_reef_ecosys
 #  endif
 # endif
 
-      write(40,'(*(g0,", "))') time/86400.0d0,PFDbott             &
+      write(40,'(*(g0:,", "))') date, PFDbott                     &
 # ifdef CORAL_POLYP 
         , CORAL(1)%Pg(1,1,1)*cff1, CORAL(1)%R (1,1,1)*cff1        &
         , (CORAL(1)%Pg(1,1,1)-CORAL(1)%R (1,1,1))*cff1            &
@@ -1886,10 +1899,8 @@ END SUBROUTINE allocate_reef_ecosys
         , dDOP_dt(1,1), dPOP_dt(1,1)                              &
 #  endif
 # endif
-        , pH(N), ssfCO2, Warg(N), U10, ssCO2flux, ssO2flux
+        , pH(N), ssfCO2, Warg(N), Wcal(N), U10, ssCO2flux, ssO2flux
         
-    dsec=dsec+OUTPUT_INTERVAL*60.
-
     END IF
 !-----------------------------------------------------------------------
 #endif

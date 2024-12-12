@@ -776,6 +776,19 @@
       SVEG2 = 0.
 
       IF ( DEP2(KCGRD(1)).GT.SLAYH ) THEN
+!!!>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>TN:Add
+#ifdef AQUACULTURE
+         KVEGH = KMESPC * (DEP2(KCGRD(1))-LAYH(1))
+         SINHK = SINH(KVEGH)
+         C     = SINHK**3
+         D     = 3.*SINHK
+         KVEGH = KVEGH + KMESPC * LAYH(1)
+         SINHK = SINH(KVEGH)
+         A     = SINHK**3 - C
+         B     = 3.*SINHK - D
+         SVEG2 = VEGDRL(1)*VEGDIL(1)*VEGNSL(1)*(A + B)
+#else
+!!!<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<TN:Add
 
          DO IL = 1, ILMAX
             KVEGH = KVEGH + KMESPC * LAYH(IL)
@@ -788,6 +801,9 @@
             B     = D - B
             SVEG2 = SVEG2 + VEGDRL(IL)*VEGDIL(IL)*VEGNSL(IL)*(A + B)
          END DO
+!!!>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>TN:Add
+#endif
+!!!<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<TN:Add
 
       ELSE IF ( DEP2(KCGRD(1)).LT.LAYH(1) ) THEN
 

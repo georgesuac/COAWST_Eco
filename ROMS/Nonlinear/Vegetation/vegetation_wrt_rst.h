@@ -28,7 +28,8 @@
 #  ifdef MASKING
      &                       GRID(ng) % rmask,                          &
 #  endif
-     &                       VEG(ng) % plant(:,:,:,i))
+     &                       VEG(ng) % plant(:,:,:,i),                  &
+     &                       SetFillVal = .FALSE.)
           IF (FoundError(status, nf90_noerr, __LINE__,                  &
      &                   __FILE__)) THEN
             IF (Master) THEN 

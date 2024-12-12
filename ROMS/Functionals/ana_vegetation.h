@@ -43,6 +43,12 @@
      &                        , IminS, ImaxS, JminS, JmaxS              &
      &                        , GRID(ng) % h                            &
      &                        , GRID(ng) % rmask                        &
+#ifdef SEAGRASS
+     &                        , GRID(ng) % p_sgrass                     &
+#endif
+#ifdef AQUACULTURE
+     &                        , GRID(ng) % dens_aqua                    &
+#endif
 #ifdef VEG_DRAG
      &                        , VEG(ng) % plant                         &
 #endif
@@ -69,6 +75,12 @@
      &                              , LBi, UBi, LBj, UBj                &
      &                              , IminS, ImaxS, JminS, JmaxS        &
      &                              , h, rmask                          &
+#ifdef SEAGRASS
+     &                              , p_sgrass                          &
+#endif
+#ifdef AQUACULTURE
+     &                              , dens_aqua                         &
+#endif
 #ifdef VEG_DRAG
      &                              , plant                             &
 #endif
@@ -83,6 +95,12 @@
       USE mod_scalars
       USE mod_vegetation
       USE mod_vegarr
+#ifdef SEAGRASS
+      USE mod_seagrass
+#endif
+#ifdef AQUACULTURE
+      USE mod_aquaculture, ONLY : Naq, diam_aqua, thck_aqua, hght_aqua
+#endif
 !
 !  Imported variable declarations.
 !
@@ -94,10 +112,22 @@
       real(r8), intent(inout) :: plant(LBi:,LBj:,:,:)
       real(r8), intent(in) :: h(LBi:,LBj:)
       real(r8), intent(in) :: rmask(LBi:,LBj:)
+#  ifdef SEAGRASS
+      real(r8), intent(inout) :: p_sgrass(:,LBi:,LBj:)
+#  endif
+#  ifdef AQUACULTURE
+      real(r8), intent(inout) :: dens_aqua(:,LBi:,LBj:)
+#  endif
 # else
       real(r8), intent(inout) :: plant(LBi:UBi,LBj:UBj,NVEG,NVEGP)
       real(r8), intent(in) :: h(LBi:UBi,LBj:UBj)
       real(r8), intent(in) :: rmask(LBi:UBi,LBj:UBj)
+#  ifdef SEAGRASS
+      real(r8), intent(inout) :: p_sgrass(Nsg,LBi:UBi,LBj:UBj)
+#  endif
+#  ifdef AQUACULTURE
+      real(r8), intent(inout) :: dens_aqua(Naq,LBi:UBi,LBj:UBj)
+#  endif
 # endif
 #endif 
 !
@@ -114,7 +144,7 @@
 #ifdef DISTRIBUTE
       integer :: Tstr, Tend
 #endif
-      integer :: i, j, k, iveg
+      integer :: i, j, k, iveg, ivegS, isg
 
 #include "set_bounds.h"
 !
@@ -123,7 +153,42 @@
 !  To have variable properties in array->plant(x,y,iveg,iprop)
 !----------------------------------------------------------------------- 
 !
-#if defined FUKIDO
+#if defined SEAGRASS || defined AQUACULTURE
+      ivegS=1
+# if defined AQUACULTURE
+#  ifdef VEG_DRAG
+      DO iveg=1,Naq  !! Aquaculture drag
+        DO j=JstrT,JendT
+          DO i=IstrT,IendT
+            plant(i,j,iveg,pdens)=dens_aqua(iveg,i,j)  !Density
+!            plant(i,j,iveg,pdiam)=diam_aqua      !Diameter
+            plant(i,j,iveg,pdiam)=diam_aqua(iveg)! 0.1d0 !diam_aqua(iveg)      !Diameter
+            plant(i,j,iveg,phght)=hght_aqua(iveg)!10.0d0 !hght_aqua(iveg)      !Height
+            plant(i,j,iveg,pthck)=thck_aqua(iveg)! 0.1d0 !thck_aqua(iveg)      !Thickness 1cm
+          END DO
+        END DO
+      END DO
+#  endif
+      ivegS=Naq+1
+# endif
+# if defined SEAGRASS
+      isg=1
+#  ifdef VEG_DRAG
+      DO iveg=ivegS,NVEG  !! seagrass drag
+        DO j=JstrT,JendT
+          DO i=IstrT,IendT
+            plant(i,j,iveg,pdiam)=0.01_r8        !Diameter
+            plant(i,j,iveg,phght)=0.16_r8         !Height
+            plant(i,j,iveg,pdens)=p_sgrass(isg,i,j)*1500.0_r8       !Density
+            plant(i,j,iveg,pthck)=0.0005_r8      !Thickness 1cm
+          END DO
+        END DO
+        isg=isg+1
+      END DO
+#  endif
+# endif
+!      
+#elif defined FUKIDO
 # ifdef VEG_DRAG
       DO iveg=1,NVEG
         DO j=JstrT,JendT

@@ -235,7 +235,7 @@
       real(r8), intent(inout) :: p_sgrass(Nsg,LBi:,LBj:)
 # endif
 # ifdef MACROALGAE
-      real(r8), intent(inout) :: p_algae(LBi:,LBj:)
+      real(r8), intent(inout) :: p_algae(Nag,LBi:,LBj:)
 # endif
 # ifdef SEDIMENT_ECOSYS
       real(r8), intent(inout) :: p_sand(LBi:,LBj:)
@@ -293,7 +293,7 @@
       real(r8), intent(inout) :: p_sgrass(Nsg,LBi:UBi,LBj:UBj)
 # endif
 # ifdef MACROALGAE
-      real(r8), intent(inout) :: p_algae(LBi:UBi,LBj:UBj)
+      real(r8), intent(inout) :: p_algae(Nag,LBi:UBi,LBj:UBj)
 # endif
 # ifdef SEDIMENT_ECOSYS
       real(r8), intent(inout) :: p_sand(LBi:UBi,LBj:UBj)
@@ -421,7 +421,7 @@
      &            ,p_sgrass(:,i,j)     &   ! seagrass coverage (0-1)
 #endif
 #ifdef MACROALGAE
-     &            ,p_algae(i,j)        &   ! algal coverage (0-1)
+     &            ,p_algae(:,i,j)      &   ! algal coverage (0-1)
 #endif
 #ifdef SEDIMENT_ECOSYS
      &            ,p_sand(i,j)         &   ! sediment coverage (0-1)
