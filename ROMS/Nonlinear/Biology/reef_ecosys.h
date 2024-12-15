@@ -229,13 +229,13 @@
       real(r8), intent(inout) :: DiaBio3d(LBi:,LBj:,:,:)
 # endif
 # ifdef CORAL_POLYP
-      real(r8), intent(inout) :: p_coral(Ncl,LBi:,LBj:)
+      real(r8), intent(inout) :: p_coral(:,LBi:,LBj:)
 # endif
 # ifdef SEAGRASS
-      real(r8), intent(inout) :: p_sgrass(Nsg,LBi:,LBj:)
+      real(r8), intent(inout) :: p_sgrass(:,LBi:,LBj:)
 # endif
 # ifdef MACROALGAE
-      real(r8), intent(inout) :: p_algae(Nag,LBi:,LBj:)
+      real(r8), intent(inout) :: p_algae(:,LBi:,LBj:)
 # endif
 # ifdef SEDIMENT_ECOSYS
       real(r8), intent(inout) :: p_sand(LBi:,LBj:)

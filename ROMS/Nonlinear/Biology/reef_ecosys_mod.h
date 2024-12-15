@@ -1023,7 +1023,7 @@
             ZOOX(ng)%QAo(isp,i,j)  = OCEAN(ng)%HisBio2d(i,j, iZxQAo(isp) )
             ZOOX(ng)%QAr(isp,i,j)  = OCEAN(ng)%HisBio2d(i,j, iZxQAr(isp) )
             ZOOX(ng)%QAi(isp,i,j)  = OCEAN(ng)%HisBio2d(i,j, iZxQAi(isp) )
-            ZOOX(ng)%QAid(isp,i,j) = OCEAN(ng)%HisBio2d(i,j, iZxQAid(isp) )
+!            ZOOX(ng)%QAid(isp,i,j) = OCEAN(ng)%HisBio2d(i,j, iZxQAid(isp) )
 #  if defined CORAL_CARBON_ISOTOPE
             ZOOX(ng)%Q13C(isp,i,j) = OCEAN(ng)%HisBio2d(i,j, iZxQ13C(isp) )
 #  endif
@@ -1180,7 +1180,7 @@
             OCEAN(ng)%HisBio2d(i,j, iZxQAo(isp) ) = ZOOX(ng)%QAo(isp,i,j) 
             OCEAN(ng)%HisBio2d(i,j, iZxQAr(isp) ) = ZOOX(ng)%QAr(isp,i,j) 
             OCEAN(ng)%HisBio2d(i,j, iZxQAi(isp) ) = ZOOX(ng)%QAi(isp,i,j) 
-            OCEAN(ng)%HisBio2d(i,j, iZxQAid(isp) )= ZOOX(ng)%QAid(isp,i,j)
+!            OCEAN(ng)%HisBio2d(i,j, iZxQAid(isp) )= ZOOX(ng)%QAid(isp,i,j)
 #  if defined CORAL_CARBON_ISOTOPE
             OCEAN(ng)%HisBio2d(i,j, iZxQ13C(isp) ) = ZOOX(ng)%Q13C(isp,i,j) 
 #  endif
@@ -1345,7 +1345,7 @@
 # endif
 
 # ifdef MACROALGAE
-          DO isp=1,Nsg
+          DO isp=1,Nag
             DIAGS(ng)%DiaBio2d(i,j, iAgPg(isp) ) = ALGAE(ng)%Pg(isp,i,j)
             DIAGS(ng)%DiaBio2d(i,j, iAg_R(isp) ) = ALGAE(ng)%R (isp,i,j)
             DIAGS(ng)%DiaBio2d(i,j, iAgPn(isp) ) = ALGAE(ng)%Pg(isp,i,j)-ALGAE(ng)%R (isp,i,j)
@@ -1383,58 +1383,35 @@
 #ifdef REEF_ECOSYS
       ! yt_edit this subroutine wraps the logic for getting tile bounds and ROMS inputs with the actual initialize_reef_ecosys() call
       SUBROUTINE call_initialize_reef_ecosys_wrapper(ng, tile)
+      
+      USE mod_grid,         ONLY : GRID
+      USE mod_reef_ecosys,  ONLY : initialize_reef_ecosys
 
-        USE mod_grid,         ONLY : GRID
-        USE mod_reef_ecosys,  ONLY : initialize_reef_ecosys
+      implicit none
+      integer, intent(in) :: ng, tile
+      integer :: i, j
+      integer :: LBi, UBi, LBj, UBj
+      !
+# include "set_bounds.h"
+      !
+      !  Set array initialization range.
+      !
+      LBi=BOUNDS(ng)%LBi(tile)
+      UBi=BOUNDS(ng)%UBi(tile)
+      LBj=BOUNDS(ng)%LBj(tile)
+      UBj=BOUNDS(ng)%UBj(tile)
 
-        implicit none
-        integer, intent(in) :: ng, tile
-        integer :: i, j
-        integer :: Imin, Imax, Jmin, Jmax
-        !
-# include "tile.h"
-        !
-        !  Set array initialization range.
-        !
-# ifdef _OPENMP
-        IF (DOMAIN(ng)%Western_Edge(tile)) THEN
-          Imin=BOUNDS(ng)%LBi(tile)
-        ELSE
-          Imin=Istr
-        END IF
-        IF (DOMAIN(ng)%Eastern_Edge(tile)) THEN
-          Imax=BOUNDS(ng)%UBi(tile)
-        ELSE
-          Imax=Iend
-        END IF
-        IF (DOMAIN(ng)%Southern_Edge(tile)) THEN
-          Jmin=BOUNDS(ng)%LBj(tile)
-        ELSE
-          Jmin=Jstr
-        END IF
-        IF (DOMAIN(ng)%Northern_Edge(tile)) THEN
-          Jmax=BOUNDS(ng)%UBj(tile)
-        ELSE
-          Jmax=Jend
-        END IF
-# else
-        Imin=LBi
-        Imax=UBi
-        Jmin=LBj
-        Jmax=UBj
-# endif
-        
-        CALL initialize_reef_ecosys(ng, Imin, Imax, Jmin, Jmax  &
-          , .not. LReadBioINI(2,ng)                             &   ! TRUE = initialize coral, seagass, macroalgae, sediment from start; FALSE = continue from previous run
+      CALL initialize_reef_ecosys(ng, IstrR, IendR, JstrR, JendR   &
+          , .not. LReadBioINI(2,ng)                                &   ! TRUE = initialize coral, seagass, macroalgae, sediment from start; FALSE = continue from previous run
 # ifdef SEAGRASS
-          , 1.0d0/(GRID(ng)%pm(Imin:Imax,Jmin:Jmax))            &   ! grid size XI-direction (meters)
-          , 1.0d0/(GRID(ng)%pn(Imin:Imax,Jmin:Jmax))            &   ! grid size ETA-direction (meters)
-          , GRID(ng)%p_sgrass                                   &   ! seagrass coverage (habitat area in grid / grid area)
+          , 1.0_r8/GRID(ng)%pm(IstrR:IendR,JstrR:JendR)            &   ! grid size XI-direction (meters)
+          , 1.0_r8/GRID(ng)%pn(IstrR:IendR,JstrR:JendR)            &   ! grid size ETA-direction (meters)
+          , GRID(ng)%p_sgrass(Nsg,IstrR:IendR,JstrR:JendR)         &   ! seagrass coverage (habitat area in grid / grid area)
 # endif
           )
 
-        CALL send_reef_ecosys2roms_his (ng, LBi, UBi, LBj, UBj)
-        write(*,*) 'yt_debug: mod_reef_ecosys.F initialize_reef_ecosys() finished send_reef_ecosys2roms_his'
+      CALL send_reef_ecosys2roms_his (ng, LBi, UBi, LBj, UBj)
+      write(*,*) 'yt_debug: mod_reef_ecosys.F initialize_reef_ecosys() finished send_reef_ecosys2roms_his'
     
       END SUBROUTINE call_initialize_reef_ecosys_wrapper
 #endif

@@ -134,7 +134,7 @@ END SUBROUTINE allocate_reef_ecosys
     write(*,*) 'yt_debug: mod_reef_ecosys.F initialize_reef_ecosys() start_of_new_run =', start_of_new_run
 
 #ifdef CORAL_POLYP
-    CALL initialize_coral(ng, LBi, UBi, LBj, UBj)
+    CALL initialize_coral(ng, LBi, UBi, LBj, UBj, start_of_new_run)
     write(*,*) 'yt_debug: mod_reef_ecosys.F initialize_reef_ecosys() finished coral init'
 #endif
 #ifdef SEAGRASS
@@ -1625,8 +1625,8 @@ END SUBROUTINE allocate_reef_ecosys
 # if defined CARBON_ISOTOPE
         dDI13C_dt(1) = dDI13C_dt(1) - Flux_DI13C * cff/rho_sw(1)
 # endif
-      END DO
-    END IF            
+      END IF            
+    END DO
 #endif
 
 
