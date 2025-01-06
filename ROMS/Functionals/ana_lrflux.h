@@ -110,6 +110,17 @@
 # if defined ANA_LONGWAVE_DOWN
       real(r8) :: TaK, Td, cff3, cff4
 # endif
+
+# if defined ANA_LONGWAVE_DOWN_TVA
+      real(r8) :: TaK, Td, cff3, cff4
+# endif
+
+# if defined ANA_LONGWAVE_DOWN_HIRAGA
+      real(r8) :: TaK, Td, cff3, cff4, Psat , Eva , Qa
+# endif
+# if defined ANA_LONGWAVE_DOWN_HIRAGA2
+      real(r8) :: TaK, Td, cff3, cff4, Psat , Eva , Qa
+# endif
 !!!<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< TN: add
 #endif
       real(r8) :: cff
@@ -141,6 +152,51 @@
           cff1 = 0.00000936_r8 * TaK*TaK              ! Swinbank (1963)
           cff2 = cff1*(1.0_r8+0.22_r8*cloud(i,j))     ! Ångström (1915)
           lrflx(i,j) = cff2 * StefBo*TaK*TaK*TaK*TaK
+#elif defined ANA_LONGWAVE_DOWN_TVA
+      DO j=JstrT,JendT
+        DO i=IstrT,IendT
+          TaK = Tair(i,j) + 273.15_r8
+          cff1 = 0.00000937_r8 * TaK*TaK*TaK*TaK*TaK*TaK              
+          cff2 = cff1*(1.0_r8 + 0.17_r8 * cloud(i,j) * cloud(i,j))      
+          lrflx(i,j) = cff2 * StefBo 
+# if defined JMAMSM_FLUXES
+          lrflx(i,j)=(lrflx(i,j)-16.7_r8)/0.977_r8  ! bias correction for JMAMSM
+# elif defined JMAOBS_FLUXES
+          lrflx(i,j)=(lrflx(i,j)+39.0_r8)/1.16_r8   ! bias correction for JMA weather station data
+# endif
+          lrflx(i,j)=cff*lrflx(i,j)
+        END DO
+      END DO
+      
+#elif defined ANA_LONGWAVE_DOWN_HIRAGA
+      DO j=JstrT,JendT
+        DO i=IstrT,IendT
+          TaK = Tair(i,j) + 273.15_r8
+          Psat = 6.1078_r8 * 10.0_r8**(7.5_r8 * (TaK - 273.15_r8) / (TaK - 35.85_r8))
+          Qa = Hair(i,j)
+          Eva = Psat * Qa
+          cff1 = 0.45_r8 + 0.066_r8 * sqrt(Eva)              ! brunt ()
+          cff2 = cff1*(1.0_r8 - 0.7_r8 * cloud(i,j)) + 0.7_r8 * cloud(i,j)     ! hiraga
+          lrflx(i,j) = cff2 * StefBo * TaK * TaK * TaK * TaK
+# if defined JMAMSM_FLUXES
+          lrflx(i,j)=(lrflx(i,j)-16.7_r8)/0.977_r8  ! bias correction for JMAMSM
+# elif defined JMAOBS_FLUXES
+          lrflx(i,j)=(lrflx(i,j)+39.0_r8)/1.16_r8   ! bias correction for JMA weather station data
+# endif
+          lrflx(i,j)=cff*lrflx(i,j)
+        END DO
+      END DO
+#elif defined ANA_LONGWAVE_DOWN_HIRAGA2
+      DO j=JstrT,JendT
+        DO i=IstrT,IendT
+          TaK = Tair(i,j) + 273.15_r8
+          Psat = 6.1078_r8 * 10.0_r8**(7.5_r8 * (TaK - 273.15_r8) / (TaK - 35.85_r8))
+          Qa = Hair(i,j)
+          Eva = Psat * Qa
+          cff1 = 0.51_r8 + 0.066_r8 * sqrt(Eva)              ! brunt ()
+          cff2 = cff1*(1.0_r8 - 0.84_r8 * cloud(i,j)) + 0.84_r8 * cloud(i,j)     ! hiraga
+          lrflx(i,j) = cff2 * StefBo*TaK*TaK*TaK*TaK
+
 # if defined JMAMSM_FLUXES
           lrflx(i,j)=(lrflx(i,j)-16.7_r8)/0.977_r8  ! bias correction for JMAMSM
 # elif defined JMAOBS_FLUXES
