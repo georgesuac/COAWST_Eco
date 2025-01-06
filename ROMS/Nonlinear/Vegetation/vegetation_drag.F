@@ -66,6 +66,10 @@
      &                        GRID(ng) % Hz,                            &
 !!!>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>TN:Add
      &                        GRID(ng) % h,                             &
+# ifdef WET_DRY
+     &                        GRID(ng) % umask_wet,                     &
+     &                        GRID(ng) % vmask_wet,                     &
+# endif
 !!!<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<TN:Add
      &                        OCEAN(ng) % u,                            &
      &                        OCEAN(ng) % v,                            &
@@ -101,6 +105,11 @@
      &                              Hz,                                 &
 !!!>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>TN:Add
      &                              h,                                  &
+# ifdef WET_DRY
+     &                              umask_wet,                          &
+     &                              vmask_wet,                          &
+# endif
+!!!<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<TN:Add
 !!!<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<TN:Add
      &                              u, v,                               &
      &                              plant,                              &
@@ -144,6 +153,10 @@
       real(r8), intent(in) :: Hz(LBi:,LBj:,:)
 !!!>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>TN:Add
       real(r8), intent(in) :: h(LBi:,LBj:)
+#  ifdef WET_DRY
+      real(r8), intent(in) :: umask_wet(LBi:,LBj:)
+      real(r8), intent(in) :: vmask_wet(LBi:,LBj:)
+#  endif
 !!!<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<TN:Add
       real(r8), intent(in) :: u(LBi:,LBj:,:,:)
       real(r8), intent(in) :: v(LBi:,LBj:,:,:)
@@ -168,6 +181,10 @@
       real(r8), intent(in) :: Hz(LBi:UBi,LBj:UBj,N(ng))
 !!!>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>TN:Add
       real(r8), intent(in) :: h(LBi:UBi,LBj:UBj)
+#  ifdef WET_DRY
+      real(r8), intent(in) :: umask_wet(LBi:UBi,LBj:UBj)
+      real(r8), intent(in) :: vmask_wet(LBi:UBi,LBj:UBj)
+#  endif
 !!!<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<TN:Add
       real(r8), intent(in) :: u(LBi:UBi,LBj:UBj,N(ng),2)
       real(r8), intent(in) :: v(LBi:UBi,LBj:UBj,N(ng),2)
@@ -448,6 +465,9 @@
               ru_veg(i,j,k)=SIGN(1.0_r8, ru_veg(i,j,k))*                &
      &               MIN(ABS(ru_veg(i,j,k)),                            &
      &                   ABS(u(i,j,k,nrhs))*cff4)
+!!!>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>TN:Add
+              ru_veg(i,j,k)=ru_veg(i,j,k)*umask_wet(i,j)
+!!!<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<TN:Add
 # endif
 
             END DO
@@ -491,6 +511,9 @@
               rv_veg(i,j,k)=SIGN(1.0_r8, rv_veg(i,j,k))*                &
      &               MIN(ABS(rv_veg(i,j,k)),                            &
      &                   ABS(v(i,j,k,nrhs))*cff4)
+!!!>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>TN:Add
+              rv_veg(i,j,k)=rv_veg(i,j,k)*vmask_wet(i,j)
+!!!<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<TN:Add
 # endif
 
             END DO

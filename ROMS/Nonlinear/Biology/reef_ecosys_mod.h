@@ -1404,8 +1404,8 @@
       CALL initialize_reef_ecosys(ng, IstrR, IendR, JstrR, JendR   &
           , .not. LReadBioINI(2,ng)                                &   ! TRUE = initialize coral, seagass, macroalgae, sediment from start; FALSE = continue from previous run
 # ifdef SEAGRASS
-          , 1.0_r8/GRID(ng)%pm(IstrR:IendR,JstrR:JendR)            &   ! grid size XI-direction (meters)
-          , 1.0_r8/GRID(ng)%pn(IstrR:IendR,JstrR:JendR)            &   ! grid size ETA-direction (meters)
+          , GRID(ng)%om_r(IstrR:IendR,JstrR:JendR)                 &   ! grid size XI-direction (meters)
+          , GRID(ng)%on_r(IstrR:IendR,JstrR:JendR)                 &   ! grid size ETA-direction (meters)
           , GRID(ng)%p_sgrass(Nsg,IstrR:IendR,JstrR:JendR)         &   ! seagrass coverage (habitat area in grid / grid area)
 # endif
           )

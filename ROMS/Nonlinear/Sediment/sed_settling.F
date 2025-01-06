@@ -352,9 +352,9 @@
             settling_flux(i,j,ised)=FC(i,0)
 !!!>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>TN:Add
 # if defined SHIRAHO_REEF
-            IF (h(i,j).gt.29.0_r8) THEN
-              settling_flux(i,j,ised)=0.0_r8
-            END IF
+!            IF (h(i,j).gt.29.0_r8) THEN
+!              settling_flux(i,j,ised)=0.0_r8
+!            END IF
 # endif
 !!!<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<TN:Add
           END DO

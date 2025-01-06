@@ -179,7 +179,7 @@
           DO i=IstrT,IendT
             plant(i,j,iveg,pdiam)=0.01_r8        !Diameter
             plant(i,j,iveg,phght)=0.16_r8         !Height
-            plant(i,j,iveg,pdens)=p_sgrass(isg,i,j)*1500.0_r8       !Density
+            plant(i,j,iveg,pdens)=p_sgrass(isg,i,j)*2000.0_r8       !Density
             plant(i,j,iveg,pthck)=0.0005_r8      !Thickness 1cm
           END DO
         END DO

@@ -33,6 +33,9 @@
      &                        GRID(ng) % pn,                            &
      &                        GRID(ng) % xr,                            &
      &                        GRID(ng) % yr,                            &
+#ifdef SEDIMENT_ECOSYS
+     &                        GRID(ng) % p_sand,                        &
+#endif
 #if defined BBL_MODEL && (defined MB_BBL || defined SSW_BBL)
      &                        OCEAN(ng) % rho,                          &
 #endif
@@ -63,6 +66,9 @@
      &                              IminS, ImaxS, JminS, JmaxS,         &
      &                              pm, pn,                             &
      &                              xr, yr,                             &
+#ifdef SEDIMENT_ECOSYS
+     &                              p_sand,                             &
+#endif
 #if defined BBL_MODEL && (defined MB_BBL || defined SSW_BBL)
      &                              rho,                                &
 #endif
@@ -89,6 +95,9 @@
       real(r8), intent(in) :: pn(LBi:,LBj:)
       real(r8), intent(in) :: xr(LBi:,LBj:)
       real(r8), intent(in) :: yr(LBi:,LBj:)
+# ifdef SEDIMENT_ECOSYS
+      real(r8), intent(in) :: p_sand(LBi:,LBj:)
+# endif
 # if defined BBL_MODEL && (defined MB_BBL || defined SSW_BBL)
       real(r8), intent(in) :: rho(LBi:,LBj:,:)
 # endif
@@ -104,6 +113,9 @@
       real(r8), intent(in) :: pn(LBi:UBi,LBj:UBj)
       real(r8), intent(in) :: xr(LBi:UBi,LBj:UBj)
       real(r8), intent(in) :: yr(LBi:UBi,LBj:UBj)
+# ifdef SEDIMENT_ECOSYS
+      real(r8), intent(in) :: p_sand(LBi:UBi,LBj:UBj)
+# endif
 # if defined BBL_MODEL && (defined MB_BBL || defined SSW_BBL)
       real(r8), intent(in) :: rho(LBi:,LBj:,:)
 # endif
@@ -408,7 +420,34 @@
         END DO
       END DO
 !!!>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> TN:Add
-# elif defined SHIRAHO_REEF || defined BERAU2 || defined BERAU2RIVER
+# elif defined SHIRAHO_REEF
+      DO j=JstrT,JendT
+        DO i=IstrT,IendT
+!
+!  Set bed layer properties.
+!
+          DO k=1,Nbed
+             bed(i,j,k,iaged)=time(ng)
+             if(p_sand(i,j)>0.1_r8) then
+               bed(i,j,k,ithck)=0.1_r8   !10.0_r8
+             else
+               bed(i,j,k,ithck)=0.0_r8   !
+             endif
+             bed(i,j,k,iporo)=0.50_r8
+             
+             bed_frac(i,j,k,1)=0.0_r8  !!! mud_01:   0% (Red soil from Todoroki river)
+             bed_frac(i,j,k,2)=1.0_r8  !!! mud_02: 100% (Reef sediment)
+             
+          END DO
+!
+!  Set exposed sediment layer properties.
+!
+          bottom(i,j,irlen)=0.10_r8
+          bottom(i,j,irhgt)=0.01_r8
+          bottom(i,j,izdef)=Zob(ng)
+        END DO
+      END DO
+# elif defined BERAU2 || defined BERAU2RIVER
       DO j=JstrT,JendT
         DO i=IstrT,IendT
 !
