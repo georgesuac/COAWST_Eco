@@ -1290,7 +1290,7 @@
             END DO
           END IF
 !!!>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>TN:Add
-# if defined SGD_ON && !defined SEDECO_ADVECTION
+# if defined SGD_ON && !defined SEDECO_SGD
 !
 !  Apply mass point sources - Volume influx.
 !

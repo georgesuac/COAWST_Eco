@@ -72,6 +72,11 @@
       USE mod_inwave_params
       USE mod_inwave_vars
 #endif
+!!! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> TN:Add
+#if defined SEDIMENT_ECOSYS
+      USE mod_reef_ecosys_param, ONLY : Nsed
+#endif
+!!!<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< TN:Add
 !
       implicit none
 !
@@ -5054,7 +5059,7 @@
           status=nf_fwrite3d(ng, iNLM, QCK(ng)%ncid,                    &
      &                     QCK(ng)%Vid(ifield),                         &
      &                     QCK(ng)%Rindex, gtype,                       &
-     &                     LBi, UBi, LBj, UBj, 1, Nsed(ng), scale,      &
+     &                     LBi, UBi, LBj, UBj, 1, Nsed, scale,          &
 #  ifdef MASKING
      &                     GRID(ng) % rmask,                            &
 #  endif

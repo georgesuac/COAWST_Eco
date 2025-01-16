@@ -40,6 +40,9 @@
 #if defined BIOLOGY
       USE mod_biology
 #endif
+#if defined SEDIMENT_ECOSYS
+      USE mod_reef_ecosys_param, ONLY : Nsed
+#endif
 !!!<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<TN:Add
 #if (defined PERFECT_RESTART && defined ICE_MODEL) || defined NCEP_FLUXES
       USE mod_forces
@@ -2101,7 +2104,7 @@
         status=nf_fwrite3d(ng, iNLM, RST(ng)%ncid,                    &
      &                   RST(ng)%Vid(ifield),                         &
      &                   RST(ng)%Rindex, gtype,                       &
-     &                   LBi, UBi, LBj, UBj, 1, Nsed(ng), scale,      &
+     &                   LBi, UBi, LBj, UBj, 1, Nsed, scale,          &
 #  ifdef MASKING
      &                   GRID(ng) % rmask,                            &
 #  endif

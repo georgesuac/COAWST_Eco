@@ -1,11 +1,65 @@
 
-!!!=== Copyright (c) 2012-2020 Takashi NAKAMURA  =====
+!!!=== Copyright (c) 2012-2025 Takashi NAKAMURA  =====
 
 module mod_geochem
 
   implicit none
-! ------ Isotope related parameter -----
+
+!----- Carbon isotope fractionation ------------------------
+#if defined CARBON_TRACE
+  real(8), parameter :: aC_phot(3) = [ 1.0d0, 1.0d0, 1.0d0 ]
+!  real(8), parameter :: aC_resp(3) = [ 1.0d0, 1.0d0, 1.0d0 ]
+  real(8), parameter :: aC_calc(3) = [ 1.0d0, 1.0d0, 1.0d0 ] 
+  real(8), parameter :: aC_co2 (3) = [ 1.0d0, 1.0d0, 1.0d0 ]
+  real(8), parameter :: aC_grz (3) = [ 1.0d0, 1.0d0, 1.0d0 ]
+#else
+                                     ! iCt      iC13             iD47 (clumped isotope)              
+  real(8), parameter :: aC_phot(3) = [ 1.0d0, -20.0d-3 +1.0d0, -20.0d-3 +1.0d0 ] !!!!! To Be Confirmed
+!  real(8), parameter :: aC_resp(3) = [ 1.0d0,   0.0d-3 +1.0d0,   0.0d-3 +1.0d0 ]
+  real(8), parameter :: aC_calc(3) = [ 1.0d0,   2.7d-3 +1.0d0,   2.7d-3 +1.0d0 ] 
+  real(8), parameter :: aC_co2 (3) = [ 1.0d0,  -7.0d-3 +1.0d0,  -7.0d-3 +1.0d0 ] !!!!! To Be Confirmed. Maybe ~-8-4.4
+  real(8), parameter :: aC_grz (3) = [ 1.0d0,   0.8d-3 +1.0d0,           1.0d0 ]
+#endif
+
+!----- Nitrogen isotope fractionation ------------------------
+#if defined NITROGEN_TRACE
+  real(8), parameter :: aNO3_phot(2) = [ 1.0d0, 1.0d0 ]
+  real(8), parameter :: aNH4_phot(2) = [ 1.0d0, 1.0d0 ]
+  real(8), parameter :: aN_grz   (2) = [ 1.0d0, 1.0d0 ]
+  real(8), parameter :: aN_N2fix (2) = [ 1.0d0, 1.0d0 ]
+  real(8), parameter :: aN_nitr  (2) = [ 1.0d0, 1.0d0 ]
+  real(8), parameter :: aN_denitr(2) = [ 1.0d0, 1.0d0 ]
+#else
+                                        ! iNt         iN15         
+  real(8), parameter :: aNO3_phot(2) = [ 1.0d0, -10.0d-3 +1.0d0 ] ! NO3 assimilation by phytoplankton !!!! To Be Confirmed
+  real(8), parameter :: aNH4_phot(2) = [ 1.0d0,  -5.0d-3 +1.0d0 ] ! NH4 assimilation by phytoplankton !!!! To Be Confirmed
+  real(8), parameter :: aN_grz   (2) = [ 1.0d0,   3.4d-3 +1.0d0 ] ! condensation
+  real(8), parameter :: aN_N2fix (2) = [ 1.0d0,   1.0d-3 +1.0d0 ] ! nitrogen fixation (N2 -> NH4) !!!! To be confirmed
+  real(8), parameter :: aN_nitr  (2) = [ 1.0d0, -35.0d-3 +1.0d0 ] ! nitrification (NH4 -> NO3) ! To be confirmed
+  real(8), parameter :: aN_denitr(2) = [ 1.0d0, -20.0d-3 +1.0d0 ] ! denitrification (NO3 -> N2) ! To be confirmed
+#endif
+
+!----- Sulfur isotope fractionation ------------------------
+#if defined SULFUR_TRACE
+  real(8), parameter :: aS_SO4red(2) = [ 1.0d0, 1.0d0 ]
+  real(8), parameter :: aS_S02SO4(2) = [ 1.0d0, 1.0d0 ]
+  real(8), parameter :: aS_S02H2S(2) = [ 1.0d0, 1.0d0 ]
+#else
+                                         ! iSt      iS34         
+  real(8), parameter :: aS_SO4red(2) = [ 1.0d0, -25.0d-3 +1.0d0 ] ! Sulfate reduction (SO42- -> H2S)             ( 25 permill; Dale et al., 2009)
+  real(8), parameter :: aS_S02SO4(2) = [ 1.0d0,  20.0d-3 +1.0d0 ] ! S0 disproportionation to SO42- (S0 -> SO42-) (-20 permill; Dale et al., 2009)
+  real(8), parameter :: aS_S02H2S(2) = [ 1.0d0,  -7.0d-3 +1.0d0 ] ! S0 disproportionation to H2S   (S0 -> H2S)   (  7 permill; Dale et al., 2009)
+#endif
+
+! ------ Carbon Isotope related parameters -----
   real(8), parameter :: R13C_VPDB = 0.011056d0/0.988944d0
+! ------ Nitrogen Isotope related parameters -----
+  real(8), parameter :: R15N_AIR = 0.003663d0/0.996337d0
+! ------ Sulfur Isotope related parameters -----
+  real(8), parameter :: R34S_VCDT = 0.00419719d0/0.9503957d0
+! ------ Oxygen Isotope related parameters -----
+  real(8), parameter :: R18O_VSMOW = 0.0020004d0/0.9976206d0
+! ------ Boron Isotope related parameters -----
   real(8), parameter :: R11B_SRM951 = 80.173d0/19.827d0  !NIST SRM 951 boric acid standard
 
 ! ------ Molecular diffusion coefficients in seawater @ 25 degC, 35 psu -----
@@ -26,7 +80,10 @@ module mod_geochem
   real(8), parameter :: vis_sw   = 0.94d-6   ! kinematic viscosity   (m2 s-1)
 
   real(8), parameter :: grav    = 9.80665d0 ! Gravitational acceleration [m/s2]
-    
+
+  real(8), parameter :: PI  = 3.14159265359d0
+  real(8), parameter :: Rg  = 8.31d0    ! Gass constant (J K–1 mol–1)
+
 contains
 !!!***********************************************************************
 !!!   Physical parameters of seawater
@@ -1152,6 +1209,97 @@ contains
 !!!***********************************************************************
 !!!   Isotope functions
 !!!*********************************************************************** 
+! **********************************************************************
+!  Safe calculation of isotope ratio.
+! **********************************************************************
+
+  real(8) function Iso_ratio(Ci,Ct) ! isotope ratio Ci/Ct
+
+    implicit none
+    real(8), intent(in) :: Ci  ! Isotope concentration (e.g., umol/L) 
+    real(8), intent(in) :: Ct  ! Total concentration   (e.g., umol/L)
+    if(Ct>0.0d0) then
+      Iso_ratio = max(Ci,0.0d0)/Ct
+    else
+      Iso_ratio = 0.0d0
+    endif
+    Iso_ratio = min(Iso_ratio, 1.0d0)
+
+    return
+  end function Iso_ratio
+
+! **********************************************************************
+!  R (isotope ratio) from delta value with standard R value.
+! **********************************************************************
+
+  real(8) function R_from_delta(delta,Rstd)  ! e.g., R13C = 13C/12C; R15N = 15N/14N
+
+    implicit none
+    real(8), intent(in) :: delta ! Isotope ratio (delta value; per mill vs standard)
+    real(8), intent(in) :: Rstd  ! Isotope ratio of standard
+
+    R_from_delta=(delta*1.d-3 + 1.d0)*Rstd
+
+    return
+  end function R_from_delta
+
+! **********************************************************************
+!  delta value (isotope ratio vs standard) from 
+!   R (isotope ratio) with standard R value.
+! **********************************************************************
+
+  real(8) function delta_from_R(Rsample,Rstd)  ! e.g., R13C = 13C/12C; R15N = 15N/14N
+
+    implicit none
+    real(8), intent(in) :: Rsample ! Isotope ratio of sample
+    real(8), intent(in) :: Rstd    ! Isotope ratio of standard
+
+    delta_from_R=(Rsample/Rstd-1.d0)*1.d3
+
+    return
+  end function delta_from_R
+
+! **********************************************************************
+!  delta value (isotope ratio vs standard) from 
+!   isotope concentration and total concentration with standard R value.
+! **********************************************************************
+
+  real(8) function delta_from_Ci_Ct(Ci,Ct,Rstd)  ! e.g., R13C = 13C/12C; R15N = 15N/14N
+
+    implicit none
+    real(8), intent(in) :: Ci    ! Isotope concentration
+    real(8), intent(in) :: Ct    ! Total concentration
+    real(8), intent(in) :: Rstd  ! Isotope ratio of standard
+
+    if((Ct-Ci)<=0.0d0) then
+      delta_from_Ci_Ct=-9999.0d0
+    else
+      delta_from_Ci_Ct=(Ci/(Ct-Ci)/Rstd-1.d0)*1.d3
+    endif
+
+    return
+  end function delta_from_Ci_Ct
+
+! **********************************************************************
+!  isotope concentration from delta value (isotope ratio vs standard)
+!   and total concentration with standard R value.
+! **********************************************************************
+
+  real(8) function Ci_from_Ct_delta(Ct,delta,Rstd)  ! e.g., R13C = 13C/12C; R15N = 15N/14N
+
+    implicit none
+    real(8), intent(in) :: Ct    ! Total concentration
+    real(8), intent(in) :: delta ! Isotope ratio (delta value; per mill vs standard)
+    real(8), intent(in) :: Rstd  ! Isotope ratio of standard
+    real(8) :: cff
+
+    cff = (delta*1.0d-3 + 1.0d0)*Rstd
+
+    Ci_from_Ct_delta= cff/(1+cff) * Ct
+
+    return
+  end function Ci_from_Ct_delta
+
 
 ! **********************************************************************
 !  d13C VPDB from R13C value.
@@ -1182,6 +1330,19 @@ contains
     return
   end function R13C_fromd13C
 
+! **********************************************************************
+!  R15N from R15N air value.
+! **********************************************************************
+
+  real(8) function R15N_fromd15N(d15N)  ! R15N = 15N/14N
+
+    implicit none
+    real(8), intent(in) :: d15N ! Nitrogen isotope ratio (per mill air)
+
+    R15N_fromd15N=(d15N*1.d-3 + 1.d0)*R15N_AIR
+
+    return
+  end function R15N_fromd15N
 
 ! **********************************************************************
 !  Carbon 13 isotope concentrations
@@ -1551,234 +1712,6 @@ contains
     return
   end function aB_Palmer1987
 
-
-!!!***********************************************************************
-!!!   Sediment biogeochemical parameters
-!!!*********************************************************************** 
-  !     Added by Masa Muto (2023)
-
-  ! ----For all of module which is newer than mod_sedecosys_MM3.F ---------!
-  ! ----For all of mod_sedecosys_test().F  ---------!
-
-  !!--- Diffusion coefficient in sediment --- !!
-  real(8) function Dsed(Dw,poro)  
-    implicit none
-    real(8), intent(in) :: Dw   ! diffusion coefficient in pure seawater
-    real(8), intent(in) :: poro ! porosity
-    Dsed = Dw / (1d0+3d0*(1d0-poro))
-    return
-  end function Dsed
-
-  !! Ficks law (diffusion)
-  ! General
-  real(8) function Ficks(D,C1,C2,dz)
-    implicit none
-    real(8), intent(in) :: D
-    real(8), intent(in) :: C1
-    real(8), intent(in) :: C2
-    real(8), intent(in) :: dz
-    Ficks =  D * (C1 - C2)/dz
-    return
-  end function Ficks
-  ! Dissolved compounds
-  real(8) function Ficks_sedd(D,C1,C2,dz,poro) ! for solutes
-    implicit none
-    real(8), intent(in) :: D
-    real(8), intent(in) :: C1
-    real(8), intent(in) :: C2
-    real(8), intent(in) :: dz
-    real(8), intent(in) :: poro
-    Ficks_sedd = poro * D * (C1 - C2)/dz
-    return
-  end function Ficks_sedd
-  ! Particle compounds
-  real(8) function Ficks_sedp(D,C1,C2,dz,poro,rho_s) ! for solids
-    implicit none
-    real(8), intent(in) :: D
-    real(8), intent(in) :: C1
-    real(8), intent(in) :: C2
-    real(8), intent(in) :: dz
-    real(8), intent(in) :: poro
-    real(8), intent(in) :: rho_s
-    Ficks_sedp = rho_s * (1d0-poro) * D * (C1 - C2)/dz
-    return
-  end function Ficks_sedp
-
-
-  !! --- Burial Flux calculation --- !!
-  ! Dissolved compounds
-  real(8) function FCd(poro,u,C)
-    implicit none
-    real(8), intent(in) :: poro ! porosity
-    real(8), intent(in) :: u    ! deposition rate
-    real(8), intent(in) :: C    ! compound concentration
-    FCd = poro * u * C
-    return
-  end function FCd
-! Particle compounds
-  real(8) function FCp(poro,u,C,rho_s)
-    implicit none
-    real(8), intent(in) :: poro
-    real(8), intent(in) :: u
-    real(8), intent(in) :: C
-    real(8), intent(in) :: rho_s ! soil density
-    FCp = rho_s * (1d0-poro) * u * C
-    return
-  end function FCp
-
-
-  !! --- Advection Flux calculation --- !!
-  ! Dissolved compounds
-  real(8) function FCa(poro1,poro2,u,C1,C2) ! (nmol cm-2 s-1)
-    implicit none
-    real(8), intent(in) :: poro1 ! [cm_w3/cm_s3]  porosity of layer above
-    real(8), intent(in) :: poro2 ! [cm_w3/cm_s3]  porosity of layer below
-    real(8), intent(in) :: u     ! [cm s-1]       advection velocity (advection downwards is positive)
-    real(8), intent(in) :: C1    ! [umol L_w-1]   compound concentration of layer above
-    real(8), intent(in) :: C2    ! [umol L_w-1]   compound concentration of layer below (µmol L-1 = nmol cm-3)
-    if (u >= 0) then
-    ! [nmol/cm_s2 s] = [cm_w3/cm_s3] [cm_s/s] [nmol/cm_w3]
-      Fca            = poro1         * u      * C1
-    else
-      Fca            = poro2         * u      * C2
-    endif
-    return
-  end function FCa
-
-
-  !! --- Reaction rate --- !!
-  ! reaction with solute * solute
-  real(8) function Vdd(k,poro,Cd1,Cd2)
-    implicit none
-    real(8), intent(in) :: k
-    real(8), intent(in) :: poro
-    real(8), intent(in) :: Cd1
-    real(8), intent(in) :: Cd2
-    Vdd = k * poro * Cd1 * Cd2
-    return
-  end function Vdd
-  ! reaction with solid * solute
-  real(8) function Vsd(k,poro,Cs1,Cd1,rho_s)
-    implicit none
-    real(8), intent(in) :: k
-    real(8), intent(in) :: poro
-    real(8), intent(in) :: Cs1
-    real(8), intent(in) :: Cd1
-    real(8), intent(in) :: rho_s
-    Vsd = k * rho_s * (1d0 - poro) * Cs1 * Cd1
-    return
-  end function Vsd
-  ! reaction with solid * solid
-  real(8) function Vss(k,poro,Cs1,Cs2,rho_s)
-    implicit none
-    real(8), intent(in) :: k
-    real(8), intent(in) :: poro
-    real(8), intent(in) :: Cs1
-    real(8), intent(in) :: Cs2
-    real(8), intent(in) :: rho_s
-    Vss = k * ((rho_s * (1d0 - poro))**2) * Cs1 * Cs2
-    return
-  end function Vss
-
-  !! Mass balance calculation in sediment column
-  !! solutes (dissolved)
-  real(8) function massbalance_sed_d(C,FTin,FTout,R,dz,poro,dt,misc_sources)
-    implicit none
-    real(8),intent(in) :: C             ! concentration                   (µmol L-1 = nmol cm-3)
-    real(8),intent(in) :: FTin          ! total flux (IN)                 (nmol cm-2 s-1)
-    real(8),intent(in) :: FTout         ! total flux (OUT)                (nmol cm-2 s-1)
-    real(8),intent(in) :: R             ! Net prodution and consumption   (nmol cm-3 s-1)
-    real(8),intent(in) :: dz            ! layer thickness                 (cm)
-    real(8),intent(in) :: poro          ! porosity                        (cm_w3 cm_s-3)
-    real(8),intent(in) :: dt            ! time step                       (s)
-    real(8),intent(in) :: misc_sources  ! other sources (like seagrass)   (µmol L-1 s-1)
-    real(8) :: Ccal
-
-       Ccal      =       C       +   ((FTin - FTout) / dz    +        R         )/   poro        *  dt + misc_sources * dt
-!  [nmol cm_w-3] = [nmol cm_w-3]   ([nmol cm_s-2 s-1]/(cm_s) + [nmol cm_s-3 s-1])/[cm_w3 cm_s-3] * [s] + [nmol g-1 s-1] [s]
-    Ccal = max(Ccal,0.0d0)
-    ! Ccal = min(Ccal,3.0d4)
-    ! Ccal = min(Ccal,1.0d4)
-    ! massbalance_sed_d = min(Ccal,1.0d4)
-    massbalance_sed_d = Ccal
-
-    return
-  end function massbalance_sed_d
-
-  !! solids (particulate)
-  real(8) function massbalance_sed_p(C,FTin,FTout,R,dz,poro,dt,rho_s,misc_sources)
-    implicit none
-    real(8),intent(in) :: C             ! concentration                  (nmol g-1)
-    real(8),intent(in) :: FTin          ! total flux  (IN)               (nmol cm-2 s-1)
-    real(8),intent(in) :: FTout         ! total flux  (OUT)              (nmol cm-2 s-1)
-    real(8),intent(in) :: R             ! Net prodution and consumption  (nmol cm-3 s-1)
-    real(8),intent(in) :: dz            ! layer thickness                (cm)
-    real(8),intent(in) :: poro          ! porosity                       (cm_w3 cm_s-3)
-    real(8),intent(in) :: dt            ! time step                      (s)
-    real(8),intent(in) :: rho_s         ! soil(wet) density              (g cm_w-3)
-    real(8),intent(in) :: misc_sources  ! other sources (like seagrass)  (nmol g-1 s-1)
-    real(8) :: Ccal
-
-       Ccal     =      C    +    ( (FTin -FTout)  /dz  +       R        )/(rho_s      *  (1d0 - poro) ) * dt  + misc_sources * dt
-  ! [nmol g-1]      [nmol g-1] + ([nmol cm-2 s-1]/[cm] + [nmol cm-3 s-1])/([g cm_w-3] * [cm_w3 cm_s-3]) * [s] + [nmol g-1 s-1] [s]
-    Ccal = max(Ccal,0.0d0)
-    ! Ccal = min(Ccal,1.0d4)
-    ! Ccal = min(Ccal,1.0d7)
-    ! massbalance_sed_p = min(Ccal,1.0d4)
-    massbalance_sed_p = Ccal
-
-    return
-  end function massbalance_sed_p
-
-
-  ! ------------For mod_sedecosys_MM2.F --------------!
-  !! almost out of use
-  !---O2---!
-  real(8) function DiffsedO2(temp,poro) !Diffuison coefficient of O2 (cm2 s-1)
-    implicit none
-    real(8), intent(in) :: temp   !temperature
-    real(8), intent(in) :: poro   !porosity
-
-    DiffsedO2 = (11.7d0 + 0.334d0*temp + 0.00505d0*temp**2.0d0) / (1.0d0+3.0d0*(1.0d0- poro)) *10d-6 
-    return
-  end function DiffsedO2
-  !---NO3---!
-  real(8) function DiffsedNO3(temp,poro) !Diffusion coefficient of NO3 (cm2 s-1)
-    implicit none
-    real(8), intent(in) :: temp   !temperature
-    real(8), intent(in) :: poro   !porosity
-
-    DiffsedNO3 = (9.72d0 + 0.365d0*temp) / (1.0d0+3.0d0*(1.0d0- poro)) *10d-6  
-    return
-  end function DiffsedNO3
-  !---NH4---!
-  real(8) function DiffsedNH4(temp,poro) !Diffusion coefficient of NH4 (cm2 s-1)
-    implicit none
-    real(8), intent(in) :: temp   !temperature
-    real(8), intent(in) :: poro   !porosity
-
-    DiffsedNH4 = (9.76d0 + 0.398d0*temp) / (1.0d0+3.0d0*(1.0d0- poro)) *10d-6 
-    return
-  end function DiffsedNH4
-  !---PO4---!
-  real(8) function DiffsedPO4(temp,poro) !Diffusion coefficient of PO4 (cm2 s-1)
-    implicit none
-    real(8), intent(in) :: temp   !temperature
-    real(8), intent(in) :: poro   !porosity
-
-    DiffsedPO4 = (9.76d0 + 0.398d0*temp) / (1.0d0+3.0d0*(1.0d0- poro)) *10d-6 
-    return
-  end function DiffsedPO4
-  !---Mn2+---!
-
-  !---Fe2+---! 
-
-  !---SO4---!
-
-  !---H2S---!
-
-
-!!!*********************************************************************
 !!!***********************************************************************
 !!!   Empirical vertical profiles of biogeochemical parameters
 !!!*********************************************************************** 
@@ -1786,8 +1719,9 @@ contains
 !--- Dissolved Inorganic Carbon (DIC) ----------------
 !     developed by Faisal AMRI
 
-  real(8) function DIC_Profile(t_oC)
+  real(8) function DIC_Profile(SSDIC, t_oC)
     implicit none
+    real(8), intent(in) :: SSDIC  ! Sea surface DIC (umol kg-1)
     real(8), intent(in) :: t_oC   ! Temperatureture (oC)
     
     DIC_Profile = 2312.116d0+(10.68979d0*t_oC)                &
@@ -1799,8 +1733,9 @@ contains
 !--- Total Alikalinity (TA) ------------------------------
 !     developed by Faisal AMRI
 
-  real(8) function TA_Profile(t_oC)
+  real(8) function TA_Profile(SSTA, t_oC)
     implicit none
+    real(8), intent(in) :: SSTA   ! Sea surface TA (umol kg-1)
     real(8), intent(in) :: t_oC   ! Temperatureture (oC)
     
     TA_Profile = 2444.733d0-(22.2978d0*t_oC)                  &
@@ -1883,37 +1818,38 @@ contains
 !--- Phytoplankton -------------------------------------
 !     developed by Shinya AMANO, Takashi NAKAMURA
 
-  real(8) function PHY_Profile2(iphy, d)
+  real(8) function PHY_Profile2(iphy, SSPhyC, d)
     implicit none
-    integer, intent(in) :: iphy ! Phytoplankton functional group num 
-    real(8), intent(in) :: d    ! elevation (m) = -depth  
+    integer, intent(in) :: iphy   ! Phytoplankton functional group num 
+    real(8), intent(in) :: SSphyC ! Sea surface phytoplankton density (umolC L-1) 
+    real(8), intent(in) :: d      ! elevation (m) = -depth  
  
     SELECT CASE(iphy)
     !--- Phytoplankton_01 ---
     CASE(1)
       IF (d.gt.-155.0d0) THEN
-        PHY_Profile2=(-0.00095d0*(d+50.0d0)**2 + 10.5d0)/24.0d0 * 0.2d0    ! umol L-1
+        PHY_Profile2=(-0.00095d0*(d+50.0d0)**2 + 10.5d0)/24.0d0 * SSphyC    ! umol L-1
       ELSE IF (d.le.-155d0) THEN
         PHY_Profile2=0.0d0     ! umol L-1
       END IF
     !--- Phytoplankton_02 ---
     CASE(2)
       IF (d.gt.-155.0d0) THEN
-        PHY_Profile2=(-0.00095d0*(d+50.0d0)**2 + 10.5d0)/24.0d0 * 1.0d0    ! umol L-1
+        PHY_Profile2=(-0.00095d0*(d+50.0d0)**2 + 10.5d0)/24.0d0 * SSphyC    ! umol L-1
       ELSE IF (d.le.-155d0) THEN
         PHY_Profile2=0.0d0     ! umol L-1
       END IF
     !--- Phytoplankton_03 ---
     CASE(3)
       IF (d.gt.-155.0d0) THEN
-        PHY_Profile2=(-0.00095d0*(d+50.0d0)**2 + 10.5d0)/24.0d0 * 0.02d0    ! umol L-1
+        PHY_Profile2=(-0.00095d0*(d+50.0d0)**2 + 10.5d0)/24.0d0 * SSphyC    ! umol L-1
       ELSE IF (d.le.-155d0) THEN
         PHY_Profile2=0.0d0     ! umol L-1
       END IF
     !--- Phytoplankton_04 ---
     CASE(4)
       IF (d.gt.-155.0d0) THEN
-        PHY_Profile2=(-0.00095d0*(d+50.0d0)**2 + 10.5d0)/24.0d0 * 0.4d0    ! umol L-1
+        PHY_Profile2=(-0.00095d0*(d+50.0d0)**2 + 10.5d0)/24.0d0 * SSphyC    ! umol L-1
       ELSE IF (d.le.-155d0) THEN
         PHY_Profile2=0.0d0     ! umol L-1
       END IF
@@ -1939,9 +1875,10 @@ contains
 !--- Zooplankton -------------------------------------
 !     TN test
 
-  real(8) function ZOO_Profile2(izoo, d)
+  real(8) function ZOO_Profile2(izoo, SSzooC, d)
     implicit none
     integer, intent(in) :: izoo ! Zooplankton functional group num 
+    real(8), intent(in) :: SSzooC ! Sea surface zooplankton density (umolC L-1) 
     real(8), intent(in) :: d    ! elevation (m) = -depth
 
     SELECT CASE(izoo)

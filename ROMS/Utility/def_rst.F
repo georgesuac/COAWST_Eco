@@ -40,6 +40,11 @@
 #ifdef INWAVE_MODEL
       USE mod_inwave_params
 #endif
+!!! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> TN:Add
+#if defined SEDIMENT_ECOSYS
+      USE mod_reef_ecosys_param, ONLY : Nsed
+#endif
+!!!<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< TN:Add
 !
       USE def_var_mod, ONLY : def_var
       USE strings_mod, ONLY : FoundError
@@ -322,7 +327,7 @@
 !!! yuta_edits_for_masa >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>YT:Add
 #if defined SEDIMENT_ECOSYS
         status=def_dim(ng, iNLM, RST(ng)%ncid, ncname, 'sed_eco_layer', &
-     &                 Nsed(ng), DimIDs(36))
+     &                 Nsed, DimIDs(36))
         IF (FoundError(exit_flag, NoError, __LINE__,                    &
      &                 __FILE__)) RETURN
 #endif

@@ -35,14 +35,8 @@
       USE nf_fread2d_mod,  ONLY : nf_fread2d
       USE strings_mod,     ONLY : FoundError, find_string
 !!!>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>TN:Add
-#ifdef CORAL_POLYP
-      USE mod_coral, ONLY : Ncl
-#endif
-#ifdef SEAGRASS
-      USE mod_seagrass, ONLY : Nsg
-#endif
-#ifdef MACROALGAE
-      USE mod_macroalgae, ONLY : Nag
+#if defined CORAL_POLYP || defined SEAGRASS || defined MACROALGAE
+      USE mod_reef_ecosys_param, ONLY : Ncl, Nsg, Nag
 #endif
 #ifdef AQUACULTURE
       USE mod_aquaculture, ONLY : Naq

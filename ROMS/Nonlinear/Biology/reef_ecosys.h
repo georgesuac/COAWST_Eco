@@ -1,6 +1,6 @@
       SUBROUTINE biology (ng,tile)
 
-!!!=== Copyright (c) 2012-2024 Takashi NAKAMURA  =====
+!!!=== Copyright (c) 2012-2025 Takashi NAKAMURA  =====
 !***********************************************************************
 !  References:                                                         !
 !                                                                      !
@@ -28,7 +28,7 @@
 #if defined DIAGNOSTICS_BIO
       USE mod_diags
 #endif
-#if defined SEDECO_ADVECTION && defined SGD_ON
+#if defined SEDECO_SGD && defined SGD_ON
       USE mod_sources
 #endif
 #if defined SEDIMENT && defined SUSPLOAD
@@ -91,12 +91,12 @@
 #endif
 #ifdef SEDIMENT_ECOSYS
      &                   GRID(ng) % p_sand,                             &
-# if defined SEDECO_ADVECTION && defined SGD_ON
+# if defined SEDECO_SGD && defined SGD_ON
      &                   GRID(ng) % sgd_src,                            &
      &                   GRID(ng) % pm,                                 &
      &                   GRID(ng) % pn,                                 &
-     &                   SOURCES(ng) % Qbar(Nsrc(ng)),                  &
-     &                   SOURCES(ng) % Tsrc(Nsrc(ng),1,:),              &
+     &                   SOURCES(ng) % Qsgd,                            &
+     &                   SOURCES(ng) % Tsgd,                            &
 # endif
 #endif
 #if defined SEDIMENT && defined SUSPLOAD
@@ -155,12 +155,12 @@
 #endif
 #ifdef SEDIMENT_ECOSYS
      &                         p_sand,                                  &
-# if defined SEDECO_ADVECTION && defined SGD_ON
+# if defined SEDECO_SGD && defined SGD_ON
      &                         sgd_src,                                 &
      &                         pm,                                      &
      &                         pn,                                      &
-     &                         Qbar,                                    &
-     &                         Tsrc,                                    &
+     &                         Qsgd,                                    &
+     &                         Tsgd,                                    &
 # endif
 #endif
 #if defined SEDIMENT && defined SUSPLOAD
@@ -185,21 +185,9 @@
       USE mod_ncparam
       USE mod_scalars
       
+      USE mod_reef_ecosys_param
       USE mod_reef_ecosys  !!!<<<<<<<<<<<<<<<< Reef ecosystem model
       USE mod_geochem
-#ifdef CORAL_POLYP
-      USE mod_coral
-#endif
-#ifdef MACROALGAE
-      USE mod_macroalgae
-#endif
-#ifdef SEAGRASS
-      USE mod_seagrass
-#endif
-#ifdef SEDIMENT_ECOSYS
-      USE mod_sedecosys
-#endif
-
 
 !
 !  Imported variable declarations.
@@ -239,12 +227,12 @@
 # endif
 # ifdef SEDIMENT_ECOSYS
       real(r8), intent(inout) :: p_sand(LBi:,LBj:)
-#  if defined SEDECO_ADVECTION && defined SGD_ON
+#  if defined SEDECO_SGD && defined SGD_ON
       real(r8), intent(inout) :: sgd_src(LBi:,LBj:)
       real(r8), intent(in)    :: pm(LBi:,LBj:)
       real(r8), intent(in)    :: pn(LBi:,LBj:)
-      real(r8), intent(in)    :: Qbar
-      real(r8), intent(in)    :: Tsrc(UBt)
+      real(r8), intent(in)    :: Qsgd
+      real(r8), intent(in)    :: Tsgd(UBt)
 #  endif
 # endif
 # if defined SEDIMENT && defined SUSPLOAD
@@ -297,12 +285,12 @@
 # endif
 # ifdef SEDIMENT_ECOSYS
       real(r8), intent(inout) :: p_sand(LBi:UBi,LBj:UBj)
-#  if defined SEDECO_ADVECTION && defined SGD_ON
+#  if defined SEDECO_SGD && defined SGD_ON
       real(r8), intent(inout) :: sgd_src(LBi:UBi,LBj:UBj)
       real(r8), intent(in)    :: pm(LBi:UBi,LBj:UBj)
       real(r8), intent(in)    :: pn(LBi:UBi,LBj:UBj)
-      real(r8), intent(in)    :: Qbar
-      real(r8), intent(in)    :: Tsrc(UBt)
+      real(r8), intent(in)    :: Qsgd
+      real(r8), intent(in)    :: Tsgd(UBt)
 #  endif
 # endif
 # if defined SEDIMENT && defined SUSPLOAD
@@ -328,12 +316,81 @@
 !
 !  Local variable declarations.
 !
-      integer :: Iter, i, ibio, isink, itrc, ivar, j, k, ks
+      integer :: Iter, i, ibio, itrc, j, k, isp, m
       integer :: icl
       real(r8) :: PFDsurf    
       real(r8) :: tau, tau_u, tau_v        
-      real(r8) :: u10        
-      
+      real(r8) :: u10
+
+      real(r8) :: Tmp(N(ng))                 ! Temperature (oC)
+      real(r8) :: Sal(N(ng))                 ! Salinity (PSU)
+      real(r8) :: DOx(N(ng))                 ! Dissolved oxygen (umol L-1)
+      real(r8) :: TA (N(ng))                 ! Total alkalinity (TA: umol kg-1)
+      real(r8) :: DIC(N_Csp,N(ng))           ! Total dissolved inorganic carbon (DIC: umol kg-1)
+      real(r8) :: NO3(N_Nsp,N(ng))           ! NO3 (umol L-1)
+      real(r8) :: NH4(N_Nsp,N(ng))           ! NH4 (umol L-1)
+      real(r8) :: PO4(N_Nsp,N(ng))           ! PO4 (umol L-1)
+      real(r8) :: DOC(N_Csp,Ndom,N(ng))      ! Dissolved organic carbon (DOC: umol L-1)
+      real(r8) :: POC(N_Csp,Npom,N(ng))      ! Particulate organic carbon (POC: umol L-1)
+      real(r8) :: DON(N_Nsp,Ndom,N(ng))      ! Labile Dissolved organic nitrogen (DON: umol L-1)
+      real(r8) :: PON(N_Nsp,Npom,N(ng))      ! Particulate organic nitrogen (PON: umol L-1)
+      real(r8) :: DOP(N_Psp,Ndom,N(ng))      ! Labile Dissolved organic phosporius (DOP: umol L-1)
+      real(r8) :: POP(N_Psp,Npom,N(ng))      ! Particulate organic phosporius (POP: umol L-1)
+      real(r8) :: PhyC(N_Csp,Nphy,N(ng))     ! phytoplankton C biomass (umol C L-1), dinoflagellate
+      real(r8) :: ZooC(N_Csp,Nzoo,N(ng))     ! zooplankton C biomass (umol C L-1)
+      real(r8) :: PhyN(N_Nsp,Nphy,N(ng))     ! phytoplankton N biomass (umol N L-1), dinoflagellate
+      real(r8) :: ZooN(N_Nsp,Nzoo,N(ng))     ! zooplankton N biomass (umol N L-1)
+      real(r8) :: PhyP(N_Psp,Nphy,N(ng))     ! phytoplankton P biomass (umol P L-1), dinoflagellate
+      real(r8) :: ZooP(N_Psp,Nzoo,N(ng))     ! zooplankton P biomass (umol P L-1)
+      real(r8) :: PIC (N_Csp,Npim,N(ng))     ! Particulate inorganic carbon (PIC: umol L-1), coccolith (CaCO3)
+#if defined COT_STARFISH         
+      real(r8) :: COTe(N(ng))         ! COT starfish egg (umol L-1)
+      real(r8) :: COTl(N(ng))         ! COT starfish larvae (umol L-1)
+#endif
+    
+      real(r8) :: dTemp_dt(N(ng))            ! Tmp(N): Temperature (oC)
+      real(r8) :: dSalt_dt(N(ng))            ! Sal(N): Salinity (PSU)
+      real(r8) :: dDOx_dt(N(ng))             ! dDOx/dt  (umol L-1 s-1) 
+      real(r8) :: dTA_dt (N(ng))             ! dTA/dt   (umol kg-1 s-1) 
+      real(r8) :: dDIC_dt(N_Csp,N(ng))       ! dDIC/dt  (umol kg-1 s-1)  1 mmol m-3 = 1 umol L-1 = 1/1.024 umol kg-1
+      real(r8) :: dNO3_dt(N_Nsp,N(ng))       ! dNO3/dt (umol L-1 s-1)
+      real(r8) :: dNH4_dt(N_Nsp,N(ng))       ! dNH4/dt (umol L-1 s-1)
+      real(r8) :: dPO4_dt(N_Psp,N(ng))       ! dPO4/dt (umol L-1 s-1)
+      real(r8) :: dDOC_dt(N_Csp,Ndom,N(ng))  ! dDOC/dt  (umol L-1 s-1) 
+      real(r8) :: dPOC_dt(N_Csp,Npom,N(ng))  ! dPOC/dt  (umol L-1 s-1) 
+      real(r8) :: dDON_dt(N_Nsp,Ndom,N(ng))  ! dDON/dt (umol L-1 s-1)
+      real(r8) :: dPON_dt(N_Nsp,Npom,N(ng))  ! dPON/dt (umol L-1 s-1)
+      real(r8) :: dDOP_dt(N_Psp,Ndom,N(ng))  ! dDOP/dt (umol L-1 s-1)
+      real(r8) :: dPOP_dt(N_Psp,Npom,N(ng))  ! dPOP/dt (umol L-1 s-1)
+      real(r8) :: dPhyC_dt(N_Csp,Nphy,N(ng)) ! dPhyC/dt  (umolC L-1 s-1)  
+      real(r8) :: dZooC_dt(N_Csp,Nzoo,N(ng)) ! dZooC/dt  (umolC L-1 s-1)  
+      real(r8) :: dPhyN_dt(N_Nsp,Nphy,N(ng)) ! dPhyN/dt  (umolN L-1 s-1)  
+      real(r8) :: dZooN_dt(N_Nsp,Nzoo,N(ng)) ! dZooN/dt  (umolN L-1 s-1)  
+      real(r8) :: dPhyP_dt(N_Psp,Nphy,N(ng)) ! dPhyP/dt  (umolP L-1 s-1)  
+      real(r8) :: dZooP_dt(N_Psp,Nzoo,N(ng)) ! dZooP/dt  (umolP L-1 s-1)  
+      real(r8) :: dPIC_dt (N_Csp,Npim,N(ng)) ! dPIC/dt  (umol L-1 s-1) 
+#if defined COT_STARFISH         
+      real(r8) :: dCOTe_dt(N)    ! dCOTe/dt (umol L-1 s-1)
+      real(r8) :: dCOTl_dt(N)    ! dCOTl/dt (umol L-1 s-1)
+#endif
+#if defined SEDECO_SGD && defined SGD_ON
+      real(r8) :: sgd_flux        ! sumbarine groundwater discharge rate of grid (cm s-1)  
+      real(r8) :: sgd_Tmp         ! SGD concentration coming in through bottom: Tmp: Temperature (oC)
+      real(r8) :: sgd_Sal         ! SGD concentration coming in through bottom: Sal: Salinity (PSU)
+      real(r8) :: sgd_DIC(N_Csp)  ! SGD concentration coming in through bottom: DIC: Total dissolved inorganic carbon (DIC: umol kg-1)
+      real(r8) :: sgd_TA          ! SGD concentration coming in through bottom: TA : Total alkalinity (TA: umol kg-1)
+      real(r8) :: sgd_DOx         ! SGD concentration coming in through bottom: DOx: Dissolved oxygen (umol L-1)
+      real(r8) :: sgd_NO3(N_Nsp)  ! SGD concentration coming in through bottom: NO3: NO3 (umol L-1)
+      real(r8) :: sgd_NH4(N_Nsp)  ! SGD concentration coming in through bottom: NH4: NH4 (umol L-1)
+      real(r8) :: sgd_PO4(N_Psp)  ! SGD concentration coming in through bottom: PO4: PO4 (umol L-1)
+      real(r8) :: sgd_DOC(N_Csp,Ndom)  ! SGD concentration coming in through bottom: DOC: Total dissolved organic carbon (DOC: umol L-1)
+      real(r8) :: sgd_DON(N_Nsp,Ndom)  ! SGD concentration coming in through bottom: DOC: Total dissolved organic nitrogen (DON: umol L-1)
+      real(r8) :: sgd_DOP(N_Psp,Ndom)  ! SGD concentration coming in through bottom: DOC: Total dissolved organic phosphrous (DOP: umol L-1)
+#endif
+#if defined SEDECO_BURIAL
+      real(r8) :: Fdep_sed        ! Sedimentation rate (cm s-1) (Positive: sedimentation; Negative: erosion)
+#endif
+          
       real(r8) :: pH(UBk)      
       real(r8) :: Warg(UBk)    
       real(r8) :: Wcal(UBk)    
@@ -354,8 +411,6 @@
 
 #include "set_bounds.h"
 
-          
-!$acc kernels
 !-----------------------------------------------------------------------
       DO j=Jstr,Jend
 
@@ -366,6 +421,113 @@
 #ifdef MASKING
           IF (rmask(i,j).eq.1.0_r8) THEN
 # endif
+
+!=== Import ROMS tracer arrays into REEF_ECOSYS model arrays ===
+            Tmp(:) = t(i,j,:,nstp,iTemp)       
+            Sal(:) = t(i,j,:,nstp,iSalt)       
+            DOx(:) = t(i,j,:,nstp,iDO)       
+            TA (:) = t(i,j,:,nstp,iTA)
+            DO isp=1,N_Csp     
+              DIC(isp,:) = t(i,j,:,nstp,iDIC(isp))
+            END DO       
+            DO isp=1,N_Nsp     
+              NO3(isp,:) = t(i,j,:,nstp,iNO3(isp))       
+            END DO       
+            DO isp=1,N_Nsp     
+              NH4(isp,:) = t(i,j,:,nstp,iNH4(isp))       
+            END DO       
+            DO isp=1,N_Psp     
+              PO4(isp,:) = t(i,j,:,nstp,iPO4(isp))       
+            END DO
+            DO m=1,Ndom    
+              DO isp=1,N_Csp     
+                DOC(isp,m,:) = t(i,j,:,nstp,iDOC(isp,m))
+              END DO
+            END DO
+            DO m=1,Ndom    
+              DO isp=1,N_Nsp     
+                DON(isp,m,:) = t(i,j,:,nstp,iDON(isp,m))  
+              END DO
+            END DO
+            DO m=1,Ndom    
+              DO isp=1,N_Psp     
+                DOP(isp,m,:) = t(i,j,:,nstp,iDOP(isp,m))  
+              END DO
+            END DO 
+            DO m=1,Npom    
+              DO isp=1,N_Csp     
+                POC(isp,m,:) = t(i,j,:,nstp,iPOC(isp,m))  
+              END DO
+            END DO 
+            DO m=1,Npom    
+              DO isp=1,N_Nsp     
+                PON(isp,m,:) = t(i,j,:,nstp,iPON(isp,m))  
+              END DO
+            END DO 
+            DO m=1,Npom    
+              DO isp=1,N_Psp     
+                POP(isp,m,:) = t(i,j,:,nstp,iPOP(isp,m))  
+              END DO
+            END DO 
+            DO m=1,Nphy    
+              DO isp=1,N_Csp     
+                PhyC(isp,m,:) = t(i,j,:,nstp,iPhyC(isp,m))
+              END DO
+            END DO 
+            DO m=1,Nphy    
+              DO isp=1,N_Nsp     
+                PhyN(isp,m,:) = t(i,j,:,nstp,iPhyN(isp,m))
+              END DO
+            END DO 
+            DO m=1,Nphy    
+              DO isp=1,N_Psp     
+                PhyP(isp,m,:) = t(i,j,:,nstp,iPhyP(isp,m))
+              END DO
+            END DO 
+            DO m=1,Nzoo    
+              DO isp=1,N_Csp     
+                ZooC(isp,m,:) = t(i,j,:,nstp,iZooC(isp,m))
+              END DO
+            END DO 
+            DO m=1,Nzoo    
+              DO isp=1,N_Nsp     
+                ZooN(isp,m,:) = t(i,j,:,nstp,iZooN(isp,m))
+              END DO
+            END DO 
+            DO m=1,Nzoo    
+              DO isp=1,N_Psp     
+                ZooP(isp,m,:) = t(i,j,:,nstp,iZooP(isp,m))
+              END DO
+            END DO 
+            DO m=1,Npim    
+              DO isp=1,N_Csp     
+                 PIC (isp,m,:) = t(i,j,:,nstp,iPIC(isp,m)) 
+              END DO
+            END DO 
+#if defined COT_STARFISH         
+            COTe(:) = t(i,j,:,nstp,iCOTe)     &   ! COTe(N): COT starfish egg (umol L-1)
+            COTl(:) = t(i,j,:,nstp,iCOTl)     &   ! COTl(N): COT starfish larvae (umol L-1)
+#endif
+#if defined SEDECO_SGD && defined SGD_ON
+            sgd_flux  = Qsgd*pm(i,j)*pn(i,j)*sgd_src(i,j)*100.0_r8  ! m/s => 100 cm/s; sumbarine groundwater discharge rate of grid (cm s-1)
+            sgd_Tmp   = Tsgd(iTemp) 
+            sgd_Sal   = Tsgd(iSalt) 
+            sgd_DOx   = Tsgd(iDO  )
+            sgd_TA    = Tsgd(iTA  )
+            sgd_DIC(:)= Tsgd( iDIC(1):iDIC(N_Csp) )     
+            sgd_NO3(:)= Tsgd( iNO3(1):iNO3(N_Nsp) )  
+            sgd_NH4(:)= Tsgd( iNH4(1):iNH4(N_Nsp) ) 
+            sgd_PO4(:)= Tsgd( iPO4(1):iPO4(N_Nsp) )
+            DO m=1,Ndom
+              sgd_DOC(:,m)= Tsgd( iDOC(1,m):iDOC(N_Nsp,m) )
+              sgd_DON(:,m)= Tsgd( iDON(1,m):iDON(N_Nsp,m) )
+              sgd_DOP(:,m)= Tsgd( iDOP(1,m):iDOP(N_Nsp,m) )
+            END DO
+#endif
+#if defined SEDECO_BURIAL
+!  Sedimentation rate (g cm-2 s-1) (Positive: sedimentation; Negative: erosion)
+            Fdep_sed = 0.0d0 !ero_flux !(kg/m2)
+#endif
 
 !
 !  Calculate surface Photosynthetically Available Radiation (PAR).  The
@@ -426,129 +588,73 @@
 #ifdef SEDIMENT_ECOSYS
      &            ,p_sand(i,j)         &   ! sediment coverage (0-1)
 #endif
-     &            ,t(i,j,:,nstp,iTemp)     &   ! Tmp(N): Temperature (oC)
-     &            ,t(i,j,:,nstp,iSalt)     &   ! Sal(N): Salinity (PSU)
-     &            ,t(i,j,:,nstp,iTIC_)     &   ! DIC(N): Total dissolved inorganic carbon (DIC: umol kg-1)
-     &            ,t(i,j,:,nstp,iTAlk)     &   ! TA (N): Total alkalinity (TA: umol kg-1)
-     &            ,t(i,j,:,nstp,iOxyg)     &   ! DOx(N): Dissolved oxygen (umol L-1)
-#if defined ORGANIC_MATTER
-     &            ,t(i,j,:,nstp,iDOC(:))   &   ! DOC(N): Dissolved organic carbon (DOC: umol L-1)
-     &            ,t(i,j,:,nstp,iPOC(:))   &   ! POC(N): Particulate organic carbon (POC: umol L-1)
-     &            ,t(i,j,:,nstp,iPhyt(:))  &   ! PHY(N): phytoplankton1 (umol C L-1), dinoflagellate
-     &            ,t(i,j,:,nstp,iZoop(:))  &   ! ZOO(N): zooplankton (umol C L-1)
-     &            ,t(i,j,:,nstp,iPIC(:))   &   ! PIC(N): Particulate inorganic carbon (PIC: umol L-1), coccolith (CaCO3)
-#endif
-#if defined CARBON_ISOTOPE
-     &            ,t(i,j,:,nstp,iT13C)         &   ! DI13C (N): 13C of DIC (umol kg-1)
-# if defined ORGANIC_MATTER
-     &            ,t(i,j,:,nstp,iDO13C(:))     &   ! DO13C (N): 13C of Labile Dissolved organic carbon (LDOC: umol L-1)
-     &            ,t(i,j,:,nstp,iPO13C(:))     &   ! PO13C (N): 13C of Particulate organic carbon (POC: umol L-1)
-     &            ,t(i,j,:,nstp,iPhyt13C(:))   &   ! PHY13C(N): 13C of phytoplankton1 (umol C L-1), dinoflagellate
-     &            ,t(i,j,:,nstp,iZoop13C(:))   &   ! ZOO13C(N): 13C of zooplankton (umol C L-1)
-     &            ,t(i,j,:,nstp,iPI13C(:))     &   ! PI13C (N): 13C of Particulate inorganic carbon (PIC: umol L-1), coccolith (CaCO3)
-# endif
-#endif
-#if defined NUTRIENTS         
-     &            ,t(i,j,:,nstp,iNO3_)     &   ! NO3(N): NO3 (umol L-1)
-!     &            ,t(i,j,:,nstp,iNO2_)     &   ! NO2(N): NO2 (umol L-1)
-     &            ,t(i,j,:,nstp,iNH4_)     &   ! NH4(N): NH4 (umol L-1)
-     &            ,t(i,j,:,nstp,iPO4_)     &   ! PO4(N): PO4 (umol L-1)
-# if defined ORGANIC_MATTER
-     &            ,t(i,j,:,nstp,iDON(:))   &   ! DON(N): Dissolved organic nitrogen (DON: umol L-1)
-     &            ,t(i,j,:,nstp,iPON(:))   &   ! PON(N): Particulate organic nitrogen (PON: umol L-1)
-     &            ,t(i,j,:,nstp,iDOP(:))   &   ! DOP(N): Dissolved organic phosporius (DOP: umol L-1)
-     &            ,t(i,j,:,nstp,iPOP(:))   &   ! POP(N): Particulate organic phosporius (POP: umol L-1)
-# endif
-# if defined NITROGEN_ISOTOPE
-     &            ,t(i,j,:,nstp,i15NO3)     &   ! NO3_15N(N): 15N of NO3 (umol L-1)
-!     &            ,t(i,j,:,nstp,i15NO2)     &   ! NO2_15N(N): 15N of NO2 (umol L-1)
-     &            ,t(i,j,:,nstp,i15NH4)     &   ! NH4_15N(N): 15N of NH4 (umol L-1)
-#  if defined ORGANIC_MATTER
-     &            ,t(i,j,:,nstp,iDO15N(:))     &   ! DO15N (N): 15N of Labile Dissolved organic nitrogen (LDON: umol L-1)
-     &            ,t(i,j,:,nstp,iPO15N(:))     &   ! PO15N (N): 15N of Particulate organic nitrogen (PON: umol L-1)
-     &            ,t(i,j,:,nstp,iPhyt15N(:))   &   ! PHY15N(N): 15N of phytoplankton1 (umol C L-1), dinoflagellate
-     &            ,t(i,j,:,nstp,iZoop15N(:))   &   ! ZOO15N(N): 15N of zooplankton (umol C L-1)
-#  endif
-# endif
-#endif
+     &            , Tmp                &   ! Tmp(N): Temperature (oC)
+     &            , Sal                &   ! Sal(N): Salinity (PSU)
+     &            , DOx                &   ! DOx(N): Dissolved oxygen (umol O2 L-1)
+     &            , TA                 &   ! TA(N) : Total alkalinity (umol kg-1)
+     &            , DIC                &   ! DIC(N_Csp,N): Total dissolved inorganic carbon (umol C kg-1)
+     &            , NO3                &   ! NO3(N_Nsp,N): (umol N L-1)
+     &            , NH4                &   ! NH4(N_Nsp,N): (umol N L-1)
+     &            , PO4                &   ! PO4(N_Psp,N): (umol P L-1)
+     &            , DOC                &   ! DOC(N_Csp,Ndom,N): Dissolved organic carbon       (umol C L-1)
+     &            , POC                &   ! POC(N_Csp,Npom,N): Particulate organic carbon     (umol C L-1)
+     &            , DON                &   ! DON(N_Nsp,Ndom,N): Dissolved organic nitrogen     (umol N L-1)
+     &            , PON                &   ! PON(N_Nsp,Npom,N): Particulate organic nitrogen   (umol N L-1)
+     &            , DOP                &   ! DOP(N_Psp,Ndom,N): Dissolved organic phosporius   (umol P L-1)
+     &            , POP                &   ! POP(N_Psp,Npom,N): Particulate organic phosporius (umol P L-1)
+     &            , PhyC               &   ! PhyC(N_Csp,Nphy,N): phytoplankton C biomass (umol C L-1)
+     &            , ZooC               &   ! ZooC(N_Csp,Nzoo,N): zooplankton C biomass   (umol C L-1)
+     &            , PhyN               &   ! PhyN(N_Nsp,Nphy,N): phytoplankton N biomass (umol N L-1)
+     &            , ZooN               &   ! ZooN(N_Nsp,Nzoo,N): zooplankton N biomass   (umol N L-1)
+     &            , PhyP               &   ! PhyP(N_Psp,Nphy,N): phytoplankton P biomass (umol P L-1)
+     &            , ZooP               &   ! ZooP(N_Psp,Nzoo,N): zooplankton P biomass   (umol P L-1)
+     &            , PIC                &   ! PIC (N_Csp,Npim,N): Particulate inorganic carbon (PIC: umolC L-1), coccolith (CaCO3)
 #if defined COT_STARFISH         
-     &            ,t(i,j,:,nstp,iCOTe)     &   ! COTe(N): COT starfish egg (umol L-1)
-     &            ,t(i,j,:,nstp,iCOTl)     &   ! COTl(N): COT starfish larvae (umol L-1)
+     &            , COTe               &   ! COTe(N): COT starfish egg (umol L-1)
+     &            , COTl               &   ! COTl(N): COT starfish larvae (umol L-1)
 #endif
-#if defined SEDECO_ADVECTION && defined SGD_ON
-!        [nondim]     * [m3.water s-1 grid-1] / [m2.grid grid-1] [100 cm m-1] = [cm.water s-1]
-     & , sgd_src(i,j) * Qbar                  * pm(i,j)*pn(i,j)  * 100d0      & ! sumbarine groundwater discharge rate of grid (cm s-1)
-     &            ,Tsrc(iTemp)       &   ! SGD Tmp: Temperature (oC)
-     &            ,Tsrc(iSalt)       &   ! SGD Sal: Salinity (PSU)
-     &            ,Tsrc(iTIC_)       &   ! SGD DIC: Total dissolved inorganic carbon (DIC: umol kg-1)
-     &            ,Tsrc(iTAlk)       &   ! SGD TA : Total alkalinity (TA: umol kg-1)
-     &            ,Tsrc(iOxyg)       &   ! SGD DOx: Dissolved oxygen (umol L-1)
-# if defined CARBON_ISOTOPE
-     &            ,Tsrc(iT13C)       &   ! SGD DI13C : 13C of DIC (umol kg-1)
-# endif
-# if defined NUTRIENTS            
-     &            ,Tsrc(iNO3_)       &   ! SGD NO3: NO3 (umol L-1)
-     &            ,Tsrc(iNH4_)       &   ! SGD NH4: NH4 (umol L-1)
-     &            ,Tsrc(iPO4_)       &   ! SGD PO4: PO4 (umol L-1)
-#  if defined NITROGEN_ISOTOPE
-     &            ,Tsrc(i15NO3)      &   ! SGD NO3_15N: 15N of NO3 (umol L-1)
-     &            ,Tsrc(i15NH4)      &   ! SGD NH4_15N: 15N of NH4 (umol L-1)
-#  endif
-# endif
+#if defined SEDECO_SGD && defined SGD_ON
+     &            , sgd_flux           &   ! sumbarine groundwater discharge rate (cm s-1)  This flux is assumed to be the same throughout the sediment ecosystem layers (no compression/expansion) So volume flux doesn't change but concentrations of tracers do
+     &            , sgd_Tmp            &   ! SGD concentration coming in through bottom: Tmp: Temperature (oC)
+     &            , sgd_Sal            &   ! SGD concentration coming in through bottom: Sal: Salinity (PSU)
+     &            , sgd_TA             &   ! SGD concentration coming in through bottom: TA : Total alkalinity (TA: umol kg-1)
+     &            , sgd_DOx            &   ! SGD concentration coming in through bottom: DOx: Dissolved oxygen (umol L-1)
+     &            , sgd_DIC            &   ! SGD concentration coming in through bottom: DIC: Total dissolved inorganic carbon (DIC: umol kg-1)
+     &            , sgd_NO3            &   ! SGD concentration coming in through bottom: NO3: NO3 (umol L-1)
+     &            , sgd_NH4            &   ! SGD concentration coming in through bottom: NH4: NH4 (umol L-1)
+     &            , sgd_PO4            &   ! SGD concentration coming in through bottom: PO4: PO4 (umol L-1)
+     &            , sgd_DOC            &   ! SGD concentration coming in through bottom: DOC: Total dissolved organic carbon (DOC: umol L-1)
+     &            , sgd_DON            &   ! SGD concentration coming in through bottom: DOC: Total dissolved organic nitrogen (DON: umol L-1)
+     &            , sgd_DOP            &   ! SGD concentration coming in through bottom: DOC: Total dissolved organic phosphrous (DOP: umol L-1)
 #endif
-#if defined SEDIMENT && defined SUSPLOAD
-!     &            ,ero_flux          &
-!     &            ,settling_flux     &
+#if defined SEDECO_BURIAL
+     &            , Fdep_sed           &   ! Sedimentation rate (g cm-2 s-1) (Positive: sedimentation; Negative: erosion)
 #endif
-!          output parameters
-     &            ,dtrc_dt(:,iTemp)        &   ! dTemp_dt(N): Temperature (oC s-1)
-     &            ,dtrc_dt(:,iSalt)        &   ! dSalt_dt(N): Salinity (PSU s-1)
-     &            ,dtrc_dt(:,iTIC_)        &   ! dDIC_dt(N): dDIC/dt (umol kg-1 s-1)
-     &            ,dtrc_dt(:,iTAlk)        &   ! dTA_dt (N): dTA/dt (umol kg-1 s-1)
-     &            ,dtrc_dt(:,iOxyg)        &   ! dDOx_dt(N): dDO/dt (umol L-1 s-1)
-#if defined ORGANIC_MATTER     
-     &            ,dtrc_dt(:,iDOC(1):iDOC(Ndom))      &   ! dDOC_dt(N): dDOC/dt (umol L-1 s-1)
-     &            ,dtrc_dt(:,iPOC(1):iPOC(Npom))      &   ! dPOC_dt(N): dPOC/dt (umol L-1 s-1)
-     &            ,dtrc_dt(:,iPhyt(1):iPhyt(Nphy))   &   ! dPHY_dt(N): dPHY/dt (umol C L-1 s-1)
-     &            ,dtrc_dt(:,iZoop(1):iZoop(Nzoo))   &   ! dZOO_dt(N): dZOO/dt (umol C L-1 s-1)
-     &            ,dtrc_dt(:,iPIC(1):iPIC(Npim))      &   ! dPIC_dt(N): dPIC/dt (umol L-1 s-1)
-#endif
-#if defined CARBON_ISOTOPE
-     &            ,dtrc_dt(:,iT13C)        &   ! dDI13C_dt (N): dDI13C/dt (umol kg-1 s-1)
-# if defined ORGANIC_MATTER     
-     &            ,dtrc_dt(:,iDO13C(1):iDO13C(Ndom))    &   ! dDO13C_dt (N): dDO13C/dt  (umol L-1 s-1) 
-     &            ,dtrc_dt(:,iPO13C(1):iPO13C(Npom))    &   ! dPO13C_dt (N): dPO13C/dt  (umol L-1 s-1) 
-     &            ,dtrc_dt(:,iPhyt13C(1):iPhyt13C(Nphy))  &   ! dPHY13C_dt(N): dPHY13C/dt  (umol L-1 s-1)  
-     &            ,dtrc_dt(:,iZoop13C(1):iZoop13C(Nzoo))  &   ! dZOO13C_dt(N): dZOO13C/dt  (umol L-1 s-1)  
-     &            ,dtrc_dt(:,iPI13C(1):iPI13C(Npim))    &   ! dPI13C_dt (N): dPI13C/dt  (umol L-1 s-1)  
-# endif
-#endif     
-#if defined NUTRIENTS      
-     &            ,dtrc_dt(:,iNO3_)        &   ! dNO3_dt(N): dNO3/dt (umol L-1 s-1)
-!     &            ,dtrc_dt(:,iNO2_)        &   ! dNO2_dt(N): dNO2/dt (umol L-1 s-1)
-     &            ,dtrc_dt(:,iNH4_)        &   ! dNH4_dt(N): dNH4/dt (umol L-1 s-1)
-     &            ,dtrc_dt(:,iPO4_)        &   ! dPO4_dt(N): dPO4/dt (umol L-1 s-1)
-# if defined ORGANIC_MATTER     
-     &            ,dtrc_dt(:,iDON(1):iDON(Ndom))      &   ! dDON_dt(N): dDON/dt (umol L-1 s-1)
-     &            ,dtrc_dt(:,iPON(1):iPON(Npom))      &   ! dPON_dt(N): dPON/dt (umol L-1 s-1)
-     &            ,dtrc_dt(:,iDOP(1):iDOP(Ndom))      &   ! dDOP_dt(N): dDOP/dt (umol L-1 s-1)
-     &            ,dtrc_dt(:,iPOP(1):iPOP(Npom))      &   ! dPOP_dt(N): dPOP/dt (umol L-1 s-1)
-# endif     
-# if defined NITROGEN_ISOTOPE
-     &            ,dtrc_dt(:,i15NO3)        &   ! dNO3_15N_dt(N): dNO3_15N/dt (umol L-1 s-1)
-!     &            ,dtrc_dt(:,i15NO2)        &   ! dNO2_15N_dt(N): dNO2_15N/dt (umol L-1 s-1)
-     &            ,dtrc_dt(:,i15NH4)        &   ! dNH4_15N_dt(N): dNH4_15N/dt (umol L-1 s-1)
-#  if defined ORGANIC_MATTER
-     &            ,dtrc_dt(:,iDO15N(1):iDO15N(Ndom))     &   ! dDO15N_dt (N): dDO15N/dt  (umol L-1 s-1) 
-     &            ,dtrc_dt(:,iPO15N(1):iPO15N(Npom))     &   ! dPO15N_dt (N): dPO15N/dt  (umol L-1 s-1) 
-     &            ,dtrc_dt(:,iPhyt15N(1):iPhyt15N(Nphy))   &   ! dPHY15N_dt(N): dPHY1_15N/dt  (umol L-1 s-1)  
-     &            ,dtrc_dt(:,iZoop15N(1):iZoop15N(Nzoo))   &   ! dZOO15N_dt(N): dZOO_15N/dt  (umol L-1 s-1)  
-#  endif
-# endif
-#endif     
-#if defined COT_STARFISH              
-     &            ,dtrc_dt(:,iCOTe)        &   ! dCOTe/dt(N): (umol L-1 s-1)
-     &            ,dtrc_dt(:,iCOTl)        &   ! dCOTl/dt(N): (umol L-1 s-1)
+!   output parameters
+     &            , dTemp_dt           &   ! dTemp_dt(N)           : Temperature (oC s-1)
+     &            , dSalt_dt           &   ! dSalt_dt(N)           : Salinity (PSU s-1)
+     &            , dDOx_dt            &   ! dDOx_dt(N)            : dDOx/dt  (umol O2 L-1 s-1) 
+     &            , dTA_dt             &   ! dTA_dt(N)             : dTA/dt   (umol kg-1 s-1) 
+     &            , dDIC_dt            &   ! dDIC_dt(N_Csp,N)      : dDIC/dt  (umol C kg-1 s-1)  1 mmol m-3 = 1 umol L-1 = 1/1.024 umol kg-1
+     &            , dNO3_dt            &   ! dNO3_dt(N_Nsp,N)      : dNO3/dt  (umol N L-1 s-1)
+     &            , dNH4_dt            &   ! dNH4_dt(N_Nsp,N)      : dNH4/dt  (umol N L-1 s-1)
+     &            , dPO4_dt            &   ! dPO4_dt(N_Psp,N)      : dPO4/dt  (umol P L-1 s-1)
+     &            , dDOC_dt            &   ! dDOC_dt(N_Csp,Ndom,N) : dDOC/dt  (umol C L-1 s-1) 
+     &            , dPOC_dt            &   ! dPOC_dt(N_Csp,Npom,N) : dPOC/dt  (umol C L-1 s-1) 
+     &            , dDON_dt            &   ! dDON_dt(N_Nsp,Ndom,N) : dDON/dt  (umol N L-1 s-1)
+     &            , dPON_dt            &   ! dPON_dt(N_Nsp,Npom,N) : dPON/dt  (umol N L-1 s-1)
+     &            , dDOP_dt            &   ! dDOP_dt(N_Psp,Ndom,N) : dDOP/dt  (umol P L-1 s-1)
+     &            , dPOP_dt            &   ! dPOP_dt(N_Psp,Npom,N) : dPOP/dt  (umol P L-1 s-1)
+     &            , dPhyC_dt           &   ! dPhyC_dt(N_Csp,Nphy,N): dPhyC/dt (umol C L-1 s-1)  
+     &            , dZooC_dt           &   ! dZooC_dt(N_Csp,Nzoo,N): dZooC/dt (umol C L-1 s-1)  
+     &            , dPhyN_dt           &   ! dPhyN_dt(N_Nsp,Nphy,N): dPhyN/dt (umol N L-1 s-1)  
+     &            , dZooN_dt           &   ! dZooN_dt(N_Nsp,Nzoo,N): dZooN/dt (umol N L-1 s-1)  
+     &            , dPhyP_dt           &   ! dPhyP_dt(N_Psp,Nphy,N): dPhyP/dt (umol P L-1 s-1)  
+     &            , dZooP_dt           &   ! dZooP_dt(N_Psp,Nzoo,N): dZooP/dt (umol P L-1 s-1)  
+     &            , dPIC_dt            &   ! dPIC_dt (N_Csp,Npim,N): dPIC/dt  (umol C L-1 s-1)
+#if defined COT_STARFISH         
+     &            , dCOTe_dt           &   ! dCOTe/dt(N): (umol L-1 s-1)
+     &            , dCOTl_dt           &   ! dCOTl/dt(N): (umol L-1 s-1)
 #endif
      &            , pH                     &   ! pH
      &            , Warg                   &   ! aragonite saturation state
@@ -564,8 +670,91 @@
 !!!<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<KM:Add
      &             )
 !
-#ifdef MASKING
-          END IF
+!=== Export REEF_ECOSYS model arrays into ROMS tracer arrays ===
+            dtrc_dt(:,iTemp) = dTemp_dt(:)        
+            dtrc_dt(:,iSalt) = dSalt_dt(:)        
+            dtrc_dt(:,iDO  ) = dDOx_dt(:)        
+            dtrc_dt(:,iTA  ) = dTA_dt(:) 
+            DO isp=1,N_Csp     
+              dtrc_dt(:,iDIC(isp)) = dDIC_dt(isp,:)
+            END DO       
+            DO isp=1,N_Nsp     
+              dtrc_dt(:,iNO3(isp)) = dNO3_dt(isp,:)        
+            END DO       
+            DO isp=1,N_Nsp     
+              dtrc_dt(:,iNH4(isp)) = dNH4_dt(isp,:)        
+            END DO       
+            DO isp=1,N_Psp     
+              dtrc_dt(:,iPO4(isp)) = dPO4_dt(isp,:)       
+            END DO
+            DO m=1,Ndom    
+              DO isp=1,N_Csp     
+                dtrc_dt(:,iDOC(isp,m)) = dDOC_dt(isp,m,:) 
+              END DO
+            END DO
+            DO m=1,Ndom    
+              DO isp=1,N_Nsp     
+                dtrc_dt(:,iDON(isp,m)) = dDON_dt(isp,m,:)   
+              END DO
+            END DO
+            DO m=1,Ndom    
+              DO isp=1,N_Psp     
+                dtrc_dt(:,iDOP(isp,m)) = dDOP_dt(isp,m,:)  
+              END DO
+            END DO 
+            DO m=1,Npom    
+              DO isp=1,N_Csp     
+                dtrc_dt(:,iPOC(isp,m)) = dPOC_dt(isp,m,:)  
+              END DO
+            END DO 
+            DO m=1,Npom    
+              DO isp=1,N_Nsp     
+                dtrc_dt(:,iPON(isp,m)) = dPON_dt(isp,m,:)  
+              END DO
+            END DO 
+            DO m=1,Npom    
+              DO isp=1,N_Psp     
+                dtrc_dt(:,iPOP(isp,m)) = dPOP_dt(isp,m,:)   
+              END DO
+            END DO 
+            DO m=1,Nphy    
+              DO isp=1,N_Csp     
+                dtrc_dt(:,iPhyC(isp,m)) = dPhyC_dt(isp,m,:) 
+              END DO
+            END DO 
+            DO m=1,Nphy    
+              DO isp=1,N_Nsp     
+                dtrc_dt(:,iPhyN(isp,m)) = dPhyN_dt(isp,m,:)
+              END DO
+            END DO 
+            DO m=1,Nphy    
+              DO isp=1,N_Psp     
+                dtrc_dt(:,iPhyP(isp,m)) = dPhyP_dt(isp,m,:)
+              END DO
+            END DO 
+            DO m=1,Nzoo    
+              DO isp=1,N_Csp     
+                dtrc_dt(:,iZooC(isp,m)) = dZooC_dt(isp,m,:)
+              END DO
+            END DO 
+            DO m=1,Nzoo    
+              DO isp=1,N_Nsp     
+                dtrc_dt(:,iZooN(isp,m)) = dZooN_dt(isp,m,:)
+              END DO
+            END DO 
+            DO m=1,Nzoo    
+              DO isp=1,N_Psp     
+                dtrc_dt(:,iZooP(isp,m)) = dZooP_dt(isp,m,:) 
+              END DO
+            END DO 
+            DO m=1,Npim    
+              DO isp=1,N_Csp     
+                dtrc_dt(:,iPIC(isp,m)) = dPIC_dt (isp,m,:)  
+              END DO
+            END DO 
+#if defined COT_STARFISH         
+            dtrc_dt(:,iCOTe) = dCOTe_d(:)      &   ! COTe(N): COT starfish egg (umol L-1)
+            dtrc_dt(:,iCOTl) = dCOTl_d(:)      &   ! COTl(N): COT starfish larvae (umol L-1)
 #endif
 
 #if defined DIAGNOSTICS_BIO
@@ -601,103 +790,48 @@
 !  (J. Wilkin and H. Arango, Apr 27, 2012)
 !-----------------------------------------------------------------------
 
-          DO k=1,N(ng)
-
-            DO itrc=1,NAT
-              
-              ! !!! yt_debug >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-              ! ! if (isnan(dtrc_dt(k,itrc)) .or. abs(dtrc_dt(k,itrc)) > huge(dtrc_dt(k,itrc))) then
-              ! if (isnan(dtrc_dt(k,itrc)) .or. abs(dtrc_dt(k,itrc)) > 1.0d20) then
-              !   write(*,*) 'yt_debug: reef_ecosys.h      i =', i, '   j =', j, '   k =', k, '   itrc =', itrc
-              !   write(*,*) 'yt_debug:     dtrc_dt(k,itrc) =', dtrc_dt(k,itrc)
-              !   error stop
-              ! endif
-              ! !!! yt_debug <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-              IF(dtrc_dt(k,itrc)*0.0_r8 /= 0.0_r8) THEN  !!!---------Error Handling: Check NAN
-!                write(50,*) i,j,k,itrc,dtrc_dt(k,itrc),ssO2flux, ssCO2flux,rmask(i,j) 
-!                write(50,*) t(i,j,k,nnew,:)
-!                write(50,*) t(i,j,k,nstp,:)
-                dtrc_dt(k,itrc)=0.0_r8
-              END IF
-              
-              t(i,j,k,nnew,itrc)=t(i,j,k,nnew,itrc)                    &
-    &                              +dtrc_dt(k,itrc)*dt(ng)*Hz(i,j,k)
-
-              ! if (i == 20 .and. j == 50) then
-              !   write(*,*) 'yt_debug: t(i,j,k,nnew,itrc)/Hz(i,j,k) = ',t(i,j,k,nnew,itrc)/Hz(i,j,k)
-              !   write(*,*) 'yt_debug:       dtrc_dt(k,itrc)*dt(ng) = ',dtrc_dt(k,itrc)*dt(ng)
-              ! endif
-    
-              ! !!! yt_debug >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-              ! ! if (isnan(t(i,j,k,nnew,itrc)) .or. abs(t(i,j,k,nnew,itrc)) > huge(t(i,j,k,nnew,itrc))) then
-              ! ! if (isnan(t(i,j,k,nnew,itrc)) .or. abs(t(i,j,k,nnew,itrc)) > 1.0d22) then
-              ! if (isnan(t(i,j,k,nnew,itrc)) .or. abs(t(i,j,k,nnew,itrc)) > 1.0d22) then
-              !   write(*,*) 'yt_debug: reef_ecosys.h      i =', i, '   j =', j, '   k =', k, '   itrc =', itrc
-              !   write(*,*) 'yt_debug:     t(i,j,k,nnew,itrc) =', t(i,j,k,nnew,itrc)
-              !   error stop
-              ! else if (t(i,j,k,nnew,itrc) < -100d0) then
-              !   write(*,*) 'yt_debug: reef_ecosys.h      i =', i, '   j =', j, '   k =', k, '   itrc =', itrc &
-              !   , '   t(i,j,k,nnew,itrc) =', t(i,j,k,nnew,itrc)
-              ! endif
-              ! !!! yt_debug <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-              
-
+            DO k=1,N(ng)
+  
+              DO itrc=1,NAT
+  
+                IF(dtrc_dt(k,itrc)*0.0_r8 /= 0.0_r8) THEN  !!!---------Error Handling: Check NAN
+!                  write(50,*) i,j,k,itrc,dtrc_dt(k,itrc),ssO2flux, ssCO2flux,rmask(i,j) 
+!                  write(50,*) t(i,j,k,nnew,:)
+!                  write(50,*) t(i,j,k,nstp,:)
+                  dtrc_dt(k,itrc)=0.0_r8
+                END IF
+                
+                t(i,j,k,nnew,itrc)=t(i,j,k,nnew,itrc)                    &
+    &                                +dtrc_dt(k,itrc)*dt(ng)*Hz(i,j,k)
+  
+              END DO
+  
+  
+              DO itrc=1,NBT
+                ibio=idbio(itrc)
+  
+                IF(dtrc_dt(k,ibio)*0.0_r8 /= 0.0_r8) THEN  !!!---------Error Handling: Check NAN
+!                  write(50,*) i,j,k,itrc,dtrc_dt(k,ibio),ssO2flux, ssCO2flux,rmask(i,j) 
+!                  write(50,*) t(i,j,k,nnew,:)
+!                  write(50,*) t(i,j,k,nstp,:)
+                  dtrc_dt(k,ibio)=0.0_r8
+                END IF
+                
+                t(i,j,k,nnew,ibio)=t(i,j,k,nnew,ibio)                    &
+    &                                +dtrc_dt(k,ibio)*dt(ng)*Hz(i,j,k)
+      
+  
+                t(i,j,k,nnew,ibio)=MAX(0.0_r8,t(i,j,k,nnew,ibio))!!!---------Error Handling
+  
+                
+              END DO
             END DO
-
-
-            DO itrc=1,NBT
-              ibio=idbio(itrc)
-              
-              ! !!! yt_debug >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-              ! ! if (isnan(dtrc_dt(k,ibio)) .or. abs(dtrc_dt(k,ibio)) > huge(dtrc_dt(k,ibio))) then
-              ! if (isnan(dtrc_dt(k,ibio)) .or. abs(dtrc_dt(k,ibio)) > 1.0d20) then
-              !   write(*,*) 'yt_debug: reef_ecosys.h      i =', i, '   j =', j, '   k =', k, '   ibio =', ibio
-              !   write(*,*) 'yt_debug:     dtrc_dt(k,ibio) =', dtrc_dt(k,ibio)
-              !   error stop
-              ! endif
-              ! !!! yt_debug <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-              IF(dtrc_dt(k,ibio)*0.0_r8 /= 0.0_r8) THEN  !!!---------Error Handling: Check NAN
-!                write(50,*) i,j,k,itrc,dtrc_dt(k,ibio),ssO2flux, ssCO2flux,rmask(i,j) 
-!                write(50,*) t(i,j,k,nnew,:)
-!                write(50,*) t(i,j,k,nstp,:)
-                dtrc_dt(k,ibio)=0.0_r8
-              END IF
-              
-              t(i,j,k,nnew,ibio)=t(i,j,k,nnew,ibio)                    &
-    &                              +dtrc_dt(k,ibio)*dt(ng)*Hz(i,j,k)
-    
-              ! !!! yt_debug >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-              ! ! if (isnan(t(i,j,k,nnew,ibio)) .or. abs(t(i,j,k,nnew,ibio)) > huge(t(i,j,k,nnew,ibio))) then
-              ! ! if (isnan(t(i,j,k,nnew,ibio)) .or. abs(t(i,j,k,nnew,ibio)) > 1.0d22) then
-              ! if (isnan(t(i,j,k,nnew,ibio)) .or. abs(t(i,j,k,nnew,ibio)) > 1.0d22) then
-              !   write(*,*) 'yt_debug: reef_ecosys.h      i =', i, '   j =', j, '   k =', k, '   ibio =', ibio
-              !   write(*,*) 'yt_debug:     t(i,j,k,nnew,ibio) =', t(i,j,k,nnew,ibio)
-              !   error stop
-              ! else if (t(i,j,k,nnew,ibio) < -100d0) then
-              !   write(*,*) 'yt_debug: reef_ecosys.h      i =', i, '   j =', j, '   k =', k, '   ibio =', ibio &
-              !   , '   t(i,j,k,nnew,ibio) =', t(i,j,k,nnew,ibio)
-              ! endif
-              ! !!! yt_debug <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-              t(i,j,k,nnew,ibio)=MAX(0.0_r8,t(i,j,k,nnew,ibio))!!!---------Error Handling
-
-              
-            END DO
-
-#if defined DIAGNOSTICS_BIO
-# if defined CARBON_ISOTOPE
-! Carbon isotope ratio calculation
-            DiaBio3d(i,j,k,id13C)=d13C_fromR13C(t(i,j,k,nnew,iT13C)/t(i,j,k,nnew,iTIC_))
-# endif
+#ifdef MASKING
+          END IF
 #endif
-          END DO
-
         END DO
       END DO
 !-----------------------------------------------------------------------
-!$acc end kernels
 
       RETURN
       END SUBROUTINE biology_tile

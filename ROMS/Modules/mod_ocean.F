@@ -399,7 +399,7 @@
       USE mod_param
 !!! yuta_edits_for_masa >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>YT:Add
 #  if defined SEDIMENT_ECOSYS
-      USE mod_sedecosys, ONLY : Nsed
+      USE mod_reef_ecosys_param, ONLY : Nsed
 #  endif
 !!!<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<YT:Add
 
@@ -509,7 +509,7 @@
       allocate ( OCEAN(ng) % HisBio3d(LBi:UBi,LBj:UBj,N(ng),NHbio3d) )
 !!! yuta_edits_for_masa >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>YT:Add
 #  if defined SEDIMENT_ECOSYS
-      allocate ( OCEAN(ng) % HisBiosed3d(LBi:UBi,LBj:UBj,Nsed(ng),NHbiosed3d) )
+      allocate ( OCEAN(ng) % HisBiosed3d(LBi:UBi,LBj:UBj,Nsed,NHbiosed3d) )
 #  endif
 !!!<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<YT:Add
 # endif

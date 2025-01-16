@@ -31,27 +31,25 @@
                 idAlga=varid
               CASE ('idSand')
                 idAlga=varid
-              CASE ('idTvar(iTIC_)')
-                idTvar(iTIC_)=varid
-              CASE ('idTvar(iTAlk)')
-                idTvar(iTAlk)=varid
-              CASE ('idTvar(iOxyg)')
-                idTvar(iOxyg)=varid
-#if defined ORGANIC_MATTER
-              CASE ('idTvar(iDOC(i))')
+              CASE ('idTvar(iDO)')
+                idTvar(iDO)=varid
+              CASE ('idTvar(iTA)')
+                idTvar(iTA)=varid
+
+              CASE ('idTvar(iDIC(i))')
                 load=.FALSE.
                 varid=varid-1
-                DO i=1,Ndom
+                DO i=1,N_Csp
                   varid=varid+1
-                  idTvar(iDOC(i))=varid
+                  idTvar(iDIC(i))=varid
                   DO ng=1,Ngrids
                     Fscale(varid,ng)=scale
                     Iinfo(1,varid,ng)=gtype
                   END DO
-                  WRITE (Vname(1,varid),'(a,i2.2)')                   &
-   &                    TRIM(ADJUSTL(Vinfo(1))), i
+                  WRITE (Vname(1,varid),'(a,a,i2.2)')                 &
+   &                    TRIM(ADJUSTL(Vinfo(1))), '_',i
                   WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', i
+   &                    TRIM(ADJUSTL(Vinfo(2))), ', tracer type ', i
                   WRITE (Vname(3,varid),'(a)')                        &
    &                    TRIM(ADJUSTL(Vinfo(3)))
                   WRITE (Vname(4,varid),'(a,a)')                      &
@@ -60,20 +58,20 @@
    &                    TRIM(ADJUSTL(Vinfo(5)))
                 END DO
                 varid=varid+1
-              CASE ('idTvar(iPOC(i))')
+              CASE ('idTvar(iNO3(i))')
                 load=.FALSE.
                 varid=varid-1
-                DO i=1,Npom
+                DO i=1,N_Nsp
                   varid=varid+1
-                  idTvar(iPOC(i))=varid
+                  idTvar(iNO3(i))=varid
                   DO ng=1,Ngrids
                     Fscale(varid,ng)=scale
                     Iinfo(1,varid,ng)=gtype
                   END DO
-                  WRITE (Vname(1,varid),'(a,i2.2)')                   &
-   &                    TRIM(ADJUSTL(Vinfo(1))), i
+                  WRITE (Vname(1,varid),'(a,a,i2.2)')                 &
+   &                    TRIM(ADJUSTL(Vinfo(1))), '_',i
                   WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', i
+   &                    TRIM(ADJUSTL(Vinfo(2))), ', tracer type ', i
                   WRITE (Vname(3,varid),'(a)')                        &
    &                    TRIM(ADJUSTL(Vinfo(3)))
                   WRITE (Vname(4,varid),'(a,a)')                      &
@@ -82,20 +80,20 @@
    &                    TRIM(ADJUSTL(Vinfo(5)))
                 END DO
                 varid=varid+1
-              CASE ('idTvar(iPhyt(i))')
+              CASE ('idTvar(iNH4(i))')
                 load=.FALSE.
                 varid=varid-1
-                DO i=1,Nphy
+                DO i=1,N_Nsp
                   varid=varid+1
-                  idTvar(iPhyt(i))=varid
+                  idTvar(iNH4(i))=varid
                   DO ng=1,Ngrids
                     Fscale(varid,ng)=scale
                     Iinfo(1,varid,ng)=gtype
                   END DO
-                  WRITE (Vname(1,varid),'(a,i2.2)')                   &
-   &                    TRIM(ADJUSTL(Vinfo(1))), i
+                  WRITE (Vname(1,varid),'(a,a,i2.2)')                 &
+   &                    TRIM(ADJUSTL(Vinfo(1))), '_',i
                   WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', i
+   &                    TRIM(ADJUSTL(Vinfo(2))), ', tracer type ', i
                   WRITE (Vname(3,varid),'(a)')                        &
    &                    TRIM(ADJUSTL(Vinfo(3)))
                   WRITE (Vname(4,varid),'(a,a)')                      &
@@ -104,20 +102,20 @@
    &                    TRIM(ADJUSTL(Vinfo(5)))
                 END DO
                 varid=varid+1
-              CASE ('idTvar(iZoop(i))')
+              CASE ('idTvar(iPO4(i))')
                 load=.FALSE.
                 varid=varid-1
-                DO i=1,Nzoo
+                DO i=1,N_Psp
                   varid=varid+1
-                  idTvar(iZoop(i))=varid
+                  idTvar(iPO4(i))=varid
                   DO ng=1,Ngrids
                     Fscale(varid,ng)=scale
                     Iinfo(1,varid,ng)=gtype
                   END DO
-                  WRITE (Vname(1,varid),'(a,i2.2)')                   &
-   &                    TRIM(ADJUSTL(Vinfo(1))), i
+                  WRITE (Vname(1,varid),'(a,a,i2.2)')                 &
+   &                    TRIM(ADJUSTL(Vinfo(1))), '_',i
                   WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', i
+   &                    TRIM(ADJUSTL(Vinfo(2))), ', tracer type ', i
                   WRITE (Vname(3,varid),'(a)')                        &
    &                    TRIM(ADJUSTL(Vinfo(3)))
                   WRITE (Vname(4,varid),'(a,a)')                      &
@@ -126,343 +124,332 @@
    &                    TRIM(ADJUSTL(Vinfo(5)))
                 END DO
                 varid=varid+1
-              CASE ('idTvar(iPIC(i))')
+
+              CASE ('idTvar(iDOC(i,j))')
                 load=.FALSE.
                 varid=varid-1
-                DO i=1,Npim
-                  varid=varid+1
-                  idTvar(iPIC(i))=varid
-                  DO ng=1,Ngrids
-                    Fscale(varid,ng)=scale
-                    Iinfo(1,varid,ng)=gtype
+                DO j=1,Ndom
+                  DO i=1,N_Csp
+                    varid=varid+1
+                    idTvar(iDOC(i,j))=varid
+                    DO ng=1,Ngrids
+                      Fscale(varid,ng)=scale
+                      Iinfo(1,varid,ng)=gtype
+                    END DO
+                    WRITE (Vname(1,varid),'(a,i2.2,a,i2.2)')            &
+   &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
+                    WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
+   &                      TRIM(ADJUSTL(Vinfo(2)))                       &
+                          ,', functional group ', j, ', tracer type ', i
+                    WRITE (Vname(3,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(3)))
+                    WRITE (Vname(4,varid),'(a,a)')                      &
+   &                      TRIM(Vname(1,varid)), ', scalar, series'
+                    WRITE (Vname(5,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(5)))
                   END DO
-                  WRITE (Vname(1,varid),'(a,i2.2)')                   &
-   &                    TRIM(ADJUSTL(Vinfo(1))), i
-                  WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', i
-                  WRITE (Vname(3,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(3)))
-                  WRITE (Vname(4,varid),'(a,a)')                      &
-   &                    TRIM(Vname(1,varid)), ', scalar, series'
-                  WRITE (Vname(5,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(5)))
                 END DO
                 varid=varid+1
-#endif
-#if defined CARBON_ISOTOPE
-              CASE ('idTvar(iT13C)')
-                idTvar(iT13C)=varid
-# if defined ORGANIC_MATTER
-              CASE ('idTvar(iDO13C(i))')
+              CASE ('idTvar(iPOC(i,j))')
                 load=.FALSE.
                 varid=varid-1
-                DO i=1,Ndom
-                  varid=varid+1
-                  idTvar(iDO13C(i))=varid
-                  DO ng=1,Ngrids
-                    Fscale(varid,ng)=scale
-                    Iinfo(1,varid,ng)=gtype
+                DO j=1,Npom
+                  DO i=1,N_Csp
+                    varid=varid+1
+                    idTvar(iPOC(i,j))=varid
+                    DO ng=1,Ngrids
+                      Fscale(varid,ng)=scale
+                      Iinfo(1,varid,ng)=gtype
+                    END DO
+                    WRITE (Vname(1,varid),'(a,i2.2,a,i2.2)')            &
+   &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
+                    WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
+   &                      TRIM(ADJUSTL(Vinfo(2)))                       &
+                          ,', functional group ', j, ', tracer type ', i
+                    WRITE (Vname(3,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(3)))
+                    WRITE (Vname(4,varid),'(a,a)')                      &
+   &                      TRIM(Vname(1,varid)), ', scalar, series'
+                    WRITE (Vname(5,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(5)))
                   END DO
-                  WRITE (Vname(1,varid),'(a,i2.2)')                   &
-   &                    TRIM(ADJUSTL(Vinfo(1))), i
-                  WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', i
-                  WRITE (Vname(3,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(3)))
-                  WRITE (Vname(4,varid),'(a,a)')                      &
-   &                    TRIM(Vname(1,varid)), ', scalar, series'
-                  WRITE (Vname(5,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(5)))
                 END DO
                 varid=varid+1
-              CASE ('idTvar(iPO13C(i))')
+              CASE ('idTvar(iDON(i,j))')
                 load=.FALSE.
                 varid=varid-1
-                DO i=1,Npom
-                  varid=varid+1
-                  idTvar(iPO13C(i))=varid
-                  DO ng=1,Ngrids
-                    Fscale(varid,ng)=scale
-                    Iinfo(1,varid,ng)=gtype
+                DO j=1,Ndom
+                  DO i=1,N_Nsp
+                    varid=varid+1
+                    idTvar(iDON(i,j))=varid
+                    DO ng=1,Ngrids
+                      Fscale(varid,ng)=scale
+                      Iinfo(1,varid,ng)=gtype
+                    END DO
+                    WRITE (Vname(1,varid),'(a,i2.2,a,i2.2)')            &
+   &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
+                    WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
+   &                      TRIM(ADJUSTL(Vinfo(2)))                       &
+                          ,', functional group ', j, ', tracer type ', i
+                    WRITE (Vname(3,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(3)))
+                    WRITE (Vname(4,varid),'(a,a)')                      &
+   &                      TRIM(Vname(1,varid)), ', scalar, series'
+                    WRITE (Vname(5,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(5)))
                   END DO
-                  WRITE (Vname(1,varid),'(a,i2.2)')                   &
-   &                    TRIM(ADJUSTL(Vinfo(1))), i
-                  WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', i
-                  WRITE (Vname(3,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(3)))
-                  WRITE (Vname(4,varid),'(a,a)')                      &
-   &                    TRIM(Vname(1,varid)), ', scalar, series'
-                  WRITE (Vname(5,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(5)))
                 END DO
                 varid=varid+1
-              CASE ('idTvar(iPhyt13C(i))')
+              CASE ('idTvar(iPON(i,j))')
                 load=.FALSE.
                 varid=varid-1
-                DO i=1,Nphy
-                  varid=varid+1
-                  idTvar(iPhyt13C(i))=varid
-                  DO ng=1,Ngrids
-                    Fscale(varid,ng)=scale
-                    Iinfo(1,varid,ng)=gtype
+                DO j=1,Npom
+                  DO i=1,N_Nsp
+                    varid=varid+1
+                    idTvar(iPON(i,j))=varid
+                    DO ng=1,Ngrids
+                      Fscale(varid,ng)=scale
+                      Iinfo(1,varid,ng)=gtype
+                    END DO
+                    WRITE (Vname(1,varid),'(a,i2.2,a,i2.2)')            &
+   &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
+                    WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
+   &                      TRIM(ADJUSTL(Vinfo(2)))                       &
+                          ,', functional group ', j, ', tracer type ', i
+                    WRITE (Vname(3,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(3)))
+                    WRITE (Vname(4,varid),'(a,a)')                      &
+   &                      TRIM(Vname(1,varid)), ', scalar, series'
+                    WRITE (Vname(5,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(5)))
                   END DO
-                  WRITE (Vname(1,varid),'(a,i2.2)')                   &
-   &                    TRIM(ADJUSTL(Vinfo(1))), i
-                  WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', i
-                  WRITE (Vname(3,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(3)))
-                  WRITE (Vname(4,varid),'(a,a)')                      &
-   &                    TRIM(Vname(1,varid)), ', scalar, series'
-                  WRITE (Vname(5,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(5)))
                 END DO
                 varid=varid+1
-              CASE ('idTvar(iZoop13C(i))')
+              CASE ('idTvar(iDOP(i,j))')
                 load=.FALSE.
                 varid=varid-1
-                DO i=1,Nzoo
-                  varid=varid+1
-                  idTvar(iZoop13C(i))=varid
-                  DO ng=1,Ngrids
-                    Fscale(varid,ng)=scale
-                    Iinfo(1,varid,ng)=gtype
+                DO j=1,Ndom
+                  DO i=1,N_Psp
+                    varid=varid+1
+                    idTvar(iDOP(i,j))=varid
+                    DO ng=1,Ngrids
+                      Fscale(varid,ng)=scale
+                      Iinfo(1,varid,ng)=gtype
+                    END DO
+                    WRITE (Vname(1,varid),'(a,i2.2,a,i2.2)')            &
+   &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
+                    WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
+   &                      TRIM(ADJUSTL(Vinfo(2)))                       &
+                          ,', functional group ', j, ', tracer type ', i
+                    WRITE (Vname(3,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(3)))
+                    WRITE (Vname(4,varid),'(a,a)')                      &
+   &                      TRIM(Vname(1,varid)), ', scalar, series'
+                    WRITE (Vname(5,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(5)))
                   END DO
-                  WRITE (Vname(1,varid),'(a,i2.2)')                   &
-   &                    TRIM(ADJUSTL(Vinfo(1))), i
-                  WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', i
-                  WRITE (Vname(3,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(3)))
-                  WRITE (Vname(4,varid),'(a,a)')                      &
-   &                    TRIM(Vname(1,varid)), ', scalar, series'
-                  WRITE (Vname(5,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(5)))
                 END DO
                 varid=varid+1
-              CASE ('idTvar(iPI13C(i))')
+              CASE ('idTvar(iPOP(i,j))')
                 load=.FALSE.
                 varid=varid-1
-                DO i=1,Npim
-                  varid=varid+1
-                  idTvar(iPI13C(i))=varid
-                  DO ng=1,Ngrids
-                    Fscale(varid,ng)=scale
-                    Iinfo(1,varid,ng)=gtype
+                DO j=1,Npom
+                  DO i=1,N_Psp
+                    varid=varid+1
+                    idTvar(iPOP(i,j))=varid
+                    DO ng=1,Ngrids
+                      Fscale(varid,ng)=scale
+                      Iinfo(1,varid,ng)=gtype
+                    END DO
+                    WRITE (Vname(1,varid),'(a,i2.2,a,i2.2)')            &
+   &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
+                    WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
+   &                      TRIM(ADJUSTL(Vinfo(2)))                       &
+                          ,', functional group ', j, ', tracer type ', i
+                    WRITE (Vname(3,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(3)))
+                    WRITE (Vname(4,varid),'(a,a)')                      &
+   &                      TRIM(Vname(1,varid)), ', scalar, series'
+                    WRITE (Vname(5,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(5)))
                   END DO
-                  WRITE (Vname(1,varid),'(a,i2.2)')                   &
-   &                    TRIM(ADJUSTL(Vinfo(1))), i
-                  WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', i
-                  WRITE (Vname(3,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(3)))
-                  WRITE (Vname(4,varid),'(a,a)')                      &
-   &                    TRIM(Vname(1,varid)), ', scalar, series'
-                  WRITE (Vname(5,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(5)))
                 END DO
                 varid=varid+1
-# endif
-#endif
-#if defined NUTRIENTS
-              CASE ('idTvar(iNO3_)')
-                idTvar(iNO3_)=varid
-!              CASE ('idTvar(iNO2_)')
-!                idTvar(iNO2_)=varid
-              CASE ('idTvar(iNH4_)')
-                idTvar(iNH4_)=varid
-              CASE ('idTvar(iPO4_)')
-                idTvar(iPO4_)=varid
-# if defined ORGANIC_MATTER
-              CASE ('idTvar(iDON(i))')
+              CASE ('idTvar(iPhyC(i,j))')
                 load=.FALSE.
                 varid=varid-1
-                DO i=1,Ndom
-                  varid=varid+1
-                  idTvar(iDON(i))=varid
-                  DO ng=1,Ngrids
-                    Fscale(varid,ng)=scale
-                    Iinfo(1,varid,ng)=gtype
+                DO j=1,Nphy
+                  DO i=1,N_Csp
+                    varid=varid+1
+                    idTvar(iPhyC(i,j))=varid
+                    DO ng=1,Ngrids
+                      Fscale(varid,ng)=scale
+                      Iinfo(1,varid,ng)=gtype
+                    END DO
+                    WRITE (Vname(1,varid),'(a,i2.2,a,i2.2)')            &
+   &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
+                    WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
+   &                      TRIM(ADJUSTL(Vinfo(2)))                       &
+                          ,', functional group ', j, ', tracer type ', i
+                    WRITE (Vname(3,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(3)))
+                    WRITE (Vname(4,varid),'(a,a)')                      &
+   &                      TRIM(Vname(1,varid)), ', scalar, series'
+                    WRITE (Vname(5,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(5)))
                   END DO
-                  WRITE (Vname(1,varid),'(a,i2.2)')                   &
-   &                    TRIM(ADJUSTL(Vinfo(1))), i
-                  WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', i
-                  WRITE (Vname(3,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(3)))
-                  WRITE (Vname(4,varid),'(a,a)')                      &
-   &                    TRIM(Vname(1,varid)), ', scalar, series'
-                  WRITE (Vname(5,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(5)))
                 END DO
                 varid=varid+1
-              CASE ('idTvar(iPON(i))')
+              CASE ('idTvar(iZooC(i,j))')
                 load=.FALSE.
                 varid=varid-1
-                DO i=1,Npom
-                  varid=varid+1
-                  idTvar(iPON(i))=varid
-                  DO ng=1,Ngrids
-                    Fscale(varid,ng)=scale
-                    Iinfo(1,varid,ng)=gtype
+                DO j=1,Nzoo
+                  DO i=1,N_Csp
+                    varid=varid+1
+                    idTvar(iZooC(i,j))=varid
+                    DO ng=1,Ngrids
+                      Fscale(varid,ng)=scale
+                      Iinfo(1,varid,ng)=gtype
+                    END DO
+                    WRITE (Vname(1,varid),'(a,i2.2,a,i2.2)')            &
+   &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
+                    WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
+   &                      TRIM(ADJUSTL(Vinfo(2)))                       &
+                          ,', functional group ', j, ', tracer type ', i
+                    WRITE (Vname(3,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(3)))
+                    WRITE (Vname(4,varid),'(a,a)')                      &
+   &                      TRIM(Vname(1,varid)), ', scalar, series'
+                    WRITE (Vname(5,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(5)))
                   END DO
-                  WRITE (Vname(1,varid),'(a,i2.2)')                   &
-   &                    TRIM(ADJUSTL(Vinfo(1))), i
-                  WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', i
-                  WRITE (Vname(3,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(3)))
-                  WRITE (Vname(4,varid),'(a,a)')                      &
-   &                    TRIM(Vname(1,varid)), ', scalar, series'
-                  WRITE (Vname(5,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(5)))
                 END DO
                 varid=varid+1
-              CASE ('idTvar(iDOP(i))')
+              CASE ('idTvar(iPhyN(i,j))')
                 load=.FALSE.
                 varid=varid-1
-                DO i=1,Ndom
-                  varid=varid+1
-                  idTvar(iDOP(i))=varid
-                  DO ng=1,Ngrids
-                    Fscale(varid,ng)=scale
-                    Iinfo(1,varid,ng)=gtype
+                DO j=1,Nphy
+                  DO i=1,N_Nsp
+                    varid=varid+1
+                    idTvar(iPhyN(i,j))=varid
+                    DO ng=1,Ngrids
+                      Fscale(varid,ng)=scale
+                      Iinfo(1,varid,ng)=gtype
+                    END DO
+                    WRITE (Vname(1,varid),'(a,i2.2,a,i2.2)')            &
+   &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
+                    WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
+   &                      TRIM(ADJUSTL(Vinfo(2)))                       &
+                          ,', functional group ', j, ', tracer type ', i
+                    WRITE (Vname(3,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(3)))
+                    WRITE (Vname(4,varid),'(a,a)')                      &
+   &                      TRIM(Vname(1,varid)), ', scalar, series'
+                    WRITE (Vname(5,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(5)))
                   END DO
-                  WRITE (Vname(1,varid),'(a,i2.2)')                   &
-   &                    TRIM(ADJUSTL(Vinfo(1))), i
-                  WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', i
-                  WRITE (Vname(3,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(3)))
-                  WRITE (Vname(4,varid),'(a,a)')                      &
-   &                    TRIM(Vname(1,varid)), ', scalar, series'
-                  WRITE (Vname(5,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(5)))
                 END DO
                 varid=varid+1
-              CASE ('idTvar(iPOP(i))')
+              CASE ('idTvar(iZooN(i,j))')
                 load=.FALSE.
                 varid=varid-1
-                DO i=1,Npom
-                  varid=varid+1
-                  idTvar(iPOP(i))=varid
-                  DO ng=1,Ngrids
-                    Fscale(varid,ng)=scale
-                    Iinfo(1,varid,ng)=gtype
+                DO j=1,Nzoo
+                  DO i=1,N_Nsp
+                    varid=varid+1
+                    idTvar(iZooN(i,j))=varid
+                    DO ng=1,Ngrids
+                      Fscale(varid,ng)=scale
+                      Iinfo(1,varid,ng)=gtype
+                    END DO
+                    WRITE (Vname(1,varid),'(a,i2.2,a,i2.2)')            &
+   &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
+                    WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
+   &                      TRIM(ADJUSTL(Vinfo(2)))                       &
+                          ,', functional group ', j, ', tracer type ', i
+                    WRITE (Vname(3,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(3)))
+                    WRITE (Vname(4,varid),'(a,a)')                      &
+   &                      TRIM(Vname(1,varid)), ', scalar, series'
+                    WRITE (Vname(5,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(5)))
                   END DO
-                  WRITE (Vname(1,varid),'(a,i2.2)')                   &
-   &                    TRIM(ADJUSTL(Vinfo(1))), i
-                  WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', i
-                  WRITE (Vname(3,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(3)))
-                  WRITE (Vname(4,varid),'(a,a)')                      &
-   &                    TRIM(Vname(1,varid)), ', scalar, series'
-                  WRITE (Vname(5,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(5)))
                 END DO
                 varid=varid+1
-# endif
-# if defined NITROGEN_ISOTOPE
-              CASE ('idTvar(i15NO3)')
-                idTvar(i15NO3)=varid
-!              CASE ('idTvar(i15NO2)')
-!                idTvar(i15NO2)=varid
-              CASE ('idTvar(i15NH4)')
-                idTvar(i15NH4)=varid
-#  if defined ORGANIC_MATTER
-              CASE ('idTvar(iDO15N(i))')
+              CASE ('idTvar(iPhyP(i,j))')
                 load=.FALSE.
                 varid=varid-1
-                DO i=1,Ndom
-                  varid=varid+1
-                  idTvar(iDO15N(i))=varid
-                  DO ng=1,Ngrids
-                    Fscale(varid,ng)=scale
-                    Iinfo(1,varid,ng)=gtype
+                DO j=1,Nphy
+                  DO i=1,N_Psp
+                    varid=varid+1
+                    idTvar(iPhyP(i,j))=varid
+                    DO ng=1,Ngrids
+                      Fscale(varid,ng)=scale
+                      Iinfo(1,varid,ng)=gtype
+                    END DO
+                    WRITE (Vname(1,varid),'(a,i2.2,a,i2.2)')            &
+   &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
+                    WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
+   &                      TRIM(ADJUSTL(Vinfo(2)))                       &
+                          ,', functional group ', j, ', tracer type ', i
+                    WRITE (Vname(3,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(3)))
+                    WRITE (Vname(4,varid),'(a,a)')                      &
+   &                      TRIM(Vname(1,varid)), ', scalar, series'
+                    WRITE (Vname(5,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(5)))
                   END DO
-                  WRITE (Vname(1,varid),'(a,i2.2)')                   &
-   &                    TRIM(ADJUSTL(Vinfo(1))), i
-                  WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', i
-                  WRITE (Vname(3,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(3)))
-                  WRITE (Vname(4,varid),'(a,a)')                      &
-   &                    TRIM(Vname(1,varid)), ', scalar, series'
-                  WRITE (Vname(5,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(5)))
                 END DO
                 varid=varid+1
-              CASE ('idTvar(iPO15N(i))')
+              CASE ('idTvar(iZooP(i,j))')
                 load=.FALSE.
                 varid=varid-1
-                DO i=1,Npom
-                  varid=varid+1
-                  idTvar(iPO15N(i))=varid
-                  DO ng=1,Ngrids
-                    Fscale(varid,ng)=scale
-                    Iinfo(1,varid,ng)=gtype
+                DO j=1,Nzoo
+                  DO i=1,N_Psp
+                    varid=varid+1
+                    idTvar(iZooP(i,j))=varid
+                    DO ng=1,Ngrids
+                      Fscale(varid,ng)=scale
+                      Iinfo(1,varid,ng)=gtype
+                    END DO
+                    WRITE (Vname(1,varid),'(a,i2.2,a,i2.2)')            &
+   &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
+                    WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
+   &                      TRIM(ADJUSTL(Vinfo(2)))                       &
+                          ,', functional group ', j, ', tracer type ', i
+                    WRITE (Vname(3,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(3)))
+                    WRITE (Vname(4,varid),'(a,a)')                      &
+   &                      TRIM(Vname(1,varid)), ', scalar, series'
+                    WRITE (Vname(5,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(5)))
                   END DO
-                  WRITE (Vname(1,varid),'(a,i2.2)')                   &
-   &                    TRIM(ADJUSTL(Vinfo(1))), i
-                  WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', i
-                  WRITE (Vname(3,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(3)))
-                  WRITE (Vname(4,varid),'(a,a)')                      &
-   &                    TRIM(Vname(1,varid)), ', scalar, series'
-                  WRITE (Vname(5,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(5)))
                 END DO
                 varid=varid+1
-              CASE ('idTvar(iPhyt15N(i))')
+              CASE ('idTvar(iPIC(i,j))')
                 load=.FALSE.
                 varid=varid-1
-                DO i=1,Nphy
-                  varid=varid+1
-                  idTvar(iPhyt15N(i))=varid
-                  DO ng=1,Ngrids
-                    Fscale(varid,ng)=scale
-                    Iinfo(1,varid,ng)=gtype
+                DO j=1,Npim
+                  DO i=1,N_Csp
+                    varid=varid+1
+                    idTvar(iPIC(i,j))=varid
+                    DO ng=1,Ngrids
+                      Fscale(varid,ng)=scale
+                      Iinfo(1,varid,ng)=gtype
+                    END DO
+                    WRITE (Vname(1,varid),'(a,i2.2,a,i2.2)')            &
+   &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
+                    WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
+   &                      TRIM(ADJUSTL(Vinfo(2)))                       &
+                          ,', functional group ', j, ', tracer type ', i
+                    WRITE (Vname(3,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(3)))
+                    WRITE (Vname(4,varid),'(a,a)')                      &
+   &                      TRIM(Vname(1,varid)), ', scalar, series'
+                    WRITE (Vname(5,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(5)))
                   END DO
-                  WRITE (Vname(1,varid),'(a,i2.2)')                   &
-   &                    TRIM(ADJUSTL(Vinfo(1))), i
-                  WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', i
-                  WRITE (Vname(3,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(3)))
-                  WRITE (Vname(4,varid),'(a,a)')                      &
-   &                    TRIM(Vname(1,varid)), ', scalar, series'
-                  WRITE (Vname(5,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(5)))
                 END DO
                 varid=varid+1
-              CASE ('idTvar(iZoop15N(i))')
-                load=.FALSE.
-                varid=varid-1
-                DO i=1,Nzoo
-                  varid=varid+1
-                  idTvar(iZoop15N(i))=varid
-                  DO ng=1,Ngrids
-                    Fscale(varid,ng)=scale
-                    Iinfo(1,varid,ng)=gtype
-                  END DO
-                  WRITE (Vname(1,varid),'(a,i2.2)')                   &
-   &                    TRIM(ADJUSTL(Vinfo(1))), i
-                  WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', i
-                  WRITE (Vname(3,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(3)))
-                  WRITE (Vname(4,varid),'(a,a)')                      &
-   &                    TRIM(Vname(1,varid)), ', scalar, series'
-                  WRITE (Vname(5,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(5)))
-                END DO
-                varid=varid+1
-#  endif
-# endif
-#endif
 #if defined COT_STARFISH
               CASE ('idTvar(iCOTe)')
                 idTvar(iCOTe)=varid
@@ -470,10 +457,10 @@
                 idTvar(iCOTl)=varid
 #endif
 
-#ifdef CARBON_ISOTOPE
-              CASE ('iHbio3(id13C)')  !!!<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Remove??
-                iHbio3(id13C)=varid
-#endif
+!#ifdef CARBON_ISOTOPE
+!              CASE ('iHbio3(id13C)')  !!!<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Remove??
+!                iHbio3(id13C)=varid
+!#endif
 #if defined DIAGNOSTICS_BIO
               CASE ('iDbio2(iCO2fx)')
                 iDbio2(iCO2fx)=varid
@@ -502,28 +489,28 @@
 # endif
 !!!<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<KM:Add
 
-# ifdef CARBON_ISOTOPE
-              CASE ('iDbio3(id13C)')
-                iDbio3(id13C)=varid
-# endif
+!# ifdef CARBON_ISOTOPE
+!              CASE ('iDbio3(id13C)')
+!                iDbio3(id13C)=varid
+!# endif
 #endif
 
 ! ==== Coral parameters ===============================================
 #ifdef CORAL_POLYP
-              CASE ('iHbio2(iClTAcal(i))')
+              CASE ('iHbio2(iClTAcal(j))')
                 load=.FALSE.
                 varid=varid-1
-                DO i=1,Ncl
+                DO j=1,Ncl
                   varid=varid+1
-                  iHbio2(iClTAcal(i))=varid
+                  iHbio2(iClTAcal(j))=varid
                   DO ng=1,Ngrids
                     Fscale(varid,ng)=scale
                     Iinfo(1,varid,ng)=gtype
                   END DO
                   WRITE (Vname(1,varid),'(a,i2.2)')                   &
-   &                    TRIM(ADJUSTL(Vinfo(1))), i
+   &                    TRIM(ADJUSTL(Vinfo(1))), j
                   WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', i
+   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', j
                   WRITE (Vname(3,varid),'(a)')                        &
    &                    TRIM(ADJUSTL(Vinfo(3)))
                   WRITE (Vname(4,varid),'(a,a)')                      &
@@ -532,20 +519,20 @@
    &                    TRIM(ADJUSTL(Vinfo(5)))
                 END DO
                 varid=varid+1
-              CASE ('iHbio2(iClTAcoe(i))')
+              CASE ('iHbio2(iClTAcoe(j))')
                 load=.FALSE.
                 varid=varid-1
-                DO i=1,Ncl
+                DO j=1,Ncl
                   varid=varid+1
-                  iHbio2(iClTAcoe(i))=varid
+                  iHbio2(iClTAcoe(j))=varid
                   DO ng=1,Ngrids
                     Fscale(varid,ng)=scale
                     Iinfo(1,varid,ng)=gtype
                   END DO
                   WRITE (Vname(1,varid),'(a,i2.2)')                   &
-   &                    TRIM(ADJUSTL(Vinfo(1))), i
+   &                    TRIM(ADJUSTL(Vinfo(1))), j
                   WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', i
+   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', j
                   WRITE (Vname(3,varid),'(a)')                        &
    &                    TRIM(ADJUSTL(Vinfo(3)))
                   WRITE (Vname(4,varid),'(a,a)')                      &
@@ -554,20 +541,70 @@
    &                    TRIM(ADJUSTL(Vinfo(5)))
                 END DO
                 varid=varid+1
-              CASE ('iHbio2(iClDICcal(i))')
+              CASE ('iHbio2(iClDICcal(i,j))')
                 load=.FALSE.
                 varid=varid-1
-                DO i=1,Ncl
+                DO j=1,Ncl
+                  DO i=1,N_Csp
+                    varid=varid+1
+                    iHbio2(iClDICcal(i,j))=varid
+                    DO ng=1,Ngrids
+                      Fscale(varid,ng)=scale
+                      Iinfo(1,varid,ng)=gtype
+                    END DO
+                    WRITE (Vname(1,varid),'(a,i2.2,a,i2.2)')            &
+   &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
+                    WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
+   &                      TRIM(ADJUSTL(Vinfo(2)))                       &
+                          ,', functional group ', j, ', tracer type ', i
+                    WRITE (Vname(3,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(3)))
+                    WRITE (Vname(4,varid),'(a,a)')                      &
+   &                      TRIM(Vname(1,varid)), ', scalar, series'
+                    WRITE (Vname(5,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(5)))
+                  END DO
+                END DO
+                varid=varid+1
+              CASE ('iHbio2(iClDICcoe(i,j))')
+                load=.FALSE.
+                varid=varid-1
+                DO j=1,Ncl
+                  DO i=1,N_Csp
+                    varid=varid+1
+                    iHbio2(iClDICcoe(i,j))=varid
+                    DO ng=1,Ngrids
+                      Fscale(varid,ng)=scale
+                      Iinfo(1,varid,ng)=gtype
+                    END DO
+                    WRITE (Vname(1,varid),'(a,i2.2,a,i2.2)')            &
+   &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
+                    WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
+   &                      TRIM(ADJUSTL(Vinfo(2)))                       &
+                          ,', functional group ', j, ', tracer type ', i
+                    WRITE (Vname(3,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(3)))
+                    WRITE (Vname(4,varid),'(a,a)')                      &
+   &                      TRIM(Vname(1,varid)), ', scalar, series'
+                    WRITE (Vname(5,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(5)))
+                  END DO
+                END DO
+                varid=varid+1
+              CASE ('iHbio2(iClDOcoe(j))')
+                load=.FALSE.
+                varid=varid-1
+                DO j=1,Ncl
                   varid=varid+1
-                  iHbio2(iClDICcal(i))=varid
+                  iHbio2(iClDOcoe(j))=varid
                   DO ng=1,Ngrids
                     Fscale(varid,ng)=scale
                     Iinfo(1,varid,ng)=gtype
                   END DO
                   WRITE (Vname(1,varid),'(a,i2.2)')                   &
-   &                    TRIM(ADJUSTL(Vinfo(1))), i
+   &                    TRIM(ADJUSTL(Vinfo(1))), j
                   WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', i
+   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', j
                   WRITE (Vname(3,varid),'(a)')                        &
    &                    TRIM(ADJUSTL(Vinfo(3)))
                   WRITE (Vname(4,varid),'(a,a)')                      &
@@ -576,247 +613,98 @@
    &                    TRIM(ADJUSTL(Vinfo(5)))
                 END DO
                 varid=varid+1
-              CASE ('iHbio2(iClDICcoe(i))')
+              CASE ('iHbio2(iClQC(i,j))')
                 load=.FALSE.
                 varid=varid-1
-                DO i=1,Ncl
-                  varid=varid+1
-                  iHbio2(iClDICcoe(i))=varid
-                  DO ng=1,Ngrids
-                    Fscale(varid,ng)=scale
-                    Iinfo(1,varid,ng)=gtype
+                DO j=1,Ncl
+                  DO i=1,N_Csp
+                    varid=varid+1
+                    iHbio2(iClQC(i,j))=varid
+                    DO ng=1,Ngrids
+                      Fscale(varid,ng)=scale
+                      Iinfo(1,varid,ng)=gtype
+                    END DO
+                    WRITE (Vname(1,varid),'(a,i2.2,a,i2.2)')            &
+   &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
+                    WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
+   &                      TRIM(ADJUSTL(Vinfo(2)))                       &
+                          ,', functional group ', j, ', tracer type ', i
+                    WRITE (Vname(3,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(3)))
+                    WRITE (Vname(4,varid),'(a,a)')                      &
+   &                      TRIM(Vname(1,varid)), ', scalar, series'
+                    WRITE (Vname(5,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(5)))
                   END DO
-                  WRITE (Vname(1,varid),'(a,i2.2)')                   &
-   &                    TRIM(ADJUSTL(Vinfo(1))), i
-                  WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', i
-                  WRITE (Vname(3,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(3)))
-                  WRITE (Vname(4,varid),'(a,a)')                      &
-   &                    TRIM(Vname(1,varid)), ', scalar, series'
-                  WRITE (Vname(5,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(5)))
-                END DO
-                varid=varid+1
-              CASE ('iHbio2(iClDOcoe(i))')
-                load=.FALSE.
-                varid=varid-1
-                DO i=1,Ncl
-                  varid=varid+1
-                  iHbio2(iClDOcoe(i))=varid
-                  DO ng=1,Ngrids
-                    Fscale(varid,ng)=scale
-                    Iinfo(1,varid,ng)=gtype
-                  END DO
-                  WRITE (Vname(1,varid),'(a,i2.2)')                   &
-   &                    TRIM(ADJUSTL(Vinfo(1))), i
-                  WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', i
-                  WRITE (Vname(3,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(3)))
-                  WRITE (Vname(4,varid),'(a,a)')                      &
-   &                    TRIM(Vname(1,varid)), ', scalar, series'
-                  WRITE (Vname(5,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(5)))
-                END DO
-                varid=varid+1
-              CASE ('iHbio2(iClQC(i))')
-                load=.FALSE.
-                varid=varid-1
-                DO i=1,Ncl
-                  varid=varid+1
-                  iHbio2(iClQC(i))=varid
-                  DO ng=1,Ngrids
-                    Fscale(varid,ng)=scale
-                    Iinfo(1,varid,ng)=gtype
-                  END DO
-                  WRITE (Vname(1,varid),'(a,i2.2)')                   &
-   &                    TRIM(ADJUSTL(Vinfo(1))), i
-                  WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', i
-                  WRITE (Vname(3,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(3)))
-                  WRITE (Vname(4,varid),'(a,a)')                      &
-   &                    TRIM(Vname(1,varid)), ', scalar, series'
-                  WRITE (Vname(5,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(5)))
                 END DO
                 varid=varid+1
 # if defined CORAL_NONE_CO2_EQ
-              CASE ('iHbio2(iClCO2cal(i))')
+              CASE ('iHbio2(iClCO2cal(i,j))')
                 load=.FALSE.
                 varid=varid-1
-                DO i=1,Ncl
-                  varid=varid+1
-                  iHbio2(iClCO2cal(i))=varid
-                  DO ng=1,Ngrids
-                    Fscale(varid,ng)=scale
-                    Iinfo(1,varid,ng)=gtype
+                DO j=1,Ncl
+                  DO i=1,N_Csp
+                    varid=varid+1
+                    iHbio2(iClCO2cal(i,j))=varid
+                    DO ng=1,Ngrids
+                      Fscale(varid,ng)=scale
+                      Iinfo(1,varid,ng)=gtype
+                    END DO
+                    WRITE (Vname(1,varid),'(a,i2.2,a,i2.2)')            &
+   &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
+                    WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
+   &                      TRIM(ADJUSTL(Vinfo(2)))                       &
+                          ,', functional group ', j, ', tracer type ', i
+                    WRITE (Vname(3,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(3)))
+                    WRITE (Vname(4,varid),'(a,a)')                      &
+   &                      TRIM(Vname(1,varid)), ', scalar, series'
+                    WRITE (Vname(5,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(5)))
                   END DO
-                  WRITE (Vname(1,varid),'(a,i2.2)')                   &
-   &                    TRIM(ADJUSTL(Vinfo(1))), i
-                  WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', i
-                  WRITE (Vname(3,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(3)))
-                  WRITE (Vname(4,varid),'(a,a)')                      &
-   &                    TRIM(Vname(1,varid)), ', scalar, series'
-                  WRITE (Vname(5,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(5)))
                 END DO
                 varid=varid+1
-              CASE ('iHbio2(iClCO2coe(i))')
+              CASE ('iHbio2(iClCO2coe(i,j))')
                 load=.FALSE.
                 varid=varid-1
-                DO i=1,Ncl
-                  varid=varid+1
-                  iHbio2(iClCO2coe(i))=varid
-                  DO ng=1,Ngrids
-                    Fscale(varid,ng)=scale
-                    Iinfo(1,varid,ng)=gtype
+                DO j=1,Ncl
+                  DO i=1,N_Csp
+                    varid=varid+1
+                    iHbio2(iClCO2coe(i,j))=varid
+                    DO ng=1,Ngrids
+                      Fscale(varid,ng)=scale
+                      Iinfo(1,varid,ng)=gtype
+                    END DO
+                    WRITE (Vname(1,varid),'(a,i2.2,a,i2.2)')            &
+   &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
+                    WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
+   &                      TRIM(ADJUSTL(Vinfo(2)))                       &
+                          ,', functional group ', j, ', tracer type ', i
+                    WRITE (Vname(3,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(3)))
+                    WRITE (Vname(4,varid),'(a,a)')                      &
+   &                      TRIM(Vname(1,varid)), ', scalar, series'
+                    WRITE (Vname(5,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(5)))
                   END DO
-                  WRITE (Vname(1,varid),'(a,i2.2)')                   &
-   &                    TRIM(ADJUSTL(Vinfo(1))), i
-                  WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', i
-                  WRITE (Vname(3,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(3)))
-                  WRITE (Vname(4,varid),'(a,a)')                      &
-   &                    TRIM(Vname(1,varid)), ', scalar, series'
-                  WRITE (Vname(5,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(5)))
                 END DO
                 varid=varid+1
-# endif
-# ifdef CORAL_CARBON_ISOTOPE
-              CASE ('iHbio2(iClDI13Ccal(i))')
-                load=.FALSE.
-                varid=varid-1
-                DO i=1,Ncl
-                  varid=varid+1
-                  iHbio2(iClDI13Ccal(i))=varid
-                  DO ng=1,Ngrids
-                    Fscale(varid,ng)=scale
-                    Iinfo(1,varid,ng)=gtype
-                  END DO
-                  WRITE (Vname(1,varid),'(a,i2.2)')                   &
-   &                    TRIM(ADJUSTL(Vinfo(1))), i
-                  WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', i
-                  WRITE (Vname(3,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(3)))
-                  WRITE (Vname(4,varid),'(a,a)')                      &
-   &                    TRIM(Vname(1,varid)), ', scalar, series'
-                  WRITE (Vname(5,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(5)))
-                END DO
-                varid=varid+1
-              CASE ('iHbio2(iClDI13Ccoe(i))')
-                load=.FALSE.
-                varid=varid-1
-                DO i=1,Ncl
-                  varid=varid+1
-                  iHbio2(iClDI13Ccoe(i))=varid
-                  DO ng=1,Ngrids
-                    Fscale(varid,ng)=scale
-                    Iinfo(1,varid,ng)=gtype
-                  END DO
-                  WRITE (Vname(1,varid),'(a,i2.2)')                   &
-   &                    TRIM(ADJUSTL(Vinfo(1))), i
-                  WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', i
-                  WRITE (Vname(3,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(3)))
-                  WRITE (Vname(4,varid),'(a,a)')                      &
-   &                    TRIM(Vname(1,varid)), ', scalar, series'
-                  WRITE (Vname(5,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(5)))
-                END DO
-                varid=varid+1
-              CASE ('iHbio2(iClQ13C(i))')
-                load=.FALSE.
-                varid=varid-1
-                DO i=1,Ncl
-                  varid=varid+1
-                  iHbio2(iClQ13C(i))=varid
-                  DO ng=1,Ngrids
-                    Fscale(varid,ng)=scale
-                    Iinfo(1,varid,ng)=gtype
-                  END DO
-                  WRITE (Vname(1,varid),'(a,i2.2)')                   &
-   &                    TRIM(ADJUSTL(Vinfo(1))), i
-                  WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', i
-                  WRITE (Vname(3,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(3)))
-                  WRITE (Vname(4,varid),'(a,a)')                      &
-   &                    TRIM(Vname(1,varid)), ', scalar, series'
-                  WRITE (Vname(5,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(5)))
-                END DO
-                varid=varid+1
-#  if defined CORAL_NONE_CO2_EQ
-              CASE ('iHbio2(iCl13CO2cal(i))')
-                load=.FALSE.
-                varid=varid-1
-                DO i=1,Ncl
-                  varid=varid+1
-                  iHbio2(iCl13CO2cal(i))=varid
-                  DO ng=1,Ngrids
-                    Fscale(varid,ng)=scale
-                    Iinfo(1,varid,ng)=gtype
-                  END DO
-                  WRITE (Vname(1,varid),'(a,i2.2)')                   &
-   &                    TRIM(ADJUSTL(Vinfo(1))), i
-                  WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', i
-                  WRITE (Vname(3,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(3)))
-                  WRITE (Vname(4,varid),'(a,a)')                      &
-   &                    TRIM(Vname(1,varid)), ', scalar, series'
-                  WRITE (Vname(5,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(5)))
-                END DO
-                varid=varid+1
-              CASE ('iHbio2(iCl13CO2coe(i))')
-                load=.FALSE.
-                varid=varid-1
-                DO i=1,Ncl
-                  varid=varid+1
-                  iHbio2(iCl13CO2coe(i))=varid
-                  DO ng=1,Ngrids
-                    Fscale(varid,ng)=scale
-                    Iinfo(1,varid,ng)=gtype
-                  END DO
-                  WRITE (Vname(1,varid),'(a,i2.2)')                   &
-   &                    TRIM(ADJUSTL(Vinfo(1))), i
-                  WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', i
-                  WRITE (Vname(3,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(3)))
-                  WRITE (Vname(4,varid),'(a,a)')                      &
-   &                    TRIM(Vname(1,varid)), ', scalar, series'
-                  WRITE (Vname(5,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(5)))
-                END DO
-                varid=varid+1
-#  endif
 # endif
 # ifdef CORAL_ZOOXANTHELLAE
-              CASE ('iHbio2(iClROS(i))')
+              CASE ('iHbio2(iClROS(j))')
                 load=.FALSE.
                 varid=varid-1
-                DO i=1,Ncl
+                DO j=1,Ncl
                   varid=varid+1
-                  iHbio2(iClROS(i))=varid
+                  iHbio2(iClROS(j))=varid
                   DO ng=1,Ngrids
                     Fscale(varid,ng)=scale
                     Iinfo(1,varid,ng)=gtype
                   END DO
                   WRITE (Vname(1,varid),'(a,i2.2)')                   &
-   &                    TRIM(ADJUSTL(Vinfo(1))), i
+   &                    TRIM(ADJUSTL(Vinfo(1))), j
                   WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', i
+   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', j
                   WRITE (Vname(3,varid),'(a)')                        &
    &                    TRIM(ADJUSTL(Vinfo(3)))
                   WRITE (Vname(4,varid),'(a,a)')                      &
@@ -825,20 +713,20 @@
    &                    TRIM(ADJUSTL(Vinfo(5)))
                 END DO
                 varid=varid+1
-              CASE ('iHbio2(iZxDns(i))')
+              CASE ('iHbio2(iZxDns(j))')
                 load=.FALSE.
                 varid=varid-1
-                DO i=1,Ncl
+                DO j=1,Ncl
                   varid=varid+1
-                  iHbio2(iZxDns(i))=varid
+                  iHbio2(iZxDns(j))=varid
                   DO ng=1,Ngrids
                     Fscale(varid,ng)=scale
                     Iinfo(1,varid,ng)=gtype
                   END DO
                   WRITE (Vname(1,varid),'(a,i2.2)')                   &
-   &                    TRIM(ADJUSTL(Vinfo(1))), i
+   &                    TRIM(ADJUSTL(Vinfo(1))), j
                   WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', i
+   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', j
                   WRITE (Vname(3,varid),'(a)')                        &
    &                    TRIM(ADJUSTL(Vinfo(3)))
                   WRITE (Vname(4,varid),'(a,a)')                      &
@@ -847,20 +735,45 @@
    &                    TRIM(ADJUSTL(Vinfo(5)))
                 END DO
                 varid=varid+1
-              CASE ('iHbio2(iZxQC(i))')
+              CASE ('iHbio2(iZxQC(i,j))')
                 load=.FALSE.
                 varid=varid-1
-                DO i=1,Ncl
+                DO j=1,Ncl
+                  DO i=1,N_Csp
+                    varid=varid+1
+                    iHbio2(iZxQC(i,j))=varid
+                    DO ng=1,Ngrids
+                      Fscale(varid,ng)=scale
+                      Iinfo(1,varid,ng)=gtype
+                    END DO
+                    WRITE (Vname(1,varid),'(a,i2.2,a,i2.2)')            &
+   &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
+                    WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
+   &                      TRIM(ADJUSTL(Vinfo(2)))                       &
+                          ,', functional group ', j, ', tracer type ', i
+                    WRITE (Vname(3,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(3)))
+                    WRITE (Vname(4,varid),'(a,a)')                      &
+   &                      TRIM(Vname(1,varid)), ', scalar, series'
+                    WRITE (Vname(5,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(5)))
+                  END DO
+                END DO
+                varid=varid+1
+              CASE ('iHbio2(iZxChl(j))')
+                load=.FALSE.
+                varid=varid-1
+                DO j=1,Ncl
                   varid=varid+1
-                  iHbio2(iZxQC(i))=varid
+                  iHbio2(iZxChl(j))=varid
                   DO ng=1,Ngrids
                     Fscale(varid,ng)=scale
                     Iinfo(1,varid,ng)=gtype
                   END DO
                   WRITE (Vname(1,varid),'(a,i2.2)')                   &
-   &                    TRIM(ADJUSTL(Vinfo(1))), i
+   &                    TRIM(ADJUSTL(Vinfo(1))), j
                   WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', i
+   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', j
                   WRITE (Vname(3,varid),'(a)')                        &
    &                    TRIM(ADJUSTL(Vinfo(3)))
                   WRITE (Vname(4,varid),'(a,a)')                      &
@@ -869,20 +782,20 @@
    &                    TRIM(ADJUSTL(Vinfo(5)))
                 END DO
                 varid=varid+1
-              CASE ('iHbio2(iZxChl(i))')
+              CASE ('iHbio2(iZxQAo(j))')
                 load=.FALSE.
                 varid=varid-1
-                DO i=1,Ncl
+                DO j=1,Ncl
                   varid=varid+1
-                  iHbio2(iZxChl(i))=varid
+                  iHbio2(iZxQAo(j))=varid
                   DO ng=1,Ngrids
                     Fscale(varid,ng)=scale
                     Iinfo(1,varid,ng)=gtype
                   END DO
                   WRITE (Vname(1,varid),'(a,i2.2)')                   &
-   &                    TRIM(ADJUSTL(Vinfo(1))), i
+   &                    TRIM(ADJUSTL(Vinfo(1))), j
                   WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', i
+   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', j
                   WRITE (Vname(3,varid),'(a)')                        &
    &                    TRIM(ADJUSTL(Vinfo(3)))
                   WRITE (Vname(4,varid),'(a,a)')                      &
@@ -891,20 +804,20 @@
    &                    TRIM(ADJUSTL(Vinfo(5)))
                 END DO
                 varid=varid+1
-              CASE ('iHbio2(iZxQAo(i))')
+              CASE ('iHbio2(iZxQAr(j))')
                 load=.FALSE.
                 varid=varid-1
-                DO i=1,Ncl
+                DO j=1,Ncl
                   varid=varid+1
-                  iHbio2(iZxQAo(i))=varid
+                  iHbio2(iZxQAr(j))=varid
                   DO ng=1,Ngrids
                     Fscale(varid,ng)=scale
                     Iinfo(1,varid,ng)=gtype
                   END DO
                   WRITE (Vname(1,varid),'(a,i2.2)')                   &
-   &                    TRIM(ADJUSTL(Vinfo(1))), i
+   &                    TRIM(ADJUSTL(Vinfo(1))), j
                   WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', i
+   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', j
                   WRITE (Vname(3,varid),'(a)')                        &
    &                    TRIM(ADJUSTL(Vinfo(3)))
                   WRITE (Vname(4,varid),'(a,a)')                      &
@@ -913,20 +826,20 @@
    &                    TRIM(ADJUSTL(Vinfo(5)))
                 END DO
                 varid=varid+1
-              CASE ('iHbio2(iZxQAr(i))')
+              CASE ('iHbio2(iZxQAi(j))')
                 load=.FALSE.
                 varid=varid-1
-                DO i=1,Ncl
+                DO j=1,Ncl
                   varid=varid+1
-                  iHbio2(iZxQAr(i))=varid
+                  iHbio2(iZxQAi(j))=varid
                   DO ng=1,Ngrids
                     Fscale(varid,ng)=scale
                     Iinfo(1,varid,ng)=gtype
                   END DO
                   WRITE (Vname(1,varid),'(a,i2.2)')                   &
-   &                    TRIM(ADJUSTL(Vinfo(1))), i
+   &                    TRIM(ADJUSTL(Vinfo(1))), j
                   WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', i
+   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', j
                   WRITE (Vname(3,varid),'(a)')                        &
    &                    TRIM(ADJUSTL(Vinfo(3)))
                   WRITE (Vname(4,varid),'(a,a)')                      &
@@ -935,20 +848,20 @@
    &                    TRIM(ADJUSTL(Vinfo(5)))
                 END DO
                 varid=varid+1
-              CASE ('iHbio2(iZxQAi(i))')
+              CASE ('iHbio2(iZxQAid(j))')
                 load=.FALSE.
                 varid=varid-1
-                DO i=1,Ncl
+                DO j=1,Ncl
                   varid=varid+1
-                  iHbio2(iZxQAi(i))=varid
+                  iHbio2(iZxQAid(j))=varid
                   DO ng=1,Ngrids
                     Fscale(varid,ng)=scale
                     Iinfo(1,varid,ng)=gtype
                   END DO
                   WRITE (Vname(1,varid),'(a,i2.2)')                   &
-   &                    TRIM(ADJUSTL(Vinfo(1))), i
+   &                    TRIM(ADJUSTL(Vinfo(1))), j
                   WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', i
+   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', j
                   WRITE (Vname(3,varid),'(a)')                        &
    &                    TRIM(ADJUSTL(Vinfo(3)))
                   WRITE (Vname(4,varid),'(a,a)')                      &
@@ -957,71 +870,25 @@
    &                    TRIM(ADJUSTL(Vinfo(5)))
                 END DO
                 varid=varid+1
-              CASE ('iHbio2(iZxQAid(i))')
-                load=.FALSE.
-                varid=varid-1
-                DO i=1,Ncl
-                  varid=varid+1
-                  iHbio2(iZxQAid(i))=varid
-                  DO ng=1,Ngrids
-                    Fscale(varid,ng)=scale
-                    Iinfo(1,varid,ng)=gtype
-                  END DO
-                  WRITE (Vname(1,varid),'(a,i2.2)')                   &
-   &                    TRIM(ADJUSTL(Vinfo(1))), i
-                  WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', i
-                  WRITE (Vname(3,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(3)))
-                  WRITE (Vname(4,varid),'(a,a)')                      &
-   &                    TRIM(Vname(1,varid)), ', scalar, series'
-                  WRITE (Vname(5,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(5)))
-                END DO
-                varid=varid+1
-#  ifdef CORAL_CARBON_ISOTOPE
-              CASE ('iHbio2(iZxQ13C(i))')
-                load=.FALSE.
-                varid=varid-1
-                DO i=1,Ncl
-                  varid=varid+1
-                  iHbio2(iZxQ13C(i))=varid
-                  DO ng=1,Ngrids
-                    Fscale(varid,ng)=scale
-                    Iinfo(1,varid,ng)=gtype
-                  END DO
-                  WRITE (Vname(1,varid),'(a,i2.2)')                   &
-   &                    TRIM(ADJUSTL(Vinfo(1))), i
-                  WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', i
-                  WRITE (Vname(3,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(3)))
-                  WRITE (Vname(4,varid),'(a,a)')                      &
-   &                    TRIM(Vname(1,varid)), ', scalar, series'
-                  WRITE (Vname(5,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(5)))
-                END DO
-                varid=varid+1
-#  endif
 # endif
 # ifdef CORAL_SIZE_DYNAMICS
 
 # endif
 # if defined DIAGNOSTICS_BIO
-              CASE ('iDbio2(iClPg(i))')
+              CASE ('iDbio2(iClPg(j))')
                 load=.FALSE.
                 varid=varid-1
-                DO i=1,Ncl
+                DO j=1,Ncl
                   varid=varid+1
-                  iDbio2(iClPg(i))=varid
+                  iDbio2(iClPg(j))=varid
                   DO ng=1,Ngrids
                     Fscale(varid,ng)=scale
                     Iinfo(1,varid,ng)=gtype
                   END DO
                   WRITE (Vname(1,varid),'(a,i2.2)')                   &
-   &                    TRIM(ADJUSTL(Vinfo(1))), i
+   &                    TRIM(ADJUSTL(Vinfo(1))), j
                   WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', i
+   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', j
                   WRITE (Vname(3,varid),'(a)')                        &
    &                    TRIM(ADJUSTL(Vinfo(3)))
                   WRITE (Vname(4,varid),'(a,a)')                      &
@@ -1030,20 +897,20 @@
    &                    TRIM(ADJUSTL(Vinfo(5)))
                 END DO
                 varid=varid+1
-              CASE ('iDbio2(iCl_R(i))')
+              CASE ('iDbio2(iCl_R(j))')
                 load=.FALSE.
                 varid=varid-1
-                DO i=1,Ncl
+                DO j=1,Ncl
                   varid=varid+1
-                  iDbio2(iCl_R(i))=varid
+                  iDbio2(iCl_R(j))=varid
                   DO ng=1,Ngrids
                     Fscale(varid,ng)=scale
                     Iinfo(1,varid,ng)=gtype
                   END DO
                   WRITE (Vname(1,varid),'(a,i2.2)')                   &
-   &                    TRIM(ADJUSTL(Vinfo(1))), i
+   &                    TRIM(ADJUSTL(Vinfo(1))), j
                   WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', i
+   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', j
                   WRITE (Vname(3,varid),'(a)')                        &
    &                    TRIM(ADJUSTL(Vinfo(3)))
                   WRITE (Vname(4,varid),'(a,a)')                      &
@@ -1052,20 +919,20 @@
    &                    TRIM(ADJUSTL(Vinfo(5)))
                 END DO
                 varid=varid+1
-              CASE ('iDbio2(iCl_G(i))')
+              CASE ('iDbio2(iCl_G(j))')
                 load=.FALSE.
                 varid=varid-1
-                DO i=1,Ncl
+                DO j=1,Ncl
                   varid=varid+1
-                  iDbio2(iCl_G(i))=varid
+                  iDbio2(iCl_G(j))=varid
                   DO ng=1,Ngrids
                     Fscale(varid,ng)=scale
                     Iinfo(1,varid,ng)=gtype
                   END DO
                   WRITE (Vname(1,varid),'(a,i2.2)')                   &
-   &                    TRIM(ADJUSTL(Vinfo(1))), i
+   &                    TRIM(ADJUSTL(Vinfo(1))), j
                   WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', i
+   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', j
                   WRITE (Vname(3,varid),'(a)')                        &
    &                    TRIM(ADJUSTL(Vinfo(3)))
                   WRITE (Vname(4,varid),'(a,a)')                      &
@@ -1074,20 +941,20 @@
    &                    TRIM(ADJUSTL(Vinfo(5)))
                 END DO
                 varid=varid+1
-              CASE ('iDbio2(iClPn(i))')
+              CASE ('iDbio2(iClPn(j))')
                 load=.FALSE.
                 varid=varid-1
-                DO i=1,Ncl
+                DO j=1,Ncl
                   varid=varid+1
-                  iDbio2(iClPn(i))=varid
+                  iDbio2(iClPn(j))=varid
                   DO ng=1,Ngrids
                     Fscale(varid,ng)=scale
                     Iinfo(1,varid,ng)=gtype
                   END DO
                   WRITE (Vname(1,varid),'(a,i2.2)')                   &
-   &                    TRIM(ADJUSTL(Vinfo(1))), i
+   &                    TRIM(ADJUSTL(Vinfo(1))), j
                   WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', i
+   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', j
                   WRITE (Vname(3,varid),'(a)')                        &
    &                    TRIM(ADJUSTL(Vinfo(3)))
                   WRITE (Vname(4,varid),'(a,a)')                      &
@@ -1097,20 +964,42 @@
                 END DO
                 varid=varid+1
 #  ifdef CORAL_CARBON_ISOTOPE
-              CASE ('iDbio2(iClQCd13C(i))')
+              CASE ('iDbio2(iClQCd13C(j))')
                 load=.FALSE.
                 varid=varid-1
-                DO i=1,Ncl
+                DO j=1,Ncl
                   varid=varid+1
-                  iDbio2(iClQCd13C(i))=varid
+                  iDbio2(iClQCd13C(j))=varid
                   DO ng=1,Ngrids
                     Fscale(varid,ng)=scale
                     Iinfo(1,varid,ng)=gtype
                   END DO
                   WRITE (Vname(1,varid),'(a,i2.2)')                   &
-   &                    TRIM(ADJUSTL(Vinfo(1))), i
+   &                    TRIM(ADJUSTL(Vinfo(1))), j
                   WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', i
+   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', j
+                  WRITE (Vname(3,varid),'(a)')                        &
+   &                    TRIM(ADJUSTL(Vinfo(3)))
+                  WRITE (Vname(4,varid),'(a,a)')                      &
+   &                    TRIM(Vname(1,varid)), ', scalar, series'
+                  WRITE (Vname(5,varid),'(a)')                        &
+   &                    TRIM(ADJUSTL(Vinfo(5)))
+                END DO
+                varid=varid+1
+              CASE ('iDbio2(iCl_Gd13C(j))')
+                load=.FALSE.
+                varid=varid-1
+                DO j=1,Ncl
+                  varid=varid+1
+                  iDbio2(iCl_Gd13C(j))=varid
+                  DO ng=1,Ngrids
+                    Fscale(varid,ng)=scale
+                    Iinfo(1,varid,ng)=gtype
+                  END DO
+                  WRITE (Vname(1,varid),'(a,i2.2)')                   &
+   &                    TRIM(ADJUSTL(Vinfo(1))), j
+                  WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
+   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', j
                   WRITE (Vname(3,varid),'(a)')                        &
    &                    TRIM(ADJUSTL(Vinfo(3)))
                   WRITE (Vname(4,varid),'(a,a)')                      &
@@ -1121,10 +1010,10 @@
                 varid=varid+1
 #  endif
 #  ifdef CORAL_ZOOXANTHELLAE
-              CASE ('iDbio2(iZxPg(i))')
+              CASE ('iDbio2(iZxPg(j))')
                 load=.FALSE.
                 varid=varid-1
-                DO i=1,Ncl
+                DO j=1,Ncl
                   varid=varid+1
                   iDbio2(iZxPg(i))=varid
                   DO ng=1,Ngrids
@@ -1132,9 +1021,9 @@
                     Iinfo(1,varid,ng)=gtype
                   END DO
                   WRITE (Vname(1,varid),'(a,i2.2)')                   &
-   &                    TRIM(ADJUSTL(Vinfo(1))), i
+   &                    TRIM(ADJUSTL(Vinfo(1))), j
                   WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', i
+   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', j
                   WRITE (Vname(3,varid),'(a)')                        &
    &                    TRIM(ADJUSTL(Vinfo(3)))
                   WRITE (Vname(4,varid),'(a,a)')                      &
@@ -1143,20 +1032,20 @@
    &                    TRIM(ADJUSTL(Vinfo(5)))
                 END DO
                 varid=varid+1
-              CASE ('iDbio2(iZx_R(i))')
+              CASE ('iDbio2(iZx_R(j))')
                 load=.FALSE.
                 varid=varid-1
-                DO i=1,Ncl
+                DO j=1,Ncl
                   varid=varid+1
-                  iDbio2(iZx_R(i))=varid
+                  iDbio2(iZx_R(j))=varid
                   DO ng=1,Ngrids
                     Fscale(varid,ng)=scale
                     Iinfo(1,varid,ng)=gtype
                   END DO
                   WRITE (Vname(1,varid),'(a,i2.2)')                   &
-   &                    TRIM(ADJUSTL(Vinfo(1))), i
+   &                    TRIM(ADJUSTL(Vinfo(1))), j
                   WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', i
+   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', j
                   WRITE (Vname(3,varid),'(a)')                        &
    &                    TRIM(ADJUSTL(Vinfo(3)))
                   WRITE (Vname(4,varid),'(a,a)')                      &
@@ -1165,20 +1054,20 @@
    &                    TRIM(ADJUSTL(Vinfo(5)))
                 END DO
                 varid=varid+1
-              CASE ('iDbio2(iZxPn(i))')
+              CASE ('iDbio2(iZxPn(j))')
                 load=.FALSE.
                 varid=varid-1
-                DO i=1,Ncl
+                DO j=1,Ncl
                   varid=varid+1
-                  iDbio2(iZxPn(i))=varid
+                  iDbio2(iZxPn(j))=varid
                   DO ng=1,Ngrids
                     Fscale(varid,ng)=scale
                     Iinfo(1,varid,ng)=gtype
                   END DO
                   WRITE (Vname(1,varid),'(a,i2.2)')                   &
-   &                    TRIM(ADJUSTL(Vinfo(1))), i
+   &                    TRIM(ADJUSTL(Vinfo(1))), j
                   WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', i
+   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', j
                   WRITE (Vname(3,varid),'(a)')                        &
    &                    TRIM(ADJUSTL(Vinfo(3)))
                   WRITE (Vname(4,varid),'(a,a)')                      &
@@ -1189,20 +1078,20 @@
                 varid=varid+1
 #  endif
 #  ifdef CORAL_SIZE_DYNAMICS
-              CASE ('iDbio2(iClmt(i))')
+              CASE ('iDbio2(iClmt(j))')
                 load=.FALSE.
                 varid=varid-1
-                DO i=1,Ncl
+                DO j=1,Ncl
                   varid=varid+1
-                  iDbio2(iClmt(i))=varid
+                  iDbio2(iClmt(j))=varid
                   DO ng=1,Ngrids
                     Fscale(varid,ng)=scale
                     Iinfo(1,varid,ng)=gtype
                   END DO
                   WRITE (Vname(1,varid),'(a,i2.2)')                   &
-   &                    TRIM(ADJUSTL(Vinfo(1))), i
+   &                    TRIM(ADJUSTL(Vinfo(1))), j
                   WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', i
+   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', j
                   WRITE (Vname(3,varid),'(a)')                        &
    &                    TRIM(ADJUSTL(Vinfo(3)))
                   WRITE (Vname(4,varid),'(a,a)')                      &
@@ -1211,20 +1100,20 @@
    &                    TRIM(ADJUSTL(Vinfo(5)))
                 END DO
                 varid=varid+1
-              CASE ('iDbio2(iClgw(i))')
+              CASE ('iDbio2(iClgw(j))')
                 load=.FALSE.
                 varid=varid-1
-                DO i=1,Ncl
+                DO j=1,Ncl
                   varid=varid+1
-                  iDbio2(iClgw(i))=varid
+                  iDbio2(iClgw(j))=varid
                   DO ng=1,Ngrids
                     Fscale(varid,ng)=scale
                     Iinfo(1,varid,ng)=gtype
                   END DO
                   WRITE (Vname(1,varid),'(a,i2.2)')                   &
-   &                    TRIM(ADJUSTL(Vinfo(1))), i
+   &                    TRIM(ADJUSTL(Vinfo(1))), j
                   WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', i
+   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', j
                   WRITE (Vname(3,varid),'(a)')                        &
    &                    TRIM(ADJUSTL(Vinfo(3)))
                   WRITE (Vname(4,varid),'(a,a)')                      &
@@ -1238,20 +1127,95 @@
 #endif
 ! ==== Seagrass parameters ===============================================
 #ifdef SEAGRASS
-              CASE ('iHbio2(iSgSgCBm(i))')
+              CASE ('iHbio2(iSgSgCBm(i,j))')
                 load=.FALSE.
                 varid=varid-1
-                DO i=1,Nsg
+                DO j=1,Nsg
+                  DO i=1,N_Csp
+                    varid=varid+1
+                    iHbio2(iSgSgCBm(i,j))=varid
+                    DO ng=1,Ngrids
+                      Fscale(varid,ng)=scale
+                      Iinfo(1,varid,ng)=gtype
+                    END DO
+                    WRITE (Vname(1,varid),'(a,i2.2,a,i2.2)')            &
+   &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
+                    WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
+   &                      TRIM(ADJUSTL(Vinfo(2)))                       &
+                          ,', functional group ', j, ', tracer type ', i
+                    WRITE (Vname(3,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(3)))
+                    WRITE (Vname(4,varid),'(a,a)')                      &
+   &                      TRIM(Vname(1,varid)), ', scalar, series'
+                    WRITE (Vname(5,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(5)))
+                  END DO
+                END DO
+                varid=varid+1
+              CASE ('iHbio2(iSgSgNBm(i,j))')
+                load=.FALSE.
+                varid=varid-1
+                DO j=1,Nsg
+                  DO i=1,N_Nsp
+                    varid=varid+1
+                    iHbio2(iSgSgNBm(i,j))=varid
+                    DO ng=1,Ngrids
+                      Fscale(varid,ng)=scale
+                      Iinfo(1,varid,ng)=gtype
+                    END DO
+                    WRITE (Vname(1,varid),'(a,i2.2,a,i2.2)')            &
+   &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
+                    WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
+   &                      TRIM(ADJUSTL(Vinfo(2)))                       &
+                          ,', functional group ', j, ', tracer type ', i
+                    WRITE (Vname(3,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(3)))
+                    WRITE (Vname(4,varid),'(a,a)')                      &
+   &                      TRIM(Vname(1,varid)), ', scalar, series'
+                    WRITE (Vname(5,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(5)))
+                  END DO
+                END DO
+                varid=varid+1
+              CASE ('iHbio2(iSgSgPBm(i,j))')
+                load=.FALSE.
+                varid=varid-1
+                DO j=1,Nsg
+                  DO i=1,N_Psp
+                    varid=varid+1
+                    iHbio2(iSgSgPBm(i,j))=varid
+                    DO ng=1,Ngrids
+                      Fscale(varid,ng)=scale
+                      Iinfo(1,varid,ng)=gtype
+                    END DO
+                    WRITE (Vname(1,varid),'(a,i2.2,a,i2.2)')            &
+   &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
+                    WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
+   &                      TRIM(ADJUSTL(Vinfo(2)))                       &
+                          ,', functional group ', j, ', tracer type ', i
+                    WRITE (Vname(3,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(3)))
+                    WRITE (Vname(4,varid),'(a,a)')                      &
+   &                      TRIM(Vname(1,varid)), ', scalar, series'
+                    WRITE (Vname(5,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(5)))
+                  END DO
+                END DO
+                varid=varid+1
+              CASE ('iHbio2(iSgLfCBm(j))')
+                load=.FALSE.
+                varid=varid-1
+                DO j=1,Nsg
                   varid=varid+1
-                  iHbio2(iSgSgCBm(i))=varid
+                  iHbio2(iSgLfCBm(j))=varid
                   DO ng=1,Ngrids
                     Fscale(varid,ng)=scale
                     Iinfo(1,varid,ng)=gtype
                   END DO
                   WRITE (Vname(1,varid),'(a,i2.2)')                   &
-   &                    TRIM(ADJUSTL(Vinfo(1))), i
+   &                    TRIM(ADJUSTL(Vinfo(1))), j
                   WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', i
+   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', j
                   WRITE (Vname(3,varid),'(a)')                        &
    &                    TRIM(ADJUSTL(Vinfo(3)))
                   WRITE (Vname(4,varid),'(a,a)')                      &
@@ -1260,20 +1224,20 @@
    &                    TRIM(ADJUSTL(Vinfo(5)))
                 END DO
                 varid=varid+1
-              CASE ('iHbio2(iSgLfCBm(i))')
+              CASE ('iHbio2(iSgRtCBm(j))')
                 load=.FALSE.
                 varid=varid-1
-                DO i=1,Nsg
+                DO j=1,Nsg
                   varid=varid+1
-                  iHbio2(iSgLfCBm(i))=varid
+                  iHbio2(iSgRtCBm(j))=varid
                   DO ng=1,Ngrids
                     Fscale(varid,ng)=scale
                     Iinfo(1,varid,ng)=gtype
                   END DO
                   WRITE (Vname(1,varid),'(a,i2.2)')                   &
-   &                    TRIM(ADJUSTL(Vinfo(1))), i
+   &                    TRIM(ADJUSTL(Vinfo(1))), j
                   WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', i
+   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', j
                   WRITE (Vname(3,varid),'(a)')                        &
    &                    TRIM(ADJUSTL(Vinfo(3)))
                   WRITE (Vname(4,varid),'(a,a)')                      &
@@ -1282,20 +1246,20 @@
    &                    TRIM(ADJUSTL(Vinfo(5)))
                 END DO
                 varid=varid+1
-              CASE ('iHbio2(iSgRtCBm(i))')
+              CASE ('iHbio2(iSgTotSgCBmS(j))')
                 load=.FALSE.
                 varid=varid-1
-                DO i=1,Nsg
+                DO j=1,Nsg
                   varid=varid+1
-                  iHbio2(iSgRtCBm(i))=varid
+                  iHbio2(iSgTotSgCBmS(j))=varid
                   DO ng=1,Ngrids
                     Fscale(varid,ng)=scale
                     Iinfo(1,varid,ng)=gtype
                   END DO
                   WRITE (Vname(1,varid),'(a,i2.2)')                   &
-   &                    TRIM(ADJUSTL(Vinfo(1))), i
+   &                    TRIM(ADJUSTL(Vinfo(1))), j
                   WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', i
+   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', j
                   WRITE (Vname(3,varid),'(a)')                        &
    &                    TRIM(ADJUSTL(Vinfo(3)))
                   WRITE (Vname(4,varid),'(a,a)')                      &
@@ -1304,20 +1268,20 @@
    &                    TRIM(ADJUSTL(Vinfo(5)))
                 END DO
                 varid=varid+1
-              CASE ('iHbio2(iSgTotSgCBmS(i))')
+              CASE ('iHbio2(iSgTotSgCBm(j))')
                 load=.FALSE.
                 varid=varid-1
-                DO i=1,Nsg
+                DO j=1,Nsg
                   varid=varid+1
-                  iHbio2(iSgTotSgCBmS(i))=varid
+                  iHbio2(iSgTotSgCBm(j))=varid
                   DO ng=1,Ngrids
                     Fscale(varid,ng)=scale
                     Iinfo(1,varid,ng)=gtype
                   END DO
                   WRITE (Vname(1,varid),'(a,i2.2)')                   &
-   &                    TRIM(ADJUSTL(Vinfo(1))), i
+   &                    TRIM(ADJUSTL(Vinfo(1))), j
                   WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', i
+   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', j
                   WRITE (Vname(3,varid),'(a)')                        &
    &                    TRIM(ADJUSTL(Vinfo(3)))
                   WRITE (Vname(4,varid),'(a,a)')                      &
@@ -1326,20 +1290,20 @@
    &                    TRIM(ADJUSTL(Vinfo(5)))
                 END DO
                 varid=varid+1
-              CASE ('iHbio2(iSgTotSgCBm(i))')
+              CASE ('iHbio2(iSgTotLfCBm(j))')
                 load=.FALSE.
                 varid=varid-1
-                DO i=1,Nsg
+                DO j=1,Nsg
                   varid=varid+1
-                  iHbio2(iSgTotSgCBm(i))=varid
+                  iHbio2(iSgTotLfCBm(j))=varid
                   DO ng=1,Ngrids
                     Fscale(varid,ng)=scale
                     Iinfo(1,varid,ng)=gtype
                   END DO
                   WRITE (Vname(1,varid),'(a,i2.2)')                   &
-   &                    TRIM(ADJUSTL(Vinfo(1))), i
+   &                    TRIM(ADJUSTL(Vinfo(1))), j
                   WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', i
+   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', j
                   WRITE (Vname(3,varid),'(a)')                        &
    &                    TRIM(ADJUSTL(Vinfo(3)))
                   WRITE (Vname(4,varid),'(a,a)')                      &
@@ -1348,20 +1312,20 @@
    &                    TRIM(ADJUSTL(Vinfo(5)))
                 END DO
                 varid=varid+1
-              CASE ('iHbio2(iSgTotLfCBm(i))')
+              CASE ('iHbio2(iSgTotRtCBm(j))')
                 load=.FALSE.
                 varid=varid-1
-                DO i=1,Nsg
+                DO j=1,Nsg
                   varid=varid+1
-                  iHbio2(iSgTotLfCBm(i))=varid
+                  iHbio2(iSgTotRtCBm(j))=varid
                   DO ng=1,Ngrids
                     Fscale(varid,ng)=scale
                     Iinfo(1,varid,ng)=gtype
                   END DO
                   WRITE (Vname(1,varid),'(a,i2.2)')                   &
-   &                    TRIM(ADJUSTL(Vinfo(1))), i
+   &                    TRIM(ADJUSTL(Vinfo(1))), j
                   WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', i
+   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', j
                   WRITE (Vname(3,varid),'(a)')                        &
    &                    TRIM(ADJUSTL(Vinfo(3)))
                   WRITE (Vname(4,varid),'(a,a)')                      &
@@ -1370,20 +1334,20 @@
    &                    TRIM(ADJUSTL(Vinfo(5)))
                 END DO
                 varid=varid+1
-              CASE ('iHbio2(iSgTotRtCBm(i))')
+              CASE ('iHbio2(iSgLAI(j))')
                 load=.FALSE.
                 varid=varid-1
-                DO i=1,Nsg
+                DO j=1,Nsg
                   varid=varid+1
-                  iHbio2(iSgTotRtCBm(i))=varid
+                  iHbio2(iSgLAI(j))=varid
                   DO ng=1,Ngrids
                     Fscale(varid,ng)=scale
                     Iinfo(1,varid,ng)=gtype
                   END DO
                   WRITE (Vname(1,varid),'(a,i2.2)')                   &
-   &                    TRIM(ADJUSTL(Vinfo(1))), i
+   &                    TRIM(ADJUSTL(Vinfo(1))), j
                   WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', i
+   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', j
                   WRITE (Vname(3,varid),'(a)')                        &
    &                    TRIM(ADJUSTL(Vinfo(3)))
                   WRITE (Vname(4,varid),'(a,a)')                      &
@@ -1392,20 +1356,20 @@
    &                    TRIM(ADJUSTL(Vinfo(5)))
                 END DO
                 varid=varid+1
-              CASE ('iHbio2(iSgLAI(i))')
+              CASE ('iHbio2(iSgTotLA(j))')
                 load=.FALSE.
                 varid=varid-1
-                DO i=1,Nsg
+                DO j=1,Nsg
                   varid=varid+1
-                  iHbio2(iSgLAI(i))=varid
+                  iHbio2(iSgTotLA(j))=varid
                   DO ng=1,Ngrids
                     Fscale(varid,ng)=scale
                     Iinfo(1,varid,ng)=gtype
                   END DO
                   WRITE (Vname(1,varid),'(a,i2.2)')                   &
-   &                    TRIM(ADJUSTL(Vinfo(1))), i
+   &                    TRIM(ADJUSTL(Vinfo(1))), j
                   WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', i
+   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', j
                   WRITE (Vname(3,varid),'(a)')                        &
    &                    TRIM(ADJUSTL(Vinfo(3)))
                   WRITE (Vname(4,varid),'(a,a)')                      &
@@ -1414,20 +1378,20 @@
    &                    TRIM(ADJUSTL(Vinfo(5)))
                 END DO
                 varid=varid+1
-              CASE ('iHbio2(iSgTotLA(i))')
+              CASE ('iHbio2(iSgGridELAP(j))')
                 load=.FALSE.
                 varid=varid-1
-                DO i=1,Nsg
+                DO j=1,Nsg
                   varid=varid+1
-                  iHbio2(iSgTotLA(i))=varid
+                  iHbio2(iSgGridELAP(j))=varid
                   DO ng=1,Ngrids
                     Fscale(varid,ng)=scale
                     Iinfo(1,varid,ng)=gtype
                   END DO
                   WRITE (Vname(1,varid),'(a,i2.2)')                   &
-   &                    TRIM(ADJUSTL(Vinfo(1))), i
+   &                    TRIM(ADJUSTL(Vinfo(1))), j
                   WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', i
+   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', j
                   WRITE (Vname(3,varid),'(a)')                        &
    &                    TRIM(ADJUSTL(Vinfo(3)))
                   WRITE (Vname(4,varid),'(a,a)')                      &
@@ -1436,20 +1400,20 @@
    &                    TRIM(ADJUSTL(Vinfo(5)))
                 END DO
                 varid=varid+1
-              CASE ('iHbio2(iSgGridELAP(i))')
+              CASE ('iHbio2(iSgGridPhot(j))')
                 load=.FALSE.
                 varid=varid-1
-                DO i=1,Nsg
+                DO j=1,Nsg
                   varid=varid+1
-                  iHbio2(iSgGridELAP(i))=varid
+                  iHbio2(iSgGridPhot(j))=varid
                   DO ng=1,Ngrids
                     Fscale(varid,ng)=scale
                     Iinfo(1,varid,ng)=gtype
                   END DO
                   WRITE (Vname(1,varid),'(a,i2.2)')                   &
-   &                    TRIM(ADJUSTL(Vinfo(1))), i
+   &                    TRIM(ADJUSTL(Vinfo(1))), j
                   WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', i
+   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', j
                   WRITE (Vname(3,varid),'(a)')                        &
    &                    TRIM(ADJUSTL(Vinfo(3)))
                   WRITE (Vname(4,varid),'(a,a)')                      &
@@ -1458,20 +1422,20 @@
    &                    TRIM(ADJUSTL(Vinfo(5)))
                 END DO
                 varid=varid+1
-              CASE ('iHbio2(iSgGridPhot(i))')
+              CASE ('iHbio2(iSgPhotLim(j))')
                 load=.FALSE.
                 varid=varid-1
-                DO i=1,Nsg
+                DO j=1,Nsg
                   varid=varid+1
-                  iHbio2(iSgGridPhot(i))=varid
+                  iHbio2(iSgPhotLim(j))=varid
                   DO ng=1,Ngrids
                     Fscale(varid,ng)=scale
                     Iinfo(1,varid,ng)=gtype
                   END DO
                   WRITE (Vname(1,varid),'(a,i2.2)')                   &
-   &                    TRIM(ADJUSTL(Vinfo(1))), i
+   &                    TRIM(ADJUSTL(Vinfo(1))), j
                   WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', i
+   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', j
                   WRITE (Vname(3,varid),'(a)')                        &
    &                    TRIM(ADJUSTL(Vinfo(3)))
                   WRITE (Vname(4,varid),'(a,a)')                      &
@@ -1480,20 +1444,20 @@
    &                    TRIM(ADJUSTL(Vinfo(5)))
                 END DO
                 varid=varid+1
-              CASE ('iHbio2(iSgPhotLim(i))')
+              CASE ('iHbio2(iSgGridResp(j))')
                 load=.FALSE.
                 varid=varid-1
-                DO i=1,Nsg
+                DO j=1,Nsg
                   varid=varid+1
-                  iHbio2(iSgPhotLim(i))=varid
+                  iHbio2(iSgGridResp(j))=varid
                   DO ng=1,Ngrids
                     Fscale(varid,ng)=scale
                     Iinfo(1,varid,ng)=gtype
                   END DO
                   WRITE (Vname(1,varid),'(a,i2.2)')                   &
-   &                    TRIM(ADJUSTL(Vinfo(1))), i
+   &                    TRIM(ADJUSTL(Vinfo(1))), j
                   WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', i
+   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', j
                   WRITE (Vname(3,varid),'(a)')                        &
    &                    TRIM(ADJUSTL(Vinfo(3)))
                   WRITE (Vname(4,varid),'(a,a)')                      &
@@ -1502,20 +1466,20 @@
    &                    TRIM(ADJUSTL(Vinfo(5)))
                 END DO
                 varid=varid+1
-              CASE ('iHbio2(iSgGridResp(i))')
+              CASE ('iHbio2(iSgGridNetPhot(j))')
                 load=.FALSE.
                 varid=varid-1
-                DO i=1,Nsg
+                DO j=1,Nsg
                   varid=varid+1
-                  iHbio2(iSgGridResp(i))=varid
+                  iHbio2(iSgGridNetPhot(j))=varid
                   DO ng=1,Ngrids
                     Fscale(varid,ng)=scale
                     Iinfo(1,varid,ng)=gtype
                   END DO
                   WRITE (Vname(1,varid),'(a,i2.2)')                   &
-   &                    TRIM(ADJUSTL(Vinfo(1))), i
+   &                    TRIM(ADJUSTL(Vinfo(1))), j
                   WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', i
+   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', j
                   WRITE (Vname(3,varid),'(a)')                        &
    &                    TRIM(ADJUSTL(Vinfo(3)))
                   WRITE (Vname(4,varid),'(a,a)')                      &
@@ -1524,42 +1488,20 @@
    &                    TRIM(ADJUSTL(Vinfo(5)))
                 END DO
                 varid=varid+1
-              CASE ('iHbio2(iSgGridNetPhot(i))')
+              CASE ('iHbio2(iSgGridDieoff(j))')
                 load=.FALSE.
                 varid=varid-1
-                DO i=1,Nsg
+                DO j=1,Nsg
                   varid=varid+1
-                  iHbio2(iSgGridNetPhot(i))=varid
+                  iHbio2(iSgGridDieoff(j))=varid
                   DO ng=1,Ngrids
                     Fscale(varid,ng)=scale
                     Iinfo(1,varid,ng)=gtype
                   END DO
                   WRITE (Vname(1,varid),'(a,i2.2)')                   &
-   &                    TRIM(ADJUSTL(Vinfo(1))), i
+   &                    TRIM(ADJUSTL(Vinfo(1))), j
                   WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', i
-                  WRITE (Vname(3,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(3)))
-                  WRITE (Vname(4,varid),'(a,a)')                      &
-   &                    TRIM(Vname(1,varid)), ', scalar, series'
-                  WRITE (Vname(5,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(5)))
-                END DO
-                varid=varid+1
-              CASE ('iHbio2(iSgGridDieoff(i))')
-                load=.FALSE.
-                varid=varid-1
-                DO i=1,Nsg
-                  varid=varid+1
-                  iHbio2(iSgGridDieoff(i))=varid
-                  DO ng=1,Ngrids
-                    Fscale(varid,ng)=scale
-                    Iinfo(1,varid,ng)=gtype
-                  END DO
-                  WRITE (Vname(1,varid),'(a,i2.2)')                   &
-   &                    TRIM(ADJUSTL(Vinfo(1))), i
-                  WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', i
+   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', j
                   WRITE (Vname(3,varid),'(a)')                        &
    &                    TRIM(ADJUSTL(Vinfo(3)))
                   WRITE (Vname(4,varid),'(a,a)')                      &
@@ -1575,20 +1517,20 @@
 
 
 # if defined DIAGNOSTICS_BIO
-              CASE ('iDbio2(iAgPg(i))')
+              CASE ('iDbio2(iAgPg(j))')
                 load=.FALSE.
                 varid=varid-1
-                DO i=1,Nag
+                DO j=1,Nag
                   varid=varid+1
-                  iDbio2(iAgPg(i))=varid
+                  iDbio2(iAgPg(j))=varid
                   DO ng=1,Ngrids
                     Fscale(varid,ng)=scale
                     Iinfo(1,varid,ng)=gtype
                   END DO
                   WRITE (Vname(1,varid),'(a,i2.2)')                   &
-   &                    TRIM(ADJUSTL(Vinfo(1))), i
+   &                    TRIM(ADJUSTL(Vinfo(1))), j
                   WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', i
+   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', j
                   WRITE (Vname(3,varid),'(a)')                        &
    &                    TRIM(ADJUSTL(Vinfo(3)))
                   WRITE (Vname(4,varid),'(a,a)')                      &
@@ -1597,20 +1539,20 @@
    &                    TRIM(ADJUSTL(Vinfo(5)))
                 END DO
                 varid=varid+1
-              CASE ('iDbio2(iAg_R(i))')
+              CASE ('iDbio2(iAg_R(j))')
                 load=.FALSE.
                 varid=varid-1
-                DO i=1,Nag
+                DO j=1,Nag
                   varid=varid+1
-                  iDbio2(iAg_R(i))=varid
+                  iDbio2(iAg_R(j))=varid
                   DO ng=1,Ngrids
                     Fscale(varid,ng)=scale
                     Iinfo(1,varid,ng)=gtype
                   END DO
                   WRITE (Vname(1,varid),'(a,i2.2)')                   &
-   &                    TRIM(ADJUSTL(Vinfo(1))), i
+   &                    TRIM(ADJUSTL(Vinfo(1))), j
                   WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', i
+   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', j
                   WRITE (Vname(3,varid),'(a)')                        &
    &                    TRIM(ADJUSTL(Vinfo(3)))
                   WRITE (Vname(4,varid),'(a,a)')                      &
@@ -1619,20 +1561,20 @@
    &                    TRIM(ADJUSTL(Vinfo(5)))
                 END DO
                 varid=varid+1
-              CASE ('iDbio2(iAgPn(i))')
+              CASE ('iDbio2(iAgPn(j))')
                 load=.FALSE.
                 varid=varid-1
-                DO i=1,Nag
+                DO j=1,Nag
                   varid=varid+1
-                  iDbio2(iAgPn(i))=varid
+                  iDbio2(iAgPn(j))=varid
                   DO ng=1,Ngrids
                     Fscale(varid,ng)=scale
                     Iinfo(1,varid,ng)=gtype
                   END DO
                   WRITE (Vname(1,varid),'(a,i2.2)')                   &
-   &                    TRIM(ADJUSTL(Vinfo(1))), i
+   &                    TRIM(ADJUSTL(Vinfo(1))), j
                   WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', i
+   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', j
                   WRITE (Vname(3,varid),'(a)')                        &
    &                    TRIM(ADJUSTL(Vinfo(3)))
                   WRITE (Vname(4,varid),'(a,a)')                      &
@@ -1653,130 +1595,426 @@
                 iHbiosed3(iSdTmp)=varid
               CASE ('iHbiosed3(iSdSal)')
                 iHbiosed3(iSdSal)=varid
-              ! CASE ('iHbiosed3(iSdpH)')
-              !   iHbiosed3(iSdpH)=varid
-              CASE ('iHbiosed3(iSdTA)')
-                iHbiosed3(iSdTA)=varid
-              CASE ('iHbiosed3(iSdDIC)')
-                iHbiosed3(iSdDIC)=varid
               CASE ('iHbiosed3(iSdO2)')
                 iHbiosed3(iSdO2)=varid
-              ! CASE ('iHbiosed3(iSdCO2)')
-              !   iHbiosed3(iSdCO2)=varid
-              CASE ('iHbiosed3(iSdN2)')
-                iHbiosed3(iSdN2)=varid
-# if defined ORGANIC_MATTER
-              CASE ('iHbiosed3(iSdDOCf)')
-                iHbiosed3(iSdDOCf)=varid
-              CASE ('iHbiosed3(iSdDOCs)')
-                iHbiosed3(iSdDOCs)=varid
-              CASE ('iHbiosed3(iSdPOCf)')
-                iHbiosed3(iSdPOCf)=varid
-              CASE ('iHbiosed3(iSdPOCs)')
-                iHbiosed3(iSdPOCs)=varid
-              CASE ('iHbiosed3(iSdPOCn)')
-                iHbiosed3(iSdPOCn)=varid
-# endif
-# if defined NUTRIENTS
-              CASE ('iHbiosed3(iSdNO3)')
-                iHbiosed3(iSdNO3)=varid
-              CASE ('iHbiosed3(iSdNH4)')
-                iHbiosed3(iSdNH4)=varid
-              CASE ('iHbiosed3(iSdPO4)')
-                iHbiosed3(iSdPO4)=varid
-#  if defined ORGANIC_MATTER
-              CASE ('iHbiosed3(iSdDONf)')
-                iHbiosed3(iSdDONf)=varid
-              CASE ('iHbiosed3(iSdDONs)')
-                iHbiosed3(iSdDONs)=varid
-              CASE ('iHbiosed3(iSdPONf)')
-                iHbiosed3(iSdPONf)=varid
-              CASE ('iHbiosed3(iSdPONs)')
-                iHbiosed3(iSdPONs)=varid
-              CASE ('iHbiosed3(iSdPONn)')
-                iHbiosed3(iSdPONn)=varid
-              CASE ('iHbiosed3(iSdDOPf)')
-                iHbiosed3(iSdDOPf)=varid
-              CASE ('iHbiosed3(iSdDOPs)')
-                iHbiosed3(iSdDOPs)=varid
-              CASE ('iHbiosed3(iSdPOPf)')
-                iHbiosed3(iSdPOPf)=varid
-              CASE ('iHbiosed3(iSdPOPs)')
-                iHbiosed3(iSdPOPs)=varid
-              CASE ('iHbiosed3(iSdPOPn)')
-                iHbiosed3(iSdPOPn)=varid
-#  endif
-# endif
-# if defined SULFATE
+              CASE ('iHbiosed3(iSdTA)')
+                iHbiosed3(iSdTA)=varid
+              CASE ('iHbiosed3(iSdDIC(i))')
+                load=.FALSE.
+                varid=varid-1
+                DO i=1,N_Csp
+                  varid=varid+1
+                  iHbiosed3(iSdDIC(i))=varid
+                  DO ng=1,Ngrids
+                    Fscale(varid,ng)=scale
+                    Iinfo(1,varid,ng)=gtype
+                  END DO
+                  WRITE (Vname(1,varid),'(a,a,i2.2)')                 &
+   &                    TRIM(ADJUSTL(Vinfo(1))), '_',i
+                  WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
+   &                    TRIM(ADJUSTL(Vinfo(2))), ', tracer type ', i
+                  WRITE (Vname(3,varid),'(a)')                        &
+   &                    TRIM(ADJUSTL(Vinfo(3)))
+                  WRITE (Vname(4,varid),'(a,a)')                      &
+   &                    TRIM(Vname(1,varid)), ', scalar, series'
+                  WRITE (Vname(5,varid),'(a)')                        &
+   &                    TRIM(ADJUSTL(Vinfo(5)))
+                END DO
+                varid=varid+1
+              CASE ('iHbiosed3(iSdNO3(i))')
+                load=.FALSE.
+                varid=varid-1
+                DO i=1,N_Nsp
+                  varid=varid+1
+                  iHbiosed3(iSdNO3(i))=varid
+                  DO ng=1,Ngrids
+                    Fscale(varid,ng)=scale
+                    Iinfo(1,varid,ng)=gtype
+                  END DO
+                  WRITE (Vname(1,varid),'(a,a,i2.2)')                 &
+   &                    TRIM(ADJUSTL(Vinfo(1))), '_',i
+                  WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
+   &                    TRIM(ADJUSTL(Vinfo(2))), ', tracer type ', i
+                  WRITE (Vname(3,varid),'(a)')                        &
+   &                    TRIM(ADJUSTL(Vinfo(3)))
+                  WRITE (Vname(4,varid),'(a,a)')                      &
+   &                    TRIM(Vname(1,varid)), ', scalar, series'
+                  WRITE (Vname(5,varid),'(a)')                        &
+   &                    TRIM(ADJUSTL(Vinfo(5)))
+                END DO
+                varid=varid+1
+              CASE ('iHbiosed3(iSdNH4(i))')
+                load=.FALSE.
+                varid=varid-1
+                DO i=1,N_Nsp
+                  varid=varid+1
+                  iHbiosed3(iSdNH4(i))=varid
+                  DO ng=1,Ngrids
+                    Fscale(varid,ng)=scale
+                    Iinfo(1,varid,ng)=gtype
+                  END DO
+                  WRITE (Vname(1,varid),'(a,a,i2.2)')                 &
+   &                    TRIM(ADJUSTL(Vinfo(1))), '_',i
+                  WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
+   &                    TRIM(ADJUSTL(Vinfo(2))), ', tracer type ', i
+                  WRITE (Vname(3,varid),'(a)')                        &
+   &                    TRIM(ADJUSTL(Vinfo(3)))
+                  WRITE (Vname(4,varid),'(a,a)')                      &
+   &                    TRIM(Vname(1,varid)), ', scalar, series'
+                  WRITE (Vname(5,varid),'(a)')                        &
+   &                    TRIM(ADJUSTL(Vinfo(5)))
+                END DO
+                varid=varid+1
+              CASE ('iHbiosed3(iSdPO4(i))')
+                load=.FALSE.
+                varid=varid-1
+                DO i=1,N_Psp
+                  varid=varid+1
+                  iHbiosed3(iSdPO4(i))=varid
+                  DO ng=1,Ngrids
+                    Fscale(varid,ng)=scale
+                    Iinfo(1,varid,ng)=gtype
+                  END DO
+                  WRITE (Vname(1,varid),'(a,a,i2.2)')                 &
+   &                    TRIM(ADJUSTL(Vinfo(1))), '_',i
+                  WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
+   &                    TRIM(ADJUSTL(Vinfo(2))), ', tracer type ', i
+                  WRITE (Vname(3,varid),'(a)')                        &
+   &                    TRIM(ADJUSTL(Vinfo(3)))
+                  WRITE (Vname(4,varid),'(a,a)')                      &
+   &                    TRIM(Vname(1,varid)), ', scalar, series'
+                  WRITE (Vname(5,varid),'(a)')                        &
+   &                    TRIM(ADJUSTL(Vinfo(5)))
+                END DO
+                varid=varid+1
+              CASE ('iHbiosed3(iSdDOC(i,j))')
+                load=.FALSE.
+                varid=varid-1
+                DO j=1,Ndom
+                  DO i=1,N_Csp
+                    varid=varid+1
+                    iHbiosed3(iSdDOC(i,j))=varid
+                    DO ng=1,Ngrids
+                      Fscale(varid,ng)=scale
+                      Iinfo(1,varid,ng)=gtype
+                    END DO
+                    WRITE (Vname(1,varid),'(a,i2.2,a,i2.2)')            &
+   &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
+                    WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
+   &                      TRIM(ADJUSTL(Vinfo(2)))                       &
+                          ,', functional group ', j, ', tracer type ', i
+                    WRITE (Vname(3,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(3)))
+                    WRITE (Vname(4,varid),'(a,a)')                      &
+   &                      TRIM(Vname(1,varid)), ', scalar, series'
+                    WRITE (Vname(5,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(5)))
+                  END DO
+                END DO
+                varid=varid+1
+              CASE ('iHbiosed3(iSdPOC(i,j))')
+                load=.FALSE.
+                varid=varid-1
+                DO j=1,Npom
+                  DO i=1,N_Csp
+                    varid=varid+1
+                    iHbiosed3(iSdPOC(i,j))=varid
+                    DO ng=1,Ngrids
+                      Fscale(varid,ng)=scale
+                      Iinfo(1,varid,ng)=gtype
+                    END DO
+                    WRITE (Vname(1,varid),'(a,i2.2,a,i2.2)')            &
+   &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
+                    WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
+   &                      TRIM(ADJUSTL(Vinfo(2)))                       &
+                          ,', functional group ', j, ', tracer type ', i
+                    WRITE (Vname(3,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(3)))
+                    WRITE (Vname(4,varid),'(a,a)')                      &
+   &                      TRIM(Vname(1,varid)), ', scalar, series'
+                    WRITE (Vname(5,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(5)))
+                  END DO
+                END DO
+                varid=varid+1
+              CASE ('iHbiosed3(iSdDON(i,j))')
+                load=.FALSE.
+                varid=varid-1
+                DO j=1,Ndom
+                  DO i=1,N_Nsp
+                    varid=varid+1
+                    iHbiosed3(iSdDON(i,j))=varid
+                    DO ng=1,Ngrids
+                      Fscale(varid,ng)=scale
+                      Iinfo(1,varid,ng)=gtype
+                    END DO
+                    WRITE (Vname(1,varid),'(a,i2.2,a,i2.2)')            &
+   &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
+                    WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
+   &                      TRIM(ADJUSTL(Vinfo(2)))                       &
+                          ,', functional group ', j, ', tracer type ', i
+                    WRITE (Vname(3,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(3)))
+                    WRITE (Vname(4,varid),'(a,a)')                      &
+   &                      TRIM(Vname(1,varid)), ', scalar, series'
+                    WRITE (Vname(5,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(5)))
+                  END DO
+                END DO
+                varid=varid+1
+              CASE ('iHbiosed3(iSdPON(i,j))')
+                load=.FALSE.
+                varid=varid-1
+                DO j=1,Npom
+                  DO i=1,N_Nsp
+                    varid=varid+1
+                    iHbiosed3(iSdPON(i,j))=varid
+                    DO ng=1,Ngrids
+                      Fscale(varid,ng)=scale
+                      Iinfo(1,varid,ng)=gtype
+                    END DO
+                    WRITE (Vname(1,varid),'(a,i2.2,a,i2.2)')            &
+   &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
+                    WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
+   &                      TRIM(ADJUSTL(Vinfo(2)))                       &
+                          ,', functional group ', j, ', tracer type ', i
+                    WRITE (Vname(3,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(3)))
+                    WRITE (Vname(4,varid),'(a,a)')                      &
+   &                      TRIM(Vname(1,varid)), ', scalar, series'
+                    WRITE (Vname(5,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(5)))
+                  END DO
+                END DO
+                varid=varid+1
+              CASE ('iHbiosed3(iSdDOP(i,j))')
+                load=.FALSE.
+                varid=varid-1
+                DO j=1,Ndom
+                  DO i=1,N_Psp
+                    varid=varid+1
+                    iHbiosed3(iSdDOP(i,j))=varid
+                    DO ng=1,Ngrids
+                      Fscale(varid,ng)=scale
+                      Iinfo(1,varid,ng)=gtype
+                    END DO
+                    WRITE (Vname(1,varid),'(a,i2.2,a,i2.2)')            &
+   &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
+                    WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
+   &                      TRIM(ADJUSTL(Vinfo(2)))                       &
+                          ,', functional group ', j, ', tracer type ', i
+                    WRITE (Vname(3,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(3)))
+                    WRITE (Vname(4,varid),'(a,a)')                      &
+   &                      TRIM(Vname(1,varid)), ', scalar, series'
+                    WRITE (Vname(5,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(5)))
+                  END DO
+                END DO
+                varid=varid+1
+              CASE ('iHbiosed3(iSdPOP(i,j))')
+                load=.FALSE.
+                varid=varid-1
+                DO j=1,Npom
+                  DO i=1,N_Psp
+                    varid=varid+1
+                    iHbiosed3(iSdPOP(i,j))=varid
+                    DO ng=1,Ngrids
+                      Fscale(varid,ng)=scale
+                      Iinfo(1,varid,ng)=gtype
+                    END DO
+                    WRITE (Vname(1,varid),'(a,i2.2,a,i2.2)')            &
+   &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
+                    WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
+   &                      TRIM(ADJUSTL(Vinfo(2)))                       &
+                          ,', functional group ', j, ', tracer type ', i
+                    WRITE (Vname(3,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(3)))
+                    WRITE (Vname(4,varid),'(a,a)')                      &
+   &                      TRIM(Vname(1,varid)), ', scalar, series'
+                    WRITE (Vname(5,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(5)))
+                  END DO
+                END DO
+                varid=varid+1
               CASE ('iHbiosed3(iSdMn2)')
                 iHbiosed3(iSdMn2)=varid
               CASE ('iHbiosed3(iSdMnO2)')
                 iHbiosed3(iSdMnO2)=varid
               CASE ('iHbiosed3(iSdFe2)')
                 iHbiosed3(iSdFe2)=varid
-              CASE ('iHbiosed3(iSdFeS)')
-                iHbiosed3(iSdFeS)=varid
-              CASE ('iHbiosed3(iSdFeS2)')
-                iHbiosed3(iSdFeS2)=varid
+              CASE ('iHbiosed3(iSdFeS(i))')
+                load=.FALSE.
+                varid=varid-1
+                DO i=1,N_Ssp
+                  varid=varid+1
+                  iHbiosed3(iSdFeS(i))=varid
+                  DO ng=1,Ngrids
+                    Fscale(varid,ng)=scale
+                    Iinfo(1,varid,ng)=gtype
+                  END DO
+                  WRITE (Vname(1,varid),'(a,a,i2.2)')                 &
+   &                    TRIM(ADJUSTL(Vinfo(1))), '_',i
+                  WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
+   &                    TRIM(ADJUSTL(Vinfo(2))), ', tracer type ', i
+                  WRITE (Vname(3,varid),'(a)')                        &
+   &                    TRIM(ADJUSTL(Vinfo(3)))
+                  WRITE (Vname(4,varid),'(a,a)')                      &
+   &                    TRIM(Vname(1,varid)), ', scalar, series'
+                  WRITE (Vname(5,varid),'(a)')                        &
+   &                    TRIM(ADJUSTL(Vinfo(5)))
+                END DO
+                varid=varid+1
+              CASE ('iHbiosed3(iSdFeS2(i))')
+                load=.FALSE.
+                varid=varid-1
+                DO i=1,N_Ssp
+                  varid=varid+1
+                  iHbiosed3(iSdFeS2(i))=varid
+                  DO ng=1,Ngrids
+                    Fscale(varid,ng)=scale
+                    Iinfo(1,varid,ng)=gtype
+                  END DO
+                  WRITE (Vname(1,varid),'(a,a,i2.2)')                 &
+   &                    TRIM(ADJUSTL(Vinfo(1))), '_',i
+                  WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
+   &                    TRIM(ADJUSTL(Vinfo(2))), ', tracer type ', i
+                  WRITE (Vname(3,varid),'(a)')                        &
+   &                    TRIM(ADJUSTL(Vinfo(3)))
+                  WRITE (Vname(4,varid),'(a,a)')                      &
+   &                    TRIM(Vname(1,varid)), ', scalar, series'
+                  WRITE (Vname(5,varid),'(a)')                        &
+   &                    TRIM(ADJUSTL(Vinfo(5)))
+                END DO
+                varid=varid+1
               CASE ('iHbiosed3(iSdFeOOH)')
                 iHbiosed3(iSdFeOOH)=varid
-              CASE ('iHbiosed3(iSdFeOOH_PO4)')
-                iHbiosed3(iSdFeOOH_PO4)=varid
-              CASE ('iHbiosed3(iSdH2S)')
-                iHbiosed3(iSdH2S)=varid
-              CASE ('iHbiosed3(iSdSO4)')
-                iHbiosed3(iSdSO4)=varid
-              CASE ('iHbiosed3(iSdS0)')
-                iHbiosed3(iSdS0)=varid
-# endif
+              CASE ('iHbiosed3(iSdFeOOH_PO4(i))')
+                load=.FALSE.
+                varid=varid-1
+                DO i=1,N_Psp
+                  varid=varid+1
+                  iHbiosed3(iSdFeOOH_PO4(i))=varid
+                  DO ng=1,Ngrids
+                    Fscale(varid,ng)=scale
+                    Iinfo(1,varid,ng)=gtype
+                  END DO
+                  WRITE (Vname(1,varid),'(a,a,i2.2)')                 &
+   &                    TRIM(ADJUSTL(Vinfo(1))), '_',i
+                  WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
+   &                    TRIM(ADJUSTL(Vinfo(2))), ', tracer type ', i
+                  WRITE (Vname(3,varid),'(a)')                        &
+   &                    TRIM(ADJUSTL(Vinfo(3)))
+                  WRITE (Vname(4,varid),'(a,a)')                      &
+   &                    TRIM(Vname(1,varid)), ', scalar, series'
+                  WRITE (Vname(5,varid),'(a)')                        &
+   &                    TRIM(ADJUSTL(Vinfo(5)))
+                END DO
+                varid=varid+1
+              CASE ('iHbiosed3(iSdH2S(i))')
+                load=.FALSE.
+                varid=varid-1
+                DO i=1,N_Ssp
+                  varid=varid+1
+                  iHbiosed3(iSdH2S(i))=varid
+                  DO ng=1,Ngrids
+                    Fscale(varid,ng)=scale
+                    Iinfo(1,varid,ng)=gtype
+                  END DO
+                  WRITE (Vname(1,varid),'(a,a,i2.2)')                 &
+   &                    TRIM(ADJUSTL(Vinfo(1))), '_',i
+                  WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
+   &                    TRIM(ADJUSTL(Vinfo(2))), ', tracer type ', i
+                  WRITE (Vname(3,varid),'(a)')                        &
+   &                    TRIM(ADJUSTL(Vinfo(3)))
+                  WRITE (Vname(4,varid),'(a,a)')                      &
+   &                    TRIM(Vname(1,varid)), ', scalar, series'
+                  WRITE (Vname(5,varid),'(a)')                        &
+   &                    TRIM(ADJUSTL(Vinfo(5)))
+                END DO
+                varid=varid+1
+              CASE ('iHbiosed3(iSdSO4(i))')
+                load=.FALSE.
+                varid=varid-1
+                DO i=1,N_Ssp
+                  varid=varid+1
+                  iHbiosed3(iSdSO4(i))=varid
+                  DO ng=1,Ngrids
+                    Fscale(varid,ng)=scale
+                    Iinfo(1,varid,ng)=gtype
+                  END DO
+                  WRITE (Vname(1,varid),'(a,a,i2.2)')                 &
+   &                    TRIM(ADJUSTL(Vinfo(1))), '_',i
+                  WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
+   &                    TRIM(ADJUSTL(Vinfo(2))), ', tracer type ', i
+                  WRITE (Vname(3,varid),'(a)')                        &
+   &                    TRIM(ADJUSTL(Vinfo(3)))
+                  WRITE (Vname(4,varid),'(a,a)')                      &
+   &                    TRIM(Vname(1,varid)), ', scalar, series'
+                  WRITE (Vname(5,varid),'(a)')                        &
+   &                    TRIM(ADJUSTL(Vinfo(5)))
+                END DO
+                varid=varid+1
+              CASE ('iHbiosed3(iSdS0(i))')
+                load=.FALSE.
+                varid=varid-1
+                DO i=1,N_Ssp
+                  varid=varid+1
+                  iHbiosed3(iSdS0(i))=varid
+                  DO ng=1,Ngrids
+                    Fscale(varid,ng)=scale
+                    Iinfo(1,varid,ng)=gtype
+                  END DO
+                  WRITE (Vname(1,varid),'(a,a,i2.2)')                 &
+   &                    TRIM(ADJUSTL(Vinfo(1))), '_',i
+                  WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
+   &                    TRIM(ADJUSTL(Vinfo(2))), ', tracer type ', i
+                  WRITE (Vname(3,varid),'(a)')                        &
+   &                    TRIM(ADJUSTL(Vinfo(3)))
+                  WRITE (Vname(4,varid),'(a,a)')                      &
+   &                    TRIM(Vname(1,varid)), ', scalar, series'
+                  WRITE (Vname(5,varid),'(a)')                        &
+   &                    TRIM(ADJUSTL(Vinfo(5)))
+                END DO
+                varid=varid+1
 #endif
 !!!<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<YT:Add
 
 /*
 **  Biological tracers open boundary conditions.
 */
-              CASE ('idTbry(iwest,iTIC_)')
-                idTbry(iwest,iTIC_)=varid
-              CASE ('idTbry(ieast,iTIC_)')
-                idTbry(ieast,iTIC_)=varid
-              CASE ('idTbry(isouth,iTIC_)')
-                idTbry(isouth,iTIC_)=varid
-              CASE ('idTbry(inorth,iTIC_)')
-                idTbry(inorth,iTIC_)=varid
+              CASE ('idTbry(iwest,iDO)')
+                idTbry(iwest,iDO)=varid
+              CASE ('idTbry(ieast,iDO)')
+                idTbry(ieast,iDO)=varid
+              CASE ('idTbry(isouth,iDO)')
+                idTbry(isouth,iDO)=varid
+              CASE ('idTbry(inorth,iDO)')
+                idTbry(inorth,iDO)=varid
 
-              CASE ('idTbry(iwest,iTAlk)')
-                idTbry(iwest,iTAlk)=varid
-              CASE ('idTbry(ieast,iTAlk)')
-                idTbry(ieast,iTAlk)=varid
-              CASE ('idTbry(isouth,iTAlk)')
-                idTbry(isouth,iTAlk)=varid
-              CASE ('idTbry(inorth,iTAlk)')
-                idTbry(inorth,iTAlk)=varid
+              CASE ('idTbry(iwest,iTA)')
+                idTbry(iwest,iTA)=varid
+              CASE ('idTbry(ieast,iTA)')
+                idTbry(ieast,iTA)=varid
+              CASE ('idTbry(isouth,iTA)')
+                idTbry(isouth,iTA)=varid
+              CASE ('idTbry(inorth,iTA)')
+                idTbry(inorth,iTA)=varid
 
-              CASE ('idTbry(iwest,iOxyg)')
-                idTbry(iwest,iOxyg)=varid
-              CASE ('idTbry(ieast,iOxyg)')
-                idTbry(ieast,iOxyg)=varid
-              CASE ('idTbry(isouth,iOxyg)')
-                idTbry(isouth,iOxyg)=varid
-              CASE ('idTbry(inorth,iOxyg)')
-                idTbry(inorth,iOxyg)=varid
-
-#if defined ORGANIC_MATTER
-              CASE ('idTbry(iwest,iDOC(i))')
+              CASE ('idTbry(iwest,iDIC(i))')
                 load=.FALSE.
                 varid=varid-1
-                DO i=1,Ndom
+                DO i=1,N_Csp
                   varid=varid+1
-                  idTbry(iwest,iDOC(i))=varid
+                  idTbry(iwest,iDIC(i))=varid
                   DO ng=1,Ngrids
                     Fscale(varid,ng)=scale
                     Iinfo(1,varid,ng)=gtype
                   END DO
-                  WRITE (Vname(1,varid),'(a,i2.2)')                   &
-   &                    TRIM(ADJUSTL(Vinfo(1))), i
+                  WRITE (Vname(1,varid),'(a,a,i2.2)')                 &
+   &                    TRIM(ADJUSTL(Vinfo(1))), '_',i
                   WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', i
+   &                    TRIM(ADJUSTL(Vinfo(2))), ', tracer type ', i
                   WRITE (Vname(3,varid),'(a)')                        &
    &                    TRIM(ADJUSTL(Vinfo(3)))
                   WRITE (Vname(4,varid),'(a,a)')                      &
@@ -1785,20 +2023,20 @@
    &                    TRIM(ADJUSTL(Vinfo(5)))
                 END DO             
                 varid=varid+1
-              CASE ('idTbry(ieast,iDOC(i))')
+              CASE ('idTbry(ieast,iDIC(i))')
                 load=.FALSE.
                 varid=varid-1
-                DO i=1,Ndom
+                DO i=1,N_Csp
                   varid=varid+1
-                  idTbry(ieast,iDOC(i))=varid
+                  idTbry(ieast,iDIC(i))=varid
                   DO ng=1,Ngrids
                     Fscale(varid,ng)=scale
                     Iinfo(1,varid,ng)=gtype
                   END DO
-                  WRITE (Vname(1,varid),'(a,i2.2)')                   &
-   &                    TRIM(ADJUSTL(Vinfo(1))), i
+                  WRITE (Vname(1,varid),'(a,a,i2.2)')                 &
+   &                    TRIM(ADJUSTL(Vinfo(1))), '_',i
                   WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', i
+   &                    TRIM(ADJUSTL(Vinfo(2))), ', tracer type ', i
                   WRITE (Vname(3,varid),'(a)')                        &
    &                    TRIM(ADJUSTL(Vinfo(3)))
                   WRITE (Vname(4,varid),'(a,a)')                      &
@@ -1807,20 +2045,20 @@
    &                    TRIM(ADJUSTL(Vinfo(5)))
                 END DO             
                 varid=varid+1
-              CASE ('idTbry(isouth,iDOC(i))')
+              CASE ('idTbry(isouth,iDIC(i))')
                 load=.FALSE.
                 varid=varid-1
-                DO i=1,Ndom
+                DO i=1,N_Csp
                   varid=varid+1
-                  idTbry(isouth,iDOC(i))=varid
+                  idTbry(isouth,iDIC(i))=varid
                   DO ng=1,Ngrids
                     Fscale(varid,ng)=scale
                     Iinfo(1,varid,ng)=gtype
                   END DO
-                  WRITE (Vname(1,varid),'(a,i2.2)')                   &
-   &                    TRIM(ADJUSTL(Vinfo(1))), i
+                  WRITE (Vname(1,varid),'(a,a,i2.2)')                 &
+   &                    TRIM(ADJUSTL(Vinfo(1))), '_',i
                   WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', i
+   &                    TRIM(ADJUSTL(Vinfo(2))), ', tracer type ', i
                   WRITE (Vname(3,varid),'(a)')                        &
    &                    TRIM(ADJUSTL(Vinfo(3)))
                   WRITE (Vname(4,varid),'(a,a)')                      &
@@ -1829,20 +2067,20 @@
    &                    TRIM(ADJUSTL(Vinfo(5)))
                 END DO             
                 varid=varid+1
-              CASE ('idTbry(inorth,iDOC(i))')
+              CASE ('idTbry(inorth,iDIC(i))')
                 load=.FALSE.
                 varid=varid-1
-                DO i=1,Ndom
+                DO i=1,N_Csp
                   varid=varid+1
-                  idTbry(inorth,iDOC(i))=varid
+                  idTbry(inorth,iDIC(i))=varid
                   DO ng=1,Ngrids
                     Fscale(varid,ng)=scale
                     Iinfo(1,varid,ng)=gtype
                   END DO
-                  WRITE (Vname(1,varid),'(a,i2.2)')                   &
-   &                    TRIM(ADJUSTL(Vinfo(1))), i
+                  WRITE (Vname(1,varid),'(a,a,i2.2)')                 &
+   &                    TRIM(ADJUSTL(Vinfo(1))), '_',i
                   WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', i
+   &                    TRIM(ADJUSTL(Vinfo(2))), ', tracer type ', i
                   WRITE (Vname(3,varid),'(a)')                        &
    &                    TRIM(ADJUSTL(Vinfo(3)))
                   WRITE (Vname(4,varid),'(a,a)')                      &
@@ -1852,20 +2090,20 @@
                 END DO             
                 varid=varid+1
 
-              CASE ('idTbry(iwest,iPOC(i))')
+              CASE ('idTbry(iwest,iNO3(i))')
                 load=.FALSE.
                 varid=varid-1
-                DO i=1,Npom
+                DO i=1,N_Nsp
                   varid=varid+1
-                  idTbry(iwest,iPOC(i))=varid
+                  idTbry(iwest,iNO3(i))=varid
                   DO ng=1,Ngrids
                     Fscale(varid,ng)=scale
                     Iinfo(1,varid,ng)=gtype
                   END DO
-                  WRITE (Vname(1,varid),'(a,i2.2)')                   &
-   &                    TRIM(ADJUSTL(Vinfo(1))), i
+                  WRITE (Vname(1,varid),'(a,a,i2.2)')                 &
+   &                    TRIM(ADJUSTL(Vinfo(1))), '_',i
                   WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', i
+   &                    TRIM(ADJUSTL(Vinfo(2))), ', tracer type ', i
                   WRITE (Vname(3,varid),'(a)')                        &
    &                    TRIM(ADJUSTL(Vinfo(3)))
                   WRITE (Vname(4,varid),'(a,a)')                      &
@@ -1874,20 +2112,20 @@
    &                    TRIM(ADJUSTL(Vinfo(5)))
                 END DO             
                 varid=varid+1
-              CASE ('idTbry(ieast,iPOC(i))')
+              CASE ('idTbry(ieast,iNO3(i))')
                 load=.FALSE.
                 varid=varid-1
-                DO i=1,Npom
+                DO i=1,N_Nsp
                   varid=varid+1
-                  idTbry(ieast,iPOC(i))=varid
+                  idTbry(ieast,iNO3(i))=varid
                   DO ng=1,Ngrids
                     Fscale(varid,ng)=scale
                     Iinfo(1,varid,ng)=gtype
                   END DO
-                  WRITE (Vname(1,varid),'(a,i2.2)')                   &
-   &                    TRIM(ADJUSTL(Vinfo(1))), i
+                  WRITE (Vname(1,varid),'(a,a,i2.2)')                 &
+   &                    TRIM(ADJUSTL(Vinfo(1))), '_',i
                   WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', i
+   &                    TRIM(ADJUSTL(Vinfo(2))), ', tracer type ', i
                   WRITE (Vname(3,varid),'(a)')                        &
    &                    TRIM(ADJUSTL(Vinfo(3)))
                   WRITE (Vname(4,varid),'(a,a)')                      &
@@ -1896,20 +2134,20 @@
    &                    TRIM(ADJUSTL(Vinfo(5)))
                 END DO             
                 varid=varid+1
-              CASE ('idTbry(isouth,iPOC(i))')
+              CASE ('idTbry(isouth,iNO3(i))')
                 load=.FALSE.
                 varid=varid-1
-                DO i=1,Npom
+                DO i=1,N_Nsp
                   varid=varid+1
-                  idTbry(isouth,iPOC(i))=varid
+                  idTbry(isouth,iNO3(i))=varid
                   DO ng=1,Ngrids
                     Fscale(varid,ng)=scale
                     Iinfo(1,varid,ng)=gtype
                   END DO
-                  WRITE (Vname(1,varid),'(a,i2.2)')                   &
-   &                    TRIM(ADJUSTL(Vinfo(1))), i
+                  WRITE (Vname(1,varid),'(a,a,i2.2)')                 &
+   &                    TRIM(ADJUSTL(Vinfo(1))), '_',i
                   WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', i
+   &                    TRIM(ADJUSTL(Vinfo(2))), ', tracer type ', i
                   WRITE (Vname(3,varid),'(a)')                        &
    &                    TRIM(ADJUSTL(Vinfo(3)))
                   WRITE (Vname(4,varid),'(a,a)')                      &
@@ -1918,109 +2156,20 @@
    &                    TRIM(ADJUSTL(Vinfo(5)))
                 END DO             
                 varid=varid+1
-              CASE ('idTbry(inorth,iPOC(i))')
+              CASE ('idTbry(inorth,iNO3(i))')
                 load=.FALSE.
                 varid=varid-1
-                DO i=1,Npom
+                DO i=1,N_Nsp
                   varid=varid+1
-                  idTbry(inorth,iPOC(i))=varid
+                  idTbry(inorth,iNO3(i))=varid
                   DO ng=1,Ngrids
                     Fscale(varid,ng)=scale
                     Iinfo(1,varid,ng)=gtype
                   END DO
-                  WRITE (Vname(1,varid),'(a,i2.2)')                   &
-   &                    TRIM(ADJUSTL(Vinfo(1))), i
+                  WRITE (Vname(1,varid),'(a,a,i2.2)')                 &
+   &                    TRIM(ADJUSTL(Vinfo(1))), '_',i
                   WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', i
-                  WRITE (Vname(3,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(3)))
-                  WRITE (Vname(4,varid),'(a,a)')                      &
-   &                    TRIM(Vname(1,varid)), ', scalar, series'
-                  WRITE (Vname(5,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(5)))
-                END DO             
-                varid=varid+1
-
-              CASE ('idTbry(iwest,iPhyt(i))')
-                load=.FALSE.
-                varid=varid-1
-                DO i=1,Nphy
-                  varid=varid+1
-                  idTbry(iwest,iPhyt(i))=varid
-                  DO ng=1,Ngrids
-                    Fscale(varid,ng)=scale
-                    Iinfo(1,varid,ng)=gtype
-                  END DO
-                  WRITE (Vname(1,varid),'(a,i2.2)')                   &
-   &                    TRIM(ADJUSTL(Vinfo(1))), i
-                  WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', i
-                  WRITE (Vname(3,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(3)))
-                  WRITE (Vname(4,varid),'(a,a)')                      &
-   &                    TRIM(Vname(1,varid)), ', scalar, series'
-                  WRITE (Vname(5,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(5)))
-                END DO             
-                varid=varid+1
-              CASE ('idTbry(ieast,iPhyt(i))')
-                load=.FALSE.
-                varid=varid-1
-                DO i=1,Nphy
-                  varid=varid+1
-                  idTbry(ieast,iPhyt(i))=varid
-                  DO ng=1,Ngrids
-                    Fscale(varid,ng)=scale
-                    Iinfo(1,varid,ng)=gtype
-                  END DO
-                  WRITE (Vname(1,varid),'(a,i2.2)')                   &
-   &                    TRIM(ADJUSTL(Vinfo(1))), i
-                  WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', i
-                  WRITE (Vname(3,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(3)))
-                  WRITE (Vname(4,varid),'(a,a)')                      &
-   &                    TRIM(Vname(1,varid)), ', scalar, series'
-                  WRITE (Vname(5,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(5)))
-                END DO             
-                varid=varid+1
-              CASE ('idTbry(isouth,iPhyt(i))')
-                load=.FALSE.
-                varid=varid-1
-                DO i=1,Nphy
-                  varid=varid+1
-                  idTbry(isouth,iPhyt(i))=varid
-                  DO ng=1,Ngrids
-                    Fscale(varid,ng)=scale
-                    Iinfo(1,varid,ng)=gtype
-                  END DO
-                  WRITE (Vname(1,varid),'(a,i2.2)')                   &
-   &                    TRIM(ADJUSTL(Vinfo(1))), i
-                  WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', i
-                  WRITE (Vname(3,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(3)))
-                  WRITE (Vname(4,varid),'(a,a)')                      &
-   &                    TRIM(Vname(1,varid)), ', scalar, series'
-                  WRITE (Vname(5,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(5)))
-                END DO             
-                varid=varid+1
-              CASE ('idTbry(inorth,iPhyt(i))')
-                load=.FALSE.
-                varid=varid-1
-                DO i=1,Nphy
-                  varid=varid+1
-                  idTbry(inorth,iPhyt(i))=varid
-                  DO ng=1,Ngrids
-                    Fscale(varid,ng)=scale
-                    Iinfo(1,varid,ng)=gtype
-                  END DO
-                  WRITE (Vname(1,varid),'(a,i2.2)')                   &
-   &                    TRIM(ADJUSTL(Vinfo(1))), i
-                  WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', i
+   &                    TRIM(ADJUSTL(Vinfo(2))), ', tracer type ', i
                   WRITE (Vname(3,varid),'(a)')                        &
    &                    TRIM(ADJUSTL(Vinfo(3)))
                   WRITE (Vname(4,varid),'(a,a)')                      &
@@ -2030,20 +2179,20 @@
                 END DO             
                 varid=varid+1
 
-              CASE ('idTbry(iwest,iZoop(i))')
+              CASE ('idTbry(iwest,iNH4(i))')
                 load=.FALSE.
                 varid=varid-1
-                DO i=1,Nzoo
+                DO i=1,N_Nsp
                   varid=varid+1
-                  idTbry(iwest,iZoop(i))=varid
+                  idTbry(iwest,iNH4(i))=varid
                   DO ng=1,Ngrids
                     Fscale(varid,ng)=scale
                     Iinfo(1,varid,ng)=gtype
                   END DO
-                  WRITE (Vname(1,varid),'(a,i2.2)')                   &
-   &                    TRIM(ADJUSTL(Vinfo(1))), i
+                  WRITE (Vname(1,varid),'(a,a,i2.2)')                 &
+   &                    TRIM(ADJUSTL(Vinfo(1))), '_',i
                   WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', i
+   &                    TRIM(ADJUSTL(Vinfo(2))), ', tracer type ', i
                   WRITE (Vname(3,varid),'(a)')                        &
    &                    TRIM(ADJUSTL(Vinfo(3)))
                   WRITE (Vname(4,varid),'(a,a)')                      &
@@ -2052,20 +2201,20 @@
    &                    TRIM(ADJUSTL(Vinfo(5)))
                 END DO             
                 varid=varid+1
-              CASE ('idTbry(ieast,iZoop(i))')
+              CASE ('idTbry(ieast,iNH4(i))')
                 load=.FALSE.
                 varid=varid-1
-                DO i=1,Nzoo
+                DO i=1,N_Nsp
                   varid=varid+1
-                  idTbry(ieast,iZoop(i))=varid
+                  idTbry(ieast,iNH4(i))=varid
                   DO ng=1,Ngrids
                     Fscale(varid,ng)=scale
                     Iinfo(1,varid,ng)=gtype
                   END DO
-                  WRITE (Vname(1,varid),'(a,i2.2)')                   &
-   &                    TRIM(ADJUSTL(Vinfo(1))), i
+                  WRITE (Vname(1,varid),'(a,a,i2.2)')                 &
+   &                    TRIM(ADJUSTL(Vinfo(1))), '_',i
                   WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', i
+   &                    TRIM(ADJUSTL(Vinfo(2))), ', tracer type ', i
                   WRITE (Vname(3,varid),'(a)')                        &
    &                    TRIM(ADJUSTL(Vinfo(3)))
                   WRITE (Vname(4,varid),'(a,a)')                      &
@@ -2074,20 +2223,20 @@
    &                    TRIM(ADJUSTL(Vinfo(5)))
                 END DO             
                 varid=varid+1
-              CASE ('idTbry(isouth,iZoop(i))')
+              CASE ('idTbry(isouth,iNH4(i))')
                 load=.FALSE.
                 varid=varid-1
-                DO i=1,Nzoo
+                DO i=1,N_Nsp
                   varid=varid+1
-                  idTbry(isouth,iZoop(i))=varid
+                  idTbry(isouth,iNH4(i))=varid
                   DO ng=1,Ngrids
                     Fscale(varid,ng)=scale
                     Iinfo(1,varid,ng)=gtype
                   END DO
-                  WRITE (Vname(1,varid),'(a,i2.2)')                   &
-   &                    TRIM(ADJUSTL(Vinfo(1))), i
+                  WRITE (Vname(1,varid),'(a,a,i2.2)')                 &
+   &                    TRIM(ADJUSTL(Vinfo(1))), '_',i
                   WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', i
+   &                    TRIM(ADJUSTL(Vinfo(2))), ', tracer type ', i
                   WRITE (Vname(3,varid),'(a)')                        &
    &                    TRIM(ADJUSTL(Vinfo(3)))
                   WRITE (Vname(4,varid),'(a,a)')                      &
@@ -2096,109 +2245,20 @@
    &                    TRIM(ADJUSTL(Vinfo(5)))
                 END DO             
                 varid=varid+1
-              CASE ('idTbry(inorth,iZoop(i))')
+              CASE ('idTbry(inorth,iNH4(i))')
                 load=.FALSE.
                 varid=varid-1
-                DO i=1,Nzoo
+                DO i=1,N_Nsp
                   varid=varid+1
-                  idTbry(inorth,iZoop(i))=varid
+                  idTbry(inorth,iNH4(i))=varid
                   DO ng=1,Ngrids
                     Fscale(varid,ng)=scale
                     Iinfo(1,varid,ng)=gtype
                   END DO
-                  WRITE (Vname(1,varid),'(a,i2.2)')                   &
-   &                    TRIM(ADJUSTL(Vinfo(1))), i
+                  WRITE (Vname(1,varid),'(a,a,i2.2)')                 &
+   &                    TRIM(ADJUSTL(Vinfo(1))), '_',i
                   WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', i
-                  WRITE (Vname(3,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(3)))
-                  WRITE (Vname(4,varid),'(a,a)')                      &
-   &                    TRIM(Vname(1,varid)), ', scalar, series'
-                  WRITE (Vname(5,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(5)))
-                END DO             
-                varid=varid+1
-
-              CASE ('idTbry(iwest,iPIC(i))')
-                load=.FALSE.
-                varid=varid-1
-                DO i=1,Npim
-                  varid=varid+1
-                  idTbry(iwest,iPIC(i))=varid
-                  DO ng=1,Ngrids
-                    Fscale(varid,ng)=scale
-                    Iinfo(1,varid,ng)=gtype
-                  END DO
-                  WRITE (Vname(1,varid),'(a,i2.2)')                   &
-   &                    TRIM(ADJUSTL(Vinfo(1))), i
-                  WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', i
-                  WRITE (Vname(3,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(3)))
-                  WRITE (Vname(4,varid),'(a,a)')                      &
-   &                    TRIM(Vname(1,varid)), ', scalar, series'
-                  WRITE (Vname(5,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(5)))
-                END DO             
-                varid=varid+1
-              CASE ('idTbry(ieast,iPIC(i))')
-                load=.FALSE.
-                varid=varid-1
-                DO i=1,Npim
-                  varid=varid+1
-                  idTbry(ieast,iPIC(i))=varid
-                  DO ng=1,Ngrids
-                    Fscale(varid,ng)=scale
-                    Iinfo(1,varid,ng)=gtype
-                  END DO
-                  WRITE (Vname(1,varid),'(a,i2.2)')                   &
-   &                    TRIM(ADJUSTL(Vinfo(1))), i
-                  WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', i
-                  WRITE (Vname(3,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(3)))
-                  WRITE (Vname(4,varid),'(a,a)')                      &
-   &                    TRIM(Vname(1,varid)), ', scalar, series'
-                  WRITE (Vname(5,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(5)))
-                END DO             
-                varid=varid+1
-              CASE ('idTbry(isouth,iPIC(i))')
-                load=.FALSE.
-                varid=varid-1
-                DO i=1,Npim
-                  varid=varid+1
-                  idTbry(isouth,iPIC(i))=varid
-                  DO ng=1,Ngrids
-                    Fscale(varid,ng)=scale
-                    Iinfo(1,varid,ng)=gtype
-                  END DO
-                  WRITE (Vname(1,varid),'(a,i2.2)')                   &
-   &                    TRIM(ADJUSTL(Vinfo(1))), i
-                  WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', i
-                  WRITE (Vname(3,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(3)))
-                  WRITE (Vname(4,varid),'(a,a)')                      &
-   &                    TRIM(Vname(1,varid)), ', scalar, series'
-                  WRITE (Vname(5,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(5)))
-                END DO             
-                varid=varid+1
-              CASE ('idTbry(inorth,iPIC(i))')
-                load=.FALSE.
-                varid=varid-1
-                DO i=1,Npim
-                  varid=varid+1
-                  idTbry(inorth,iPIC(i))=varid
-                  DO ng=1,Ngrids
-                    Fscale(varid,ng)=scale
-                    Iinfo(1,varid,ng)=gtype
-                  END DO
-                  WRITE (Vname(1,varid),'(a,i2.2)')                   &
-   &                    TRIM(ADJUSTL(Vinfo(1))), i
-                  WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', i
+   &                    TRIM(ADJUSTL(Vinfo(2))), ', tracer type ', i
                   WRITE (Vname(3,varid),'(a)')                        &
    &                    TRIM(ADJUSTL(Vinfo(3)))
                   WRITE (Vname(4,varid),'(a,a)')                      &
@@ -2208,32 +2268,20 @@
                 END DO             
                 varid=varid+1
 
-#endif
-#if defined CARBON_ISOTOPE
-              CASE ('idTbry(iwest,iT13C)')
-                idTbry(iwest,iT13C)=varid
-              CASE ('idTbry(ieast,iT13C)')
-                idTbry(ieast,iT13C)=varid
-              CASE ('idTbry(isouth,iT13C)')
-                idTbry(isouth,iT13C)=varid
-              CASE ('idTbry(inorth,iT13C)')
-                idTbry(inorth,iT13C)=varid
-
-# if defined ORGANIC_MATTER
-              CASE ('idTbry(iwest,iDO13C(i))')
+              CASE ('idTbry(iwest,iPO4(i))')
                 load=.FALSE.
                 varid=varid-1
-                DO i=1,Ndom
+                DO i=1,N_Psp
                   varid=varid+1
-                  idTbry(iwest,iDO13C(i))=varid
+                  idTbry(iwest,iPO4(i))=varid
                   DO ng=1,Ngrids
                     Fscale(varid,ng)=scale
                     Iinfo(1,varid,ng)=gtype
                   END DO
-                  WRITE (Vname(1,varid),'(a,i2.2)')                   &
-   &                    TRIM(ADJUSTL(Vinfo(1))), i
+                  WRITE (Vname(1,varid),'(a,a,i2.2)')                 &
+   &                    TRIM(ADJUSTL(Vinfo(1))), '_',i
                   WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', i
+   &                    TRIM(ADJUSTL(Vinfo(2))), ', tracer type ', i
                   WRITE (Vname(3,varid),'(a)')                        &
    &                    TRIM(ADJUSTL(Vinfo(3)))
                   WRITE (Vname(4,varid),'(a,a)')                      &
@@ -2242,20 +2290,20 @@
    &                    TRIM(ADJUSTL(Vinfo(5)))
                 END DO             
                 varid=varid+1
-              CASE ('idTbry(ieast,iDO13C(i))')
+              CASE ('idTbry(ieast,iPO4(i))')
                 load=.FALSE.
                 varid=varid-1
-                DO i=1,Ndom
+                DO i=1,N_Psp
                   varid=varid+1
-                  idTbry(ieast,iDO13C(i))=varid
+                  idTbry(ieast,iPO4(i))=varid
                   DO ng=1,Ngrids
                     Fscale(varid,ng)=scale
                     Iinfo(1,varid,ng)=gtype
                   END DO
-                  WRITE (Vname(1,varid),'(a,i2.2)')                   &
-   &                    TRIM(ADJUSTL(Vinfo(1))), i
+                  WRITE (Vname(1,varid),'(a,a,i2.2)')                 &
+   &                    TRIM(ADJUSTL(Vinfo(1))), '_',i
                   WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', i
+   &                    TRIM(ADJUSTL(Vinfo(2))), ', tracer type ', i
                   WRITE (Vname(3,varid),'(a)')                        &
    &                    TRIM(ADJUSTL(Vinfo(3)))
                   WRITE (Vname(4,varid),'(a,a)')                      &
@@ -2264,20 +2312,20 @@
    &                    TRIM(ADJUSTL(Vinfo(5)))
                 END DO             
                 varid=varid+1
-              CASE ('idTbry(isouth,iDO13C(i))')
+              CASE ('idTbry(isouth,iPO4(i))')
                 load=.FALSE.
                 varid=varid-1
-                DO i=1,Ndom
+                DO i=1,N_Psp
                   varid=varid+1
-                  idTbry(isouth,iDO13C(i))=varid
+                  idTbry(isouth,iPO4(i))=varid
                   DO ng=1,Ngrids
                     Fscale(varid,ng)=scale
                     Iinfo(1,varid,ng)=gtype
                   END DO
-                  WRITE (Vname(1,varid),'(a,i2.2)')                   &
-   &                    TRIM(ADJUSTL(Vinfo(1))), i
+                  WRITE (Vname(1,varid),'(a,a,i2.2)')                 &
+   &                    TRIM(ADJUSTL(Vinfo(1))), '_',i
                   WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', i
+   &                    TRIM(ADJUSTL(Vinfo(2))), ', tracer type ', i
                   WRITE (Vname(3,varid),'(a)')                        &
    &                    TRIM(ADJUSTL(Vinfo(3)))
                   WRITE (Vname(4,varid),'(a,a)')                      &
@@ -2286,20 +2334,20 @@
    &                    TRIM(ADJUSTL(Vinfo(5)))
                 END DO             
                 varid=varid+1
-              CASE ('idTbry(inorth,iDO13C(i))')
+              CASE ('idTbry(inorth,iPO4(i))')
                 load=.FALSE.
                 varid=varid-1
-                DO i=1,Ndom
+                DO i=1,N_Psp
                   varid=varid+1
-                  idTbry(inorth,iDO13C(i))=varid
+                  idTbry(inorth,iPO4(i))=varid
                   DO ng=1,Ngrids
                     Fscale(varid,ng)=scale
                     Iinfo(1,varid,ng)=gtype
                   END DO
-                  WRITE (Vname(1,varid),'(a,i2.2)')                   &
-   &                    TRIM(ADJUSTL(Vinfo(1))), i
+                  WRITE (Vname(1,varid),'(a,a,i2.2)')                 &
+   &                    TRIM(ADJUSTL(Vinfo(1))), '_',i
                   WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', i
+   &                    TRIM(ADJUSTL(Vinfo(2))), ', tracer type ', i
                   WRITE (Vname(3,varid),'(a)')                        &
    &                    TRIM(ADJUSTL(Vinfo(3)))
                   WRITE (Vname(4,varid),'(a,a)')                      &
@@ -2309,760 +2357,1318 @@
                 END DO             
                 varid=varid+1
 
-              CASE ('idTbry(iwest,iPO13C(i))')
+              CASE ('idTbry(iwest,iDOC(i,j))')
                 load=.FALSE.
                 varid=varid-1
-                DO i=1,Npom
-                  varid=varid+1
-                  idTbry(iwest,iPO13C(i))=varid
-                  DO ng=1,Ngrids
-                    Fscale(varid,ng)=scale
-                    Iinfo(1,varid,ng)=gtype
+                DO j=1,Ndom
+                  DO i=1,N_Csp
+                    varid=varid+1
+                    idTbry(iwest,iDOC(i,j))=varid
+                    DO ng=1,Ngrids
+                      Fscale(varid,ng)=scale
+                      Iinfo(1,varid,ng)=gtype
+                    END DO
+                    WRITE (Vname(1,varid),'(a,i2.2,a,i2.2)')            &
+   &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
+                    WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
+   &                      TRIM(ADJUSTL(Vinfo(2)))                       &
+                          ,', functional group ', j, ', tracer type ', i
+                    WRITE (Vname(3,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(3)))
+                    WRITE (Vname(4,varid),'(a,a)')                      &
+   &                      TRIM(Vname(1,varid)), ', scalar, series'
+                    WRITE (Vname(5,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(5)))
                   END DO
-                  WRITE (Vname(1,varid),'(a,i2.2)')                   &
-   &                    TRIM(ADJUSTL(Vinfo(1))), i
-                  WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', i
-                  WRITE (Vname(3,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(3)))
-                  WRITE (Vname(4,varid),'(a,a)')                      &
-   &                    TRIM(Vname(1,varid)), ', scalar, series'
-                  WRITE (Vname(5,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(5)))
-                END DO             
+                END DO
                 varid=varid+1
-              CASE ('idTbry(ieast,iPO13C(i))')
+               CASE ('idTbry(ieast,iDOC(i,j))')
                 load=.FALSE.
                 varid=varid-1
-                DO i=1,Npom
-                  varid=varid+1
-                  idTbry(ieast,iPO13C(i))=varid
-                  DO ng=1,Ngrids
-                    Fscale(varid,ng)=scale
-                    Iinfo(1,varid,ng)=gtype
+                DO j=1,Ndom
+                  DO i=1,N_Csp
+                    varid=varid+1
+                    idTbry(ieast,iDOC(i,j))=varid
+                    DO ng=1,Ngrids
+                      Fscale(varid,ng)=scale
+                      Iinfo(1,varid,ng)=gtype
+                    END DO
+                    WRITE (Vname(1,varid),'(a,i2.2,a,i2.2)')            &
+   &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
+                    WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
+   &                      TRIM(ADJUSTL(Vinfo(2)))                       &
+                          ,', functional group ', j, ', tracer type ', i
+                    WRITE (Vname(3,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(3)))
+                    WRITE (Vname(4,varid),'(a,a)')                      &
+   &                      TRIM(Vname(1,varid)), ', scalar, series'
+                    WRITE (Vname(5,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(5)))
                   END DO
-                  WRITE (Vname(1,varid),'(a,i2.2)')                   &
-   &                    TRIM(ADJUSTL(Vinfo(1))), i
-                  WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', i
-                  WRITE (Vname(3,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(3)))
-                  WRITE (Vname(4,varid),'(a,a)')                      &
-   &                    TRIM(Vname(1,varid)), ', scalar, series'
-                  WRITE (Vname(5,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(5)))
-                END DO             
+                END DO
                 varid=varid+1
-              CASE ('idTbry(isouth,iPO13C(i))')
+              CASE ('idTbry(isouth,iDOC(i,j))')
                 load=.FALSE.
                 varid=varid-1
-                DO i=1,Npom
-                  varid=varid+1
-                  idTbry(isouth,iPO13C(i))=varid
-                  DO ng=1,Ngrids
-                    Fscale(varid,ng)=scale
-                    Iinfo(1,varid,ng)=gtype
+                DO j=1,Ndom
+                  DO i=1,N_Csp
+                    varid=varid+1
+                    idTbry(isouth,iDOC(i,j))=varid
+                    DO ng=1,Ngrids
+                      Fscale(varid,ng)=scale
+                      Iinfo(1,varid,ng)=gtype
+                    END DO
+                    WRITE (Vname(1,varid),'(a,i2.2,a,i2.2)')            &
+   &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
+                    WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
+   &                      TRIM(ADJUSTL(Vinfo(2)))                       &
+                          ,', functional group ', j, ', tracer type ', i
+                    WRITE (Vname(3,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(3)))
+                    WRITE (Vname(4,varid),'(a,a)')                      &
+   &                      TRIM(Vname(1,varid)), ', scalar, series'
+                    WRITE (Vname(5,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(5)))
                   END DO
-                  WRITE (Vname(1,varid),'(a,i2.2)')                   &
-   &                    TRIM(ADJUSTL(Vinfo(1))), i
-                  WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', i
-                  WRITE (Vname(3,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(3)))
-                  WRITE (Vname(4,varid),'(a,a)')                      &
-   &                    TRIM(Vname(1,varid)), ', scalar, series'
-                  WRITE (Vname(5,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(5)))
-                END DO             
+                END DO
                 varid=varid+1
-              CASE ('idTbry(inorth,iPO13C(i))')
+              CASE ('idTbry(inorth,iDOC(i,j))')
                 load=.FALSE.
                 varid=varid-1
-                DO i=1,Npom
-                  varid=varid+1
-                  idTbry(inorth,iPO13C(i))=varid
-                  DO ng=1,Ngrids
-                    Fscale(varid,ng)=scale
-                    Iinfo(1,varid,ng)=gtype
+                DO j=1,Ndom
+                  DO i=1,N_Csp
+                    varid=varid+1
+                    idTbry(inorth,iDOC(i,j))=varid
+                    DO ng=1,Ngrids
+                      Fscale(varid,ng)=scale
+                      Iinfo(1,varid,ng)=gtype
+                    END DO
+                    WRITE (Vname(1,varid),'(a,i2.2,a,i2.2)')            &
+   &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
+                    WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
+   &                      TRIM(ADJUSTL(Vinfo(2)))                       &
+                          ,', functional group ', j, ', tracer type ', i
+                    WRITE (Vname(3,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(3)))
+                    WRITE (Vname(4,varid),'(a,a)')                      &
+   &                      TRIM(Vname(1,varid)), ', scalar, series'
+                    WRITE (Vname(5,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(5)))
                   END DO
-                  WRITE (Vname(1,varid),'(a,i2.2)')                   &
-   &                    TRIM(ADJUSTL(Vinfo(1))), i
-                  WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', i
-                  WRITE (Vname(3,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(3)))
-                  WRITE (Vname(4,varid),'(a,a)')                      &
-   &                    TRIM(Vname(1,varid)), ', scalar, series'
-                  WRITE (Vname(5,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(5)))
-                END DO             
-                varid=varid+1
-
-              CASE ('idTbry(iwest,iPhyt13C(i))')
-                load=.FALSE.
-                varid=varid-1
-                DO i=1,Nphy
-                  varid=varid+1
-                  idTbry(iwest,iPhyt13C(i))=varid
-                  DO ng=1,Ngrids
-                    Fscale(varid,ng)=scale
-                    Iinfo(1,varid,ng)=gtype
-                  END DO
-                  WRITE (Vname(1,varid),'(a,i2.2)')                   &
-   &                    TRIM(ADJUSTL(Vinfo(1))), i
-                  WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', i
-                  WRITE (Vname(3,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(3)))
-                  WRITE (Vname(4,varid),'(a,a)')                      &
-   &                    TRIM(Vname(1,varid)), ', scalar, series'
-                  WRITE (Vname(5,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(5)))
-                END DO             
-                varid=varid+1
-              CASE ('idTbry(ieast,iPhyt13C(i))')
-                load=.FALSE.
-                varid=varid-1
-                DO i=1,Nphy
-                  varid=varid+1
-                  idTbry(ieast,iPhyt13C(i))=varid
-                  DO ng=1,Ngrids
-                    Fscale(varid,ng)=scale
-                    Iinfo(1,varid,ng)=gtype
-                  END DO
-                  WRITE (Vname(1,varid),'(a,i2.2)')                   &
-   &                    TRIM(ADJUSTL(Vinfo(1))), i
-                  WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', i
-                  WRITE (Vname(3,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(3)))
-                  WRITE (Vname(4,varid),'(a,a)')                      &
-   &                    TRIM(Vname(1,varid)), ', scalar, series'
-                  WRITE (Vname(5,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(5)))
-                END DO             
-                varid=varid+1
-              CASE ('idTbry(isouth,iPhyt13C(i))')
-                load=.FALSE.
-                varid=varid-1
-                DO i=1,Nphy
-                  varid=varid+1
-                  idTbry(isouth,iPhyt13C(i))=varid
-                  DO ng=1,Ngrids
-                    Fscale(varid,ng)=scale
-                    Iinfo(1,varid,ng)=gtype
-                  END DO
-                  WRITE (Vname(1,varid),'(a,i2.2)')                   &
-   &                    TRIM(ADJUSTL(Vinfo(1))), i
-                  WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', i
-                  WRITE (Vname(3,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(3)))
-                  WRITE (Vname(4,varid),'(a,a)')                      &
-   &                    TRIM(Vname(1,varid)), ', scalar, series'
-                  WRITE (Vname(5,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(5)))
-                END DO             
-                varid=varid+1
-              CASE ('idTbry(inorth,iPhyt13C(i))')
-                load=.FALSE.
-                varid=varid-1
-                DO i=1,Nphy
-                  varid=varid+1
-                  idTbry(inorth,iPhyt13C(i))=varid
-                  DO ng=1,Ngrids
-                    Fscale(varid,ng)=scale
-                    Iinfo(1,varid,ng)=gtype
-                  END DO
-                  WRITE (Vname(1,varid),'(a,i2.2)')                   &
-   &                    TRIM(ADJUSTL(Vinfo(1))), i
-                  WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', i
-                  WRITE (Vname(3,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(3)))
-                  WRITE (Vname(4,varid),'(a,a)')                      &
-   &                    TRIM(Vname(1,varid)), ', scalar, series'
-                  WRITE (Vname(5,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(5)))
-                END DO             
+                END DO
                 varid=varid+1
 
-              CASE ('idTbry(iwest,iZoop13C(i))')
+              CASE ('idTbry(iwest,iPOC(i,j))')
                 load=.FALSE.
                 varid=varid-1
-                DO i=1,Nzoo
-                  varid=varid+1
-                  idTbry(iwest,iZoop13C(i))=varid
-                  DO ng=1,Ngrids
-                    Fscale(varid,ng)=scale
-                    Iinfo(1,varid,ng)=gtype
+                DO j=1,Npom
+                  DO i=1,N_Csp
+                    varid=varid+1
+                    idTbry(iwest,iPOC(i,j))=varid
+                    DO ng=1,Ngrids
+                      Fscale(varid,ng)=scale
+                      Iinfo(1,varid,ng)=gtype
+                    END DO
+                    WRITE (Vname(1,varid),'(a,i2.2,a,i2.2)')            &
+   &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
+                    WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
+   &                      TRIM(ADJUSTL(Vinfo(2)))                       &
+                          ,', functional group ', j, ', tracer type ', i
+                    WRITE (Vname(3,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(3)))
+                    WRITE (Vname(4,varid),'(a,a)')                      &
+   &                      TRIM(Vname(1,varid)), ', scalar, series'
+                    WRITE (Vname(5,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(5)))
                   END DO
-                  WRITE (Vname(1,varid),'(a,i2.2)')                   &
-   &                    TRIM(ADJUSTL(Vinfo(1))), i
-                  WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', i
-                  WRITE (Vname(3,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(3)))
-                  WRITE (Vname(4,varid),'(a,a)')                      &
-   &                    TRIM(Vname(1,varid)), ', scalar, series'
-                  WRITE (Vname(5,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(5)))
-                END DO             
+                END DO
                 varid=varid+1
-              CASE ('idTbry(ieast,iZoop13C(i))')
+              CASE ('idTbry(ieast,iPOC(i,j))')
                 load=.FALSE.
                 varid=varid-1
-                DO i=1,Nzoo
-                  varid=varid+1
-                  idTbry(ieast,iZoop13C(i))=varid
-                  DO ng=1,Ngrids
-                    Fscale(varid,ng)=scale
-                    Iinfo(1,varid,ng)=gtype
+                DO j=1,Npom
+                  DO i=1,N_Csp
+                    varid=varid+1
+                    idTbry(ieast,iPOC(i,j))=varid
+                    DO ng=1,Ngrids
+                      Fscale(varid,ng)=scale
+                      Iinfo(1,varid,ng)=gtype
+                    END DO
+                    WRITE (Vname(1,varid),'(a,i2.2,a,i2.2)')            &
+   &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
+                    WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
+   &                      TRIM(ADJUSTL(Vinfo(2)))                       &
+                          ,', functional group ', j, ', tracer type ', i
+                    WRITE (Vname(3,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(3)))
+                    WRITE (Vname(4,varid),'(a,a)')                      &
+   &                      TRIM(Vname(1,varid)), ', scalar, series'
+                    WRITE (Vname(5,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(5)))
                   END DO
-                  WRITE (Vname(1,varid),'(a,i2.2)')                   &
-   &                    TRIM(ADJUSTL(Vinfo(1))), i
-                  WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', i
-                  WRITE (Vname(3,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(3)))
-                  WRITE (Vname(4,varid),'(a,a)')                      &
-   &                    TRIM(Vname(1,varid)), ', scalar, series'
-                  WRITE (Vname(5,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(5)))
-                END DO             
+                END DO
                 varid=varid+1
-              CASE ('idTbry(isouth,iZoop13C(i))')
+              CASE ('idTbry(isouth,iPOC(i,j))')
                 load=.FALSE.
                 varid=varid-1
-                DO i=1,Nzoo
-                  varid=varid+1
-                  idTbry(isouth,iZoop13C(i))=varid
-                  DO ng=1,Ngrids
-                    Fscale(varid,ng)=scale
-                    Iinfo(1,varid,ng)=gtype
+                DO j=1,Npom
+                  DO i=1,N_Csp
+                    varid=varid+1
+                    idTbry(isouth,iPOC(i,j))=varid
+                    DO ng=1,Ngrids
+                      Fscale(varid,ng)=scale
+                      Iinfo(1,varid,ng)=gtype
+                    END DO
+                    WRITE (Vname(1,varid),'(a,i2.2,a,i2.2)')            &
+   &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
+                    WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
+   &                      TRIM(ADJUSTL(Vinfo(2)))                       &
+                          ,', functional group ', j, ', tracer type ', i
+                    WRITE (Vname(3,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(3)))
+                    WRITE (Vname(4,varid),'(a,a)')                      &
+   &                      TRIM(Vname(1,varid)), ', scalar, series'
+                    WRITE (Vname(5,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(5)))
                   END DO
-                  WRITE (Vname(1,varid),'(a,i2.2)')                   &
-   &                    TRIM(ADJUSTL(Vinfo(1))), i
-                  WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', i
-                  WRITE (Vname(3,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(3)))
-                  WRITE (Vname(4,varid),'(a,a)')                      &
-   &                    TRIM(Vname(1,varid)), ', scalar, series'
-                  WRITE (Vname(5,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(5)))
-                END DO             
+                END DO
                 varid=varid+1
-              CASE ('idTbry(inorth,iZoop13C(i))')
+              CASE ('idTbry(inorth,iPOC(i,j))')
                 load=.FALSE.
                 varid=varid-1
-                DO i=1,Nzoo
-                  varid=varid+1
-                  idTbry(inorth,iZoop13C(i))=varid
-                  DO ng=1,Ngrids
-                    Fscale(varid,ng)=scale
-                    Iinfo(1,varid,ng)=gtype
+                DO j=1,Npom
+                  DO i=1,N_Csp
+                    varid=varid+1
+                    idTbry(inorth,iPOC(i,j))=varid
+                    DO ng=1,Ngrids
+                      Fscale(varid,ng)=scale
+                      Iinfo(1,varid,ng)=gtype
+                    END DO
+                    WRITE (Vname(1,varid),'(a,i2.2,a,i2.2)')            &
+   &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
+                    WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
+   &                      TRIM(ADJUSTL(Vinfo(2)))                       &
+                          ,', functional group ', j, ', tracer type ', i
+                    WRITE (Vname(3,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(3)))
+                    WRITE (Vname(4,varid),'(a,a)')                      &
+   &                      TRIM(Vname(1,varid)), ', scalar, series'
+                    WRITE (Vname(5,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(5)))
                   END DO
-                  WRITE (Vname(1,varid),'(a,i2.2)')                   &
-   &                    TRIM(ADJUSTL(Vinfo(1))), i
-                  WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', i
-                  WRITE (Vname(3,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(3)))
-                  WRITE (Vname(4,varid),'(a,a)')                      &
-   &                    TRIM(Vname(1,varid)), ', scalar, series'
-                  WRITE (Vname(5,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(5)))
-                END DO             
-                varid=varid+1
-
-              CASE ('idTbry(iwest,iPI13C(i))')
-                load=.FALSE.
-                varid=varid-1
-                DO i=1,Npim
-                  varid=varid+1
-                  idTbry(iwest,iPI13C(i))=varid
-                  DO ng=1,Ngrids
-                    Fscale(varid,ng)=scale
-                    Iinfo(1,varid,ng)=gtype
-                  END DO
-                  WRITE (Vname(1,varid),'(a,i2.2)')                   &
-   &                    TRIM(ADJUSTL(Vinfo(1))), i
-                  WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', i
-                  WRITE (Vname(3,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(3)))
-                  WRITE (Vname(4,varid),'(a,a)')                      &
-   &                    TRIM(Vname(1,varid)), ', scalar, series'
-                  WRITE (Vname(5,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(5)))
-                END DO             
-                varid=varid+1
-              CASE ('idTbry(ieast,iPI13C(i))')
-                load=.FALSE.
-                varid=varid-1
-                DO i=1,Npim
-                  varid=varid+1
-                  idTbry(ieast,iPI13C(i))=varid
-                  DO ng=1,Ngrids
-                    Fscale(varid,ng)=scale
-                    Iinfo(1,varid,ng)=gtype
-                  END DO
-                  WRITE (Vname(1,varid),'(a,i2.2)')                   &
-   &                    TRIM(ADJUSTL(Vinfo(1))), i
-                  WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', i
-                  WRITE (Vname(3,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(3)))
-                  WRITE (Vname(4,varid),'(a,a)')                      &
-   &                    TRIM(Vname(1,varid)), ', scalar, series'
-                  WRITE (Vname(5,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(5)))
-                END DO             
-                varid=varid+1
-              CASE ('idTbry(isouth,iPI13C(i))')
-                load=.FALSE.
-                varid=varid-1
-                DO i=1,Npim
-                  varid=varid+1
-                  idTbry(isouth,iPI13C(i))=varid
-                  DO ng=1,Ngrids
-                    Fscale(varid,ng)=scale
-                    Iinfo(1,varid,ng)=gtype
-                  END DO
-                  WRITE (Vname(1,varid),'(a,i2.2)')                   &
-   &                    TRIM(ADJUSTL(Vinfo(1))), i
-                  WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', i
-                  WRITE (Vname(3,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(3)))
-                  WRITE (Vname(4,varid),'(a,a)')                      &
-   &                    TRIM(Vname(1,varid)), ', scalar, series'
-                  WRITE (Vname(5,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(5)))
-                END DO             
-                varid=varid+1
-              CASE ('idTbry(inorth,iPI13C(i))')
-                load=.FALSE.
-                varid=varid-1
-                DO i=1,Npim
-                  varid=varid+1
-                  idTbry(inorth,iPI13C(i))=varid
-                  DO ng=1,Ngrids
-                    Fscale(varid,ng)=scale
-                    Iinfo(1,varid,ng)=gtype
-                  END DO
-                  WRITE (Vname(1,varid),'(a,i2.2)')                   &
-   &                    TRIM(ADJUSTL(Vinfo(1))), i
-                  WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', i
-                  WRITE (Vname(3,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(3)))
-                  WRITE (Vname(4,varid),'(a,a)')                      &
-   &                    TRIM(Vname(1,varid)), ', scalar, series'
-                  WRITE (Vname(5,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(5)))
-                END DO             
+                END DO
                 varid=varid+1
 
-# endif
-#endif
-
-#if defined NUTRIENTS
-              CASE ('idTbry(iwest,iNO3_)')
-                idTbry(iwest,iNO3_)=varid
-              CASE ('idTbry(ieast,iNO3_)')
-                idTbry(ieast,iNO3_)=varid
-              CASE ('idTbry(isouth,iNO3_)')
-                idTbry(isouth,iNO3_)=varid
-              CASE ('idTbry(inorth,iNO3_)')
-                idTbry(inorth,iNO3_)=varid
-
-!              CASE ('idTbry(iwest,iNO2_)')
-!                idTbry(iwest,iNO2_)=varid
-!              CASE ('idTbry(ieast,iNO2_)')
-!                idTbry(ieast,iNO2_)=varid
-!              CASE ('idTbry(isouth,iNO2_)')
-!                idTbry(isouth,iNO2_)=varid
-!              CASE ('idTbry(inorth,iNO2_)')
-!                idTbry(inorth,iNO2_)=varid
-
-              CASE ('idTbry(iwest,iNH4_)')
-                idTbry(iwest,iNH4_)=varid
-              CASE ('idTbry(ieast,iNH4_)')
-                idTbry(ieast,iNH4_)=varid
-              CASE ('idTbry(isouth,iNH4_)')
-                idTbry(isouth,iNH4_)=varid
-              CASE ('idTbry(inorth,iNH4_)')
-                idTbry(inorth,iNH4_)=varid
-
-              CASE ('idTbry(iwest,iPO4_)')
-                idTbry(iwest,iPO4_)=varid
-              CASE ('idTbry(ieast,iPO4_)')
-                idTbry(ieast,iPO4_)=varid
-              CASE ('idTbry(isouth,iPO4_)')
-                idTbry(isouth,iPO4_)=varid
-              CASE ('idTbry(inorth,iPO4_)')
-                idTbry(inorth,iPO4_)=varid
-
-# if defined ORGANIC_MATTER
-              CASE ('idTbry(iwest,iDON(i))')
+              CASE ('idTbry(iwest,iDON(i,j))')
                 load=.FALSE.
                 varid=varid-1
-                DO i=1,Ndom
-                  varid=varid+1
-                  idTbry(iwest,iDON(i))=varid
-                  DO ng=1,Ngrids
-                    Fscale(varid,ng)=scale
-                    Iinfo(1,varid,ng)=gtype
+                DO j=1,Ndom
+                  DO i=1,N_Nsp
+                    varid=varid+1
+                    idTbry(iwest,iDON(i,j))=varid
+                    DO ng=1,Ngrids
+                      Fscale(varid,ng)=scale
+                      Iinfo(1,varid,ng)=gtype
+                    END DO
+                    WRITE (Vname(1,varid),'(a,i2.2,a,i2.2)')            &
+   &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
+                    WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
+   &                      TRIM(ADJUSTL(Vinfo(2)))                       &
+                          ,', functional group ', j, ', tracer type ', i
+                    WRITE (Vname(3,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(3)))
+                    WRITE (Vname(4,varid),'(a,a)')                      &
+   &                      TRIM(Vname(1,varid)), ', scalar, series'
+                    WRITE (Vname(5,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(5)))
                   END DO
-                  WRITE (Vname(1,varid),'(a,i2.2)')                   &
-   &                    TRIM(ADJUSTL(Vinfo(1))), i
-                  WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', i
-                  WRITE (Vname(3,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(3)))
-                  WRITE (Vname(4,varid),'(a,a)')                      &
-   &                    TRIM(Vname(1,varid)), ', scalar, series'
-                  WRITE (Vname(5,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(5)))
-                END DO             
+                END DO
                 varid=varid+1
-              CASE ('idTbry(ieast,iDON(i))')
+               CASE ('idTbry(ieast,iDON(i,j))')
                 load=.FALSE.
                 varid=varid-1
-                DO i=1,Ndom
-                  varid=varid+1
-                  idTbry(ieast,iDON(i))=varid
-                  DO ng=1,Ngrids
-                    Fscale(varid,ng)=scale
-                    Iinfo(1,varid,ng)=gtype
+                DO j=1,Ndom
+                  DO i=1,N_Nsp
+                    varid=varid+1
+                    idTbry(ieast,iDON(i,j))=varid
+                    DO ng=1,Ngrids
+                      Fscale(varid,ng)=scale
+                      Iinfo(1,varid,ng)=gtype
+                    END DO
+                    WRITE (Vname(1,varid),'(a,i2.2,a,i2.2)')            &
+   &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
+                    WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
+   &                      TRIM(ADJUSTL(Vinfo(2)))                       &
+                          ,', functional group ', j, ', tracer type ', i
+                    WRITE (Vname(3,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(3)))
+                    WRITE (Vname(4,varid),'(a,a)')                      &
+   &                      TRIM(Vname(1,varid)), ', scalar, series'
+                    WRITE (Vname(5,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(5)))
                   END DO
-                  WRITE (Vname(1,varid),'(a,i2.2)')                   &
-   &                    TRIM(ADJUSTL(Vinfo(1))), i
-                  WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', i
-                  WRITE (Vname(3,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(3)))
-                  WRITE (Vname(4,varid),'(a,a)')                      &
-   &                    TRIM(Vname(1,varid)), ', scalar, series'
-                  WRITE (Vname(5,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(5)))
-                END DO             
+                END DO
                 varid=varid+1
-              CASE ('idTbry(isouth,iDON(i))')
+              CASE ('idTbry(isouth,iDON(i,j))')
                 load=.FALSE.
                 varid=varid-1
-                DO i=1,Ndom
-                  varid=varid+1
-                  idTbry(isouth,iDON(i))=varid
-                  DO ng=1,Ngrids
-                    Fscale(varid,ng)=scale
-                    Iinfo(1,varid,ng)=gtype
+                DO j=1,Ndom
+                  DO i=1,N_Nsp
+                    varid=varid+1
+                    idTbry(isouth,iDON(i,j))=varid
+                    DO ng=1,Ngrids
+                      Fscale(varid,ng)=scale
+                      Iinfo(1,varid,ng)=gtype
+                    END DO
+                    WRITE (Vname(1,varid),'(a,i2.2,a,i2.2)')            &
+   &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
+                    WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
+   &                      TRIM(ADJUSTL(Vinfo(2)))                       &
+                          ,', functional group ', j, ', tracer type ', i
+                    WRITE (Vname(3,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(3)))
+                    WRITE (Vname(4,varid),'(a,a)')                      &
+   &                      TRIM(Vname(1,varid)), ', scalar, series'
+                    WRITE (Vname(5,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(5)))
                   END DO
-                  WRITE (Vname(1,varid),'(a,i2.2)')                   &
-   &                    TRIM(ADJUSTL(Vinfo(1))), i
-                  WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', i
-                  WRITE (Vname(3,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(3)))
-                  WRITE (Vname(4,varid),'(a,a)')                      &
-   &                    TRIM(Vname(1,varid)), ', scalar, series'
-                  WRITE (Vname(5,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(5)))
-                END DO             
+                END DO
                 varid=varid+1
-              CASE ('idTbry(inorth,iDON(i))')
+              CASE ('idTbry(inorth,iDON(i,j))')
                 load=.FALSE.
                 varid=varid-1
-                DO i=1,Ndom
-                  varid=varid+1
-                  idTbry(inorth,iDON(i))=varid
-                  DO ng=1,Ngrids
-                    Fscale(varid,ng)=scale
-                    Iinfo(1,varid,ng)=gtype
+                DO j=1,Ndom
+                  DO i=1,N_Nsp
+                    varid=varid+1
+                    idTbry(inorth,iDON(i,j))=varid
+                    DO ng=1,Ngrids
+                      Fscale(varid,ng)=scale
+                      Iinfo(1,varid,ng)=gtype
+                    END DO
+                    WRITE (Vname(1,varid),'(a,i2.2,a,i2.2)')            &
+   &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
+                    WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
+   &                      TRIM(ADJUSTL(Vinfo(2)))                       &
+                          ,', functional group ', j, ', tracer type ', i
+                    WRITE (Vname(3,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(3)))
+                    WRITE (Vname(4,varid),'(a,a)')                      &
+   &                      TRIM(Vname(1,varid)), ', scalar, series'
+                    WRITE (Vname(5,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(5)))
                   END DO
-                  WRITE (Vname(1,varid),'(a,i2.2)')                   &
-   &                    TRIM(ADJUSTL(Vinfo(1))), i
-                  WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', i
-                  WRITE (Vname(3,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(3)))
-                  WRITE (Vname(4,varid),'(a,a)')                      &
-   &                    TRIM(Vname(1,varid)), ', scalar, series'
-                  WRITE (Vname(5,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(5)))
-                END DO             
+                END DO
                 varid=varid+1
 
-              CASE ('idTbry(iwest,iPON(i))')
+              CASE ('idTbry(iwest,iPON(i,j))')
                 load=.FALSE.
                 varid=varid-1
-                DO i=1,Npom
-                  varid=varid+1
-                  idTbry(iwest,iPON(i))=varid
-                  DO ng=1,Ngrids
-                    Fscale(varid,ng)=scale
-                    Iinfo(1,varid,ng)=gtype
+                DO j=1,Npom
+                  DO i=1,N_Nsp
+                    varid=varid+1
+                    idTbry(iwest,iPON(i,j))=varid
+                    DO ng=1,Ngrids
+                      Fscale(varid,ng)=scale
+                      Iinfo(1,varid,ng)=gtype
+                    END DO
+                    WRITE (Vname(1,varid),'(a,i2.2,a,i2.2)')            &
+   &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
+                    WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
+   &                      TRIM(ADJUSTL(Vinfo(2)))                       &
+                          ,', functional group ', j, ', tracer type ', i
+                    WRITE (Vname(3,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(3)))
+                    WRITE (Vname(4,varid),'(a,a)')                      &
+   &                      TRIM(Vname(1,varid)), ', scalar, series'
+                    WRITE (Vname(5,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(5)))
                   END DO
-                  WRITE (Vname(1,varid),'(a,i2.2)')                   &
-   &                    TRIM(ADJUSTL(Vinfo(1))), i
-                  WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', i
-                  WRITE (Vname(3,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(3)))
-                  WRITE (Vname(4,varid),'(a,a)')                      &
-   &                    TRIM(Vname(1,varid)), ', scalar, series'
-                  WRITE (Vname(5,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(5)))
-                END DO             
+                END DO
                 varid=varid+1
-              CASE ('idTbry(ieast,iPON(i))')
+              CASE ('idTbry(ieast,iPON(i,j))')
                 load=.FALSE.
                 varid=varid-1
-                DO i=1,Npom
-                  varid=varid+1
-                  idTbry(ieast,iPON(i))=varid
-                  DO ng=1,Ngrids
-                    Fscale(varid,ng)=scale
-                    Iinfo(1,varid,ng)=gtype
+                DO j=1,Npom
+                  DO i=1,N_Nsp
+                    varid=varid+1
+                    idTbry(ieast,iPON(i,j))=varid
+                    DO ng=1,Ngrids
+                      Fscale(varid,ng)=scale
+                      Iinfo(1,varid,ng)=gtype
+                    END DO
+                    WRITE (Vname(1,varid),'(a,i2.2,a,i2.2)')            &
+   &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
+                    WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
+   &                      TRIM(ADJUSTL(Vinfo(2)))                       &
+                          ,', functional group ', j, ', tracer type ', i
+                    WRITE (Vname(3,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(3)))
+                    WRITE (Vname(4,varid),'(a,a)')                      &
+   &                      TRIM(Vname(1,varid)), ', scalar, series'
+                    WRITE (Vname(5,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(5)))
                   END DO
-                  WRITE (Vname(1,varid),'(a,i2.2)')                   &
-   &                    TRIM(ADJUSTL(Vinfo(1))), i
-                  WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', i
-                  WRITE (Vname(3,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(3)))
-                  WRITE (Vname(4,varid),'(a,a)')                      &
-   &                    TRIM(Vname(1,varid)), ', scalar, series'
-                  WRITE (Vname(5,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(5)))
-                END DO             
+                END DO
                 varid=varid+1
-              CASE ('idTbry(isouth,iPON(i))')
+              CASE ('idTbry(isouth,iPON(i,j))')
                 load=.FALSE.
                 varid=varid-1
-                DO i=1,Npom
-                  varid=varid+1
-                  idTbry(isouth,iPON(i))=varid
-                  DO ng=1,Ngrids
-                    Fscale(varid,ng)=scale
-                    Iinfo(1,varid,ng)=gtype
+                DO j=1,Npom
+                  DO i=1,N_Nsp
+                    varid=varid+1
+                    idTbry(isouth,iPON(i,j))=varid
+                    DO ng=1,Ngrids
+                      Fscale(varid,ng)=scale
+                      Iinfo(1,varid,ng)=gtype
+                    END DO
+                    WRITE (Vname(1,varid),'(a,i2.2,a,i2.2)')            &
+   &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
+                    WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
+   &                      TRIM(ADJUSTL(Vinfo(2)))                       &
+                          ,', functional group ', j, ', tracer type ', i
+                    WRITE (Vname(3,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(3)))
+                    WRITE (Vname(4,varid),'(a,a)')                      &
+   &                      TRIM(Vname(1,varid)), ', scalar, series'
+                    WRITE (Vname(5,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(5)))
                   END DO
-                  WRITE (Vname(1,varid),'(a,i2.2)')                   &
-   &                    TRIM(ADJUSTL(Vinfo(1))), i
-                  WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', i
-                  WRITE (Vname(3,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(3)))
-                  WRITE (Vname(4,varid),'(a,a)')                      &
-   &                    TRIM(Vname(1,varid)), ', scalar, series'
-                  WRITE (Vname(5,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(5)))
-                END DO             
+                END DO
                 varid=varid+1
-              CASE ('idTbry(inorth,iPON(i))')
+              CASE ('idTbry(inorth,iPON(i,j))')
                 load=.FALSE.
                 varid=varid-1
-                DO i=1,Npom
-                  varid=varid+1
-                  idTbry(inorth,iPON(i))=varid
-                  DO ng=1,Ngrids
-                    Fscale(varid,ng)=scale
-                    Iinfo(1,varid,ng)=gtype
+                DO j=1,Npom
+                  DO i=1,N_Nsp
+                    varid=varid+1
+                    idTbry(inorth,iPON(i,j))=varid
+                    DO ng=1,Ngrids
+                      Fscale(varid,ng)=scale
+                      Iinfo(1,varid,ng)=gtype
+                    END DO
+                    WRITE (Vname(1,varid),'(a,i2.2,a,i2.2)')            &
+   &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
+                    WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
+   &                      TRIM(ADJUSTL(Vinfo(2)))                       &
+                          ,', functional group ', j, ', tracer type ', i
+                    WRITE (Vname(3,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(3)))
+                    WRITE (Vname(4,varid),'(a,a)')                      &
+   &                      TRIM(Vname(1,varid)), ', scalar, series'
+                    WRITE (Vname(5,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(5)))
                   END DO
-                  WRITE (Vname(1,varid),'(a,i2.2)')                   &
-   &                    TRIM(ADJUSTL(Vinfo(1))), i
-                  WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', i
-                  WRITE (Vname(3,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(3)))
-                  WRITE (Vname(4,varid),'(a,a)')                      &
-   &                    TRIM(Vname(1,varid)), ', scalar, series'
-                  WRITE (Vname(5,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(5)))
-                END DO             
-                varid=varid+1
-
-              CASE ('idTbry(iwest,iDOP(i))')
-                load=.FALSE.
-                varid=varid-1
-                DO i=1,Ndom
-                  varid=varid+1
-                  idTbry(iwest,iDOP(i))=varid
-                  DO ng=1,Ngrids
-                    Fscale(varid,ng)=scale
-                    Iinfo(1,varid,ng)=gtype
-                  END DO
-                  WRITE (Vname(1,varid),'(a,i2.2)')                   &
-   &                    TRIM(ADJUSTL(Vinfo(1))), i
-                  WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', i
-                  WRITE (Vname(3,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(3)))
-                  WRITE (Vname(4,varid),'(a,a)')                      &
-   &                    TRIM(Vname(1,varid)), ', scalar, series'
-                  WRITE (Vname(5,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(5)))
-                END DO             
-                varid=varid+1
-              CASE ('idTbry(ieast,iDOP(i))')
-                load=.FALSE.
-                varid=varid-1
-                DO i=1,Ndom
-                  varid=varid+1
-                  idTbry(ieast,iDOP(i))=varid
-                  DO ng=1,Ngrids
-                    Fscale(varid,ng)=scale
-                    Iinfo(1,varid,ng)=gtype
-                  END DO
-                  WRITE (Vname(1,varid),'(a,i2.2)')                   &
-   &                    TRIM(ADJUSTL(Vinfo(1))), i
-                  WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', i
-                  WRITE (Vname(3,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(3)))
-                  WRITE (Vname(4,varid),'(a,a)')                      &
-   &                    TRIM(Vname(1,varid)), ', scalar, series'
-                  WRITE (Vname(5,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(5)))
-                END DO             
-                varid=varid+1
-              CASE ('idTbry(isouth,iDOP(i))')
-                load=.FALSE.
-                varid=varid-1
-                DO i=1,Ndom
-                  varid=varid+1
-                  idTbry(isouth,iDOP(i))=varid
-                  DO ng=1,Ngrids
-                    Fscale(varid,ng)=scale
-                    Iinfo(1,varid,ng)=gtype
-                  END DO
-                  WRITE (Vname(1,varid),'(a,i2.2)')                   &
-   &                    TRIM(ADJUSTL(Vinfo(1))), i
-                  WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', i
-                  WRITE (Vname(3,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(3)))
-                  WRITE (Vname(4,varid),'(a,a)')                      &
-   &                    TRIM(Vname(1,varid)), ', scalar, series'
-                  WRITE (Vname(5,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(5)))
-                END DO             
-                varid=varid+1
-              CASE ('idTbry(inorth,iDOP(i))')
-                load=.FALSE.
-                varid=varid-1
-                DO i=1,Ndom
-                  varid=varid+1
-                  idTbry(inorth,iDOP(i))=varid
-                  DO ng=1,Ngrids
-                    Fscale(varid,ng)=scale
-                    Iinfo(1,varid,ng)=gtype
-                  END DO
-                  WRITE (Vname(1,varid),'(a,i2.2)')                   &
-   &                    TRIM(ADJUSTL(Vinfo(1))), i
-                  WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', i
-                  WRITE (Vname(3,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(3)))
-                  WRITE (Vname(4,varid),'(a,a)')                      &
-   &                    TRIM(Vname(1,varid)), ', scalar, series'
-                  WRITE (Vname(5,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(5)))
-                END DO             
+                END DO
                 varid=varid+1
 
-              CASE ('idTbry(iwest,iPOP(i))')
+              CASE ('idTbry(iwest,iDOP(i,j))')
                 load=.FALSE.
                 varid=varid-1
-                DO i=1,Npom
-                  varid=varid+1
-                  idTbry(iwest,iPOP(i))=varid
-                  DO ng=1,Ngrids
-                    Fscale(varid,ng)=scale
-                    Iinfo(1,varid,ng)=gtype
+                DO j=1,Ndom
+                  DO i=1,N_Psp
+                    varid=varid+1
+                    idTbry(iwest,iDOP(i,j))=varid
+                    DO ng=1,Ngrids
+                      Fscale(varid,ng)=scale
+                      Iinfo(1,varid,ng)=gtype
+                    END DO
+                    WRITE (Vname(1,varid),'(a,i2.2,a,i2.2)')            &
+   &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
+                    WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
+   &                      TRIM(ADJUSTL(Vinfo(2)))                       &
+                          ,', functional group ', j, ', tracer type ', i
+                    WRITE (Vname(3,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(3)))
+                    WRITE (Vname(4,varid),'(a,a)')                      &
+   &                      TRIM(Vname(1,varid)), ', scalar, series'
+                    WRITE (Vname(5,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(5)))
                   END DO
-                  WRITE (Vname(1,varid),'(a,i2.2)')                   &
-   &                    TRIM(ADJUSTL(Vinfo(1))), i
-                  WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', i
-                  WRITE (Vname(3,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(3)))
-                  WRITE (Vname(4,varid),'(a,a)')                      &
-   &                    TRIM(Vname(1,varid)), ', scalar, series'
-                  WRITE (Vname(5,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(5)))
-                END DO             
+                END DO
                 varid=varid+1
-              CASE ('idTbry(ieast,iPOP(i))')
+               CASE ('idTbry(ieast,iDOP(i,j))')
                 load=.FALSE.
                 varid=varid-1
-                DO i=1,Npom
-                  varid=varid+1
-                  idTbry(ieast,iPOP(i))=varid
-                  DO ng=1,Ngrids
-                    Fscale(varid,ng)=scale
-                    Iinfo(1,varid,ng)=gtype
+                DO j=1,Ndom
+                  DO i=1,N_Psp
+                    varid=varid+1
+                    idTbry(ieast,iDOP(i,j))=varid
+                    DO ng=1,Ngrids
+                      Fscale(varid,ng)=scale
+                      Iinfo(1,varid,ng)=gtype
+                    END DO
+                    WRITE (Vname(1,varid),'(a,i2.2,a,i2.2)')            &
+   &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
+                    WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
+   &                      TRIM(ADJUSTL(Vinfo(2)))                       &
+                          ,', functional group ', j, ', tracer type ', i
+                    WRITE (Vname(3,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(3)))
+                    WRITE (Vname(4,varid),'(a,a)')                      &
+   &                      TRIM(Vname(1,varid)), ', scalar, series'
+                    WRITE (Vname(5,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(5)))
                   END DO
-                  WRITE (Vname(1,varid),'(a,i2.2)')                   &
-   &                    TRIM(ADJUSTL(Vinfo(1))), i
-                  WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', i
-                  WRITE (Vname(3,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(3)))
-                  WRITE (Vname(4,varid),'(a,a)')                      &
-   &                    TRIM(Vname(1,varid)), ', scalar, series'
-                  WRITE (Vname(5,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(5)))
-                END DO             
+                END DO
                 varid=varid+1
-              CASE ('idTbry(isouth,iPOP(i))')
+              CASE ('idTbry(isouth,iDOP(i,j))')
                 load=.FALSE.
                 varid=varid-1
-                DO i=1,Npom
-                  varid=varid+1
-                  idTbry(isouth,iPOP(i))=varid
-                  DO ng=1,Ngrids
-                    Fscale(varid,ng)=scale
-                    Iinfo(1,varid,ng)=gtype
+                DO j=1,Ndom
+                  DO i=1,N_Psp
+                    varid=varid+1
+                    idTbry(isouth,iDOP(i,j))=varid
+                    DO ng=1,Ngrids
+                      Fscale(varid,ng)=scale
+                      Iinfo(1,varid,ng)=gtype
+                    END DO
+                    WRITE (Vname(1,varid),'(a,i2.2,a,i2.2)')            &
+   &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
+                    WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
+   &                      TRIM(ADJUSTL(Vinfo(2)))                       &
+                          ,', functional group ', j, ', tracer type ', i
+                    WRITE (Vname(3,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(3)))
+                    WRITE (Vname(4,varid),'(a,a)')                      &
+   &                      TRIM(Vname(1,varid)), ', scalar, series'
+                    WRITE (Vname(5,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(5)))
                   END DO
-                  WRITE (Vname(1,varid),'(a,i2.2)')                   &
-   &                    TRIM(ADJUSTL(Vinfo(1))), i
-                  WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', i
-                  WRITE (Vname(3,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(3)))
-                  WRITE (Vname(4,varid),'(a,a)')                      &
-   &                    TRIM(Vname(1,varid)), ', scalar, series'
-                  WRITE (Vname(5,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(5)))
-                END DO             
+                END DO
                 varid=varid+1
-              CASE ('idTbry(inorth,iPOP(i))')
+              CASE ('idTbry(inorth,iDOP(i,j))')
                 load=.FALSE.
                 varid=varid-1
-                DO i=1,Npom
-                  varid=varid+1
-                  idTbry(inorth,iPOP(i))=varid
-                  DO ng=1,Ngrids
-                    Fscale(varid,ng)=scale
-                    Iinfo(1,varid,ng)=gtype
+                DO j=1,Ndom
+                  DO i=1,N_Psp
+                    varid=varid+1
+                    idTbry(inorth,iDOP(i,j))=varid
+                    DO ng=1,Ngrids
+                      Fscale(varid,ng)=scale
+                      Iinfo(1,varid,ng)=gtype
+                    END DO
+                    WRITE (Vname(1,varid),'(a,i2.2,a,i2.2)')            &
+   &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
+                    WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
+   &                      TRIM(ADJUSTL(Vinfo(2)))                       &
+                          ,', functional group ', j, ', tracer type ', i
+                    WRITE (Vname(3,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(3)))
+                    WRITE (Vname(4,varid),'(a,a)')                      &
+   &                      TRIM(Vname(1,varid)), ', scalar, series'
+                    WRITE (Vname(5,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(5)))
                   END DO
-                  WRITE (Vname(1,varid),'(a,i2.2)')                   &
-   &                    TRIM(ADJUSTL(Vinfo(1))), i
-                  WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', i
-                  WRITE (Vname(3,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(3)))
-                  WRITE (Vname(4,varid),'(a,a)')                      &
-   &                    TRIM(Vname(1,varid)), ', scalar, series'
-                  WRITE (Vname(5,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(5)))
-                END DO             
+                END DO
                 varid=varid+1
-# endif
-#endif
+
+              CASE ('idTbry(iwest,iPOP(i,j))')
+                load=.FALSE.
+                varid=varid-1
+                DO j=1,Npom
+                  DO i=1,N_Psp
+                    varid=varid+1
+                    idTbry(iwest,iPOP(i,j))=varid
+                    DO ng=1,Ngrids
+                      Fscale(varid,ng)=scale
+                      Iinfo(1,varid,ng)=gtype
+                    END DO
+                    WRITE (Vname(1,varid),'(a,i2.2,a,i2.2)')            &
+   &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
+                    WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
+   &                      TRIM(ADJUSTL(Vinfo(2)))                       &
+                          ,', functional group ', j, ', tracer type ', i
+                    WRITE (Vname(3,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(3)))
+                    WRITE (Vname(4,varid),'(a,a)')                      &
+   &                      TRIM(Vname(1,varid)), ', scalar, series'
+                    WRITE (Vname(5,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(5)))
+                  END DO
+                END DO
+                varid=varid+1
+              CASE ('idTbry(ieast,iPOP(i,j))')
+                load=.FALSE.
+                varid=varid-1
+                DO j=1,Npom
+                  DO i=1,N_Psp
+                    varid=varid+1
+                    idTbry(ieast,iPOP(i,j))=varid
+                    DO ng=1,Ngrids
+                      Fscale(varid,ng)=scale
+                      Iinfo(1,varid,ng)=gtype
+                    END DO
+                    WRITE (Vname(1,varid),'(a,i2.2,a,i2.2)')            &
+   &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
+                    WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
+   &                      TRIM(ADJUSTL(Vinfo(2)))                       &
+                          ,', functional group ', j, ', tracer type ', i
+                    WRITE (Vname(3,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(3)))
+                    WRITE (Vname(4,varid),'(a,a)')                      &
+   &                      TRIM(Vname(1,varid)), ', scalar, series'
+                    WRITE (Vname(5,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(5)))
+                  END DO
+                END DO
+                varid=varid+1
+              CASE ('idTbry(isouth,iPOP(i,j))')
+                load=.FALSE.
+                varid=varid-1
+                DO j=1,Npom
+                  DO i=1,N_Psp
+                    varid=varid+1
+                    idTbry(isouth,iPOP(i,j))=varid
+                    DO ng=1,Ngrids
+                      Fscale(varid,ng)=scale
+                      Iinfo(1,varid,ng)=gtype
+                    END DO
+                    WRITE (Vname(1,varid),'(a,i2.2,a,i2.2)')            &
+   &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
+                    WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
+   &                      TRIM(ADJUSTL(Vinfo(2)))                       &
+                          ,', functional group ', j, ', tracer type ', i
+                    WRITE (Vname(3,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(3)))
+                    WRITE (Vname(4,varid),'(a,a)')                      &
+   &                      TRIM(Vname(1,varid)), ', scalar, series'
+                    WRITE (Vname(5,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(5)))
+                  END DO
+                END DO
+                varid=varid+1
+              CASE ('idTbry(inorth,iPOP(i,j))')
+                load=.FALSE.
+                varid=varid-1
+                DO j=1,Npom
+                  DO i=1,N_Psp
+                    varid=varid+1
+                    idTbry(inorth,iPOP(i,j))=varid
+                    DO ng=1,Ngrids
+                      Fscale(varid,ng)=scale
+                      Iinfo(1,varid,ng)=gtype
+                    END DO
+                    WRITE (Vname(1,varid),'(a,i2.2,a,i2.2)')            &
+   &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
+                    WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
+   &                      TRIM(ADJUSTL(Vinfo(2)))                       &
+                          ,', functional group ', j, ', tracer type ', i
+                    WRITE (Vname(3,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(3)))
+                    WRITE (Vname(4,varid),'(a,a)')                      &
+   &                      TRIM(Vname(1,varid)), ', scalar, series'
+                    WRITE (Vname(5,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(5)))
+                  END DO
+                END DO
+                varid=varid+1
+
+              CASE ('idTbry(iwest,iPhyC(i,j))')
+                load=.FALSE.
+                varid=varid-1
+                DO j=1,Nphy
+                  DO i=1,N_Csp
+                    varid=varid+1
+                    idTbry(iwest,iPhyC(i,j))=varid
+                    DO ng=1,Ngrids
+                      Fscale(varid,ng)=scale
+                      Iinfo(1,varid,ng)=gtype
+                    END DO
+                    WRITE (Vname(1,varid),'(a,i2.2,a,i2.2)')            &
+   &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
+                    WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
+   &                      TRIM(ADJUSTL(Vinfo(2)))                       &
+                          ,', functional group ', j, ', tracer type ', i
+                    WRITE (Vname(3,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(3)))
+                    WRITE (Vname(4,varid),'(a,a)')                      &
+   &                      TRIM(Vname(1,varid)), ', scalar, series'
+                    WRITE (Vname(5,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(5)))
+                  END DO
+                END DO
+                varid=varid+1
+              CASE ('idTbry(ieast,iPhyC(i,j))')
+                load=.FALSE.
+                varid=varid-1
+                DO j=1,Nphy
+                  DO i=1,N_Csp
+                    varid=varid+1
+                    idTbry(ieast,iPhyC(i,j))=varid
+                    DO ng=1,Ngrids
+                      Fscale(varid,ng)=scale
+                      Iinfo(1,varid,ng)=gtype
+                    END DO
+                    WRITE (Vname(1,varid),'(a,i2.2,a,i2.2)')            &
+   &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
+                    WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
+   &                      TRIM(ADJUSTL(Vinfo(2)))                       &
+                          ,', functional group ', j, ', tracer type ', i
+                    WRITE (Vname(3,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(3)))
+                    WRITE (Vname(4,varid),'(a,a)')                      &
+   &                      TRIM(Vname(1,varid)), ', scalar, series'
+                    WRITE (Vname(5,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(5)))
+                  END DO
+                END DO
+                varid=varid+1
+              CASE ('idTbry(isouth,iPhyC(i,j))')
+                load=.FALSE.
+                varid=varid-1
+                DO j=1,Nphy
+                  DO i=1,N_Csp
+                    varid=varid+1
+                    idTbry(isouth,iPhyC(i,j))=varid
+                    DO ng=1,Ngrids
+                      Fscale(varid,ng)=scale
+                      Iinfo(1,varid,ng)=gtype
+                    END DO
+                    WRITE (Vname(1,varid),'(a,i2.2,a,i2.2)')            &
+   &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
+                    WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
+   &                      TRIM(ADJUSTL(Vinfo(2)))                       &
+                          ,', functional group ', j, ', tracer type ', i
+                    WRITE (Vname(3,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(3)))
+                    WRITE (Vname(4,varid),'(a,a)')                      &
+   &                      TRIM(Vname(1,varid)), ', scalar, series'
+                    WRITE (Vname(5,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(5)))
+                  END DO
+                END DO
+                varid=varid+1
+              CASE ('idTbry(inorth,iPhyC(i,j))')
+                load=.FALSE.
+                varid=varid-1
+                DO j=1,Nphy
+                  DO i=1,N_Csp
+                    varid=varid+1
+                    idTbry(inorth,iPhyC(i,j))=varid
+                    DO ng=1,Ngrids
+                      Fscale(varid,ng)=scale
+                      Iinfo(1,varid,ng)=gtype
+                    END DO
+                    WRITE (Vname(1,varid),'(a,i2.2,a,i2.2)')            &
+   &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
+                    WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
+   &                      TRIM(ADJUSTL(Vinfo(2)))                       &
+                          ,', functional group ', j, ', tracer type ', i
+                    WRITE (Vname(3,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(3)))
+                    WRITE (Vname(4,varid),'(a,a)')                      &
+   &                      TRIM(Vname(1,varid)), ', scalar, series'
+                    WRITE (Vname(5,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(5)))
+                  END DO
+                END DO
+                varid=varid+1
+
+              CASE ('idTbry(iwest,iZooC(i,j))')
+                load=.FALSE.
+                varid=varid-1
+                DO j=1,Nzoo
+                  DO i=1,N_Csp
+                    varid=varid+1
+                    idTbry(iwest,iZooC(i,j))=varid
+                    DO ng=1,Ngrids
+                      Fscale(varid,ng)=scale
+                      Iinfo(1,varid,ng)=gtype
+                    END DO
+                    WRITE (Vname(1,varid),'(a,i2.2,a,i2.2)')            &
+   &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
+                    WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
+   &                      TRIM(ADJUSTL(Vinfo(2)))                       &
+                          ,', functional group ', j, ', tracer type ', i
+                    WRITE (Vname(3,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(3)))
+                    WRITE (Vname(4,varid),'(a,a)')                      &
+   &                      TRIM(Vname(1,varid)), ', scalar, series'
+                    WRITE (Vname(5,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(5)))
+                  END DO
+                END DO
+                varid=varid+1
+              CASE ('idTbry(ieast,iZooC(i,j))')
+                load=.FALSE.
+                varid=varid-1
+                DO j=1,Nzoo
+                  DO i=1,N_Csp
+                    varid=varid+1
+                    idTbry(ieast,iZooC(i,j))=varid
+                    DO ng=1,Ngrids
+                      Fscale(varid,ng)=scale
+                      Iinfo(1,varid,ng)=gtype
+                    END DO
+                    WRITE (Vname(1,varid),'(a,i2.2,a,i2.2)')            &
+   &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
+                    WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
+   &                      TRIM(ADJUSTL(Vinfo(2)))                       &
+                          ,', functional group ', j, ', tracer type ', i
+                    WRITE (Vname(3,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(3)))
+                    WRITE (Vname(4,varid),'(a,a)')                      &
+   &                      TRIM(Vname(1,varid)), ', scalar, series'
+                    WRITE (Vname(5,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(5)))
+                  END DO
+                END DO
+                varid=varid+1
+              CASE ('idTbry(isouth,iZooC(i,j))')
+                load=.FALSE.
+                varid=varid-1
+                DO j=1,Nzoo
+                  DO i=1,N_Csp
+                    varid=varid+1
+                    idTbry(isouth,iZooC(i,j))=varid
+                    DO ng=1,Ngrids
+                      Fscale(varid,ng)=scale
+                      Iinfo(1,varid,ng)=gtype
+                    END DO
+                    WRITE (Vname(1,varid),'(a,i2.2,a,i2.2)')            &
+   &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
+                    WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
+   &                      TRIM(ADJUSTL(Vinfo(2)))                       &
+                          ,', functional group ', j, ', tracer type ', i
+                    WRITE (Vname(3,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(3)))
+                    WRITE (Vname(4,varid),'(a,a)')                      &
+   &                      TRIM(Vname(1,varid)), ', scalar, series'
+                    WRITE (Vname(5,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(5)))
+                  END DO
+                END DO
+                varid=varid+1
+              CASE ('idTbry(inorth,iZooC(i,j))')
+                load=.FALSE.
+                varid=varid-1
+                DO j=1,Nzoo
+                  DO i=1,N_Csp
+                    varid=varid+1
+                    idTbry(inorth,iZooC(i,j))=varid
+                    DO ng=1,Ngrids
+                      Fscale(varid,ng)=scale
+                      Iinfo(1,varid,ng)=gtype
+                    END DO
+                    WRITE (Vname(1,varid),'(a,i2.2,a,i2.2)')            &
+   &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
+                    WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
+   &                      TRIM(ADJUSTL(Vinfo(2)))                       &
+                          ,', functional group ', j, ', tracer type ', i
+                    WRITE (Vname(3,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(3)))
+                    WRITE (Vname(4,varid),'(a,a)')                      &
+   &                      TRIM(Vname(1,varid)), ', scalar, series'
+                    WRITE (Vname(5,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(5)))
+                  END DO
+                END DO
+                varid=varid+1
+
+              CASE ('idTbry(iwest,iPhyN(i,j))')
+                load=.FALSE.
+                varid=varid-1
+                DO j=1,Nphy
+                  DO i=1,N_Nsp
+                    varid=varid+1
+                    idTbry(iwest,iPhyN(i,j))=varid
+                    DO ng=1,Ngrids
+                      Fscale(varid,ng)=scale
+                      Iinfo(1,varid,ng)=gtype
+                    END DO
+                    WRITE (Vname(1,varid),'(a,i2.2,a,i2.2)')            &
+   &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
+                    WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
+   &                      TRIM(ADJUSTL(Vinfo(2)))                       &
+                          ,', functional group ', j, ', tracer type ', i
+                    WRITE (Vname(3,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(3)))
+                    WRITE (Vname(4,varid),'(a,a)')                      &
+   &                      TRIM(Vname(1,varid)), ', scalar, series'
+                    WRITE (Vname(5,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(5)))
+                  END DO
+                END DO
+                varid=varid+1
+              CASE ('idTbry(ieast,iPhyN(i,j))')
+                load=.FALSE.
+                varid=varid-1
+                DO j=1,Nphy
+                  DO i=1,N_Nsp
+                    varid=varid+1
+                    idTbry(ieast,iPhyN(i,j))=varid
+                    DO ng=1,Ngrids
+                      Fscale(varid,ng)=scale
+                      Iinfo(1,varid,ng)=gtype
+                    END DO
+                    WRITE (Vname(1,varid),'(a,i2.2,a,i2.2)')            &
+   &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
+                    WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
+   &                      TRIM(ADJUSTL(Vinfo(2)))                       &
+                          ,', functional group ', j, ', tracer type ', i
+                    WRITE (Vname(3,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(3)))
+                    WRITE (Vname(4,varid),'(a,a)')                      &
+   &                      TRIM(Vname(1,varid)), ', scalar, series'
+                    WRITE (Vname(5,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(5)))
+                  END DO
+                END DO
+                varid=varid+1
+              CASE ('idTbry(isouth,iPhyN(i,j))')
+                load=.FALSE.
+                varid=varid-1
+                DO j=1,Nphy
+                  DO i=1,N_Nsp
+                    varid=varid+1
+                    idTbry(isouth,iPhyN(i,j))=varid
+                    DO ng=1,Ngrids
+                      Fscale(varid,ng)=scale
+                      Iinfo(1,varid,ng)=gtype
+                    END DO
+                    WRITE (Vname(1,varid),'(a,i2.2,a,i2.2)')            &
+   &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
+                    WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
+   &                      TRIM(ADJUSTL(Vinfo(2)))                       &
+                          ,', functional group ', j, ', tracer type ', i
+                    WRITE (Vname(3,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(3)))
+                    WRITE (Vname(4,varid),'(a,a)')                      &
+   &                      TRIM(Vname(1,varid)), ', scalar, series'
+                    WRITE (Vname(5,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(5)))
+                  END DO
+                END DO
+                varid=varid+1
+              CASE ('idTbry(inorth,iPhyN(i,j))')
+                load=.FALSE.
+                varid=varid-1
+                DO j=1,Nphy
+                  DO i=1,N_Nsp
+                    varid=varid+1
+                    idTbry(inorth,iPhyN(i,j))=varid
+                    DO ng=1,Ngrids
+                      Fscale(varid,ng)=scale
+                      Iinfo(1,varid,ng)=gtype
+                    END DO
+                    WRITE (Vname(1,varid),'(a,i2.2,a,i2.2)')            &
+   &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
+                    WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
+   &                      TRIM(ADJUSTL(Vinfo(2)))                       &
+                          ,', functional group ', j, ', tracer type ', i
+                    WRITE (Vname(3,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(3)))
+                    WRITE (Vname(4,varid),'(a,a)')                      &
+   &                      TRIM(Vname(1,varid)), ', scalar, series'
+                    WRITE (Vname(5,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(5)))
+                  END DO
+                END DO
+                varid=varid+1
+
+              CASE ('idTbry(iwest,iZooN(i,j))')
+                load=.FALSE.
+                varid=varid-1
+                DO j=1,Nzoo
+                  DO i=1,N_Nsp
+                    varid=varid+1
+                    idTbry(iwest,iZooN(i,j))=varid
+                    DO ng=1,Ngrids
+                      Fscale(varid,ng)=scale
+                      Iinfo(1,varid,ng)=gtype
+                    END DO
+                    WRITE (Vname(1,varid),'(a,i2.2,a,i2.2)')            &
+   &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
+                    WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
+   &                      TRIM(ADJUSTL(Vinfo(2)))                       &
+                          ,', functional group ', j, ', tracer type ', i
+                    WRITE (Vname(3,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(3)))
+                    WRITE (Vname(4,varid),'(a,a)')                      &
+   &                      TRIM(Vname(1,varid)), ', scalar, series'
+                    WRITE (Vname(5,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(5)))
+                  END DO
+                END DO
+                varid=varid+1
+              CASE ('idTbry(ieast,iZooN(i,j))')
+                load=.FALSE.
+                varid=varid-1
+                DO j=1,Nzoo
+                  DO i=1,N_Nsp
+                    varid=varid+1
+                    idTbry(ieast,iZooN(i,j))=varid
+                    DO ng=1,Ngrids
+                      Fscale(varid,ng)=scale
+                      Iinfo(1,varid,ng)=gtype
+                    END DO
+                    WRITE (Vname(1,varid),'(a,i2.2,a,i2.2)')            &
+   &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
+                    WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
+   &                      TRIM(ADJUSTL(Vinfo(2)))                       &
+                          ,', functional group ', j, ', tracer type ', i
+                    WRITE (Vname(3,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(3)))
+                    WRITE (Vname(4,varid),'(a,a)')                      &
+   &                      TRIM(Vname(1,varid)), ', scalar, series'
+                    WRITE (Vname(5,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(5)))
+                  END DO
+                END DO
+                varid=varid+1
+              CASE ('idTbry(isouth,iZooN(i,j))')
+                load=.FALSE.
+                varid=varid-1
+                DO j=1,Nzoo
+                  DO i=1,N_Nsp
+                    varid=varid+1
+                    idTbry(isouth,iZooN(i,j))=varid
+                    DO ng=1,Ngrids
+                      Fscale(varid,ng)=scale
+                      Iinfo(1,varid,ng)=gtype
+                    END DO
+                    WRITE (Vname(1,varid),'(a,i2.2,a,i2.2)')            &
+   &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
+                    WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
+   &                      TRIM(ADJUSTL(Vinfo(2)))                       &
+                          ,', functional group ', j, ', tracer type ', i
+                    WRITE (Vname(3,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(3)))
+                    WRITE (Vname(4,varid),'(a,a)')                      &
+   &                      TRIM(Vname(1,varid)), ', scalar, series'
+                    WRITE (Vname(5,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(5)))
+                  END DO
+                END DO
+                varid=varid+1
+              CASE ('idTbry(inorth,iZooN(i,j))')
+                load=.FALSE.
+                varid=varid-1
+                DO j=1,Nzoo
+                  DO i=1,N_Nsp
+                    varid=varid+1
+                    idTbry(inorth,iZooN(i,j))=varid
+                    DO ng=1,Ngrids
+                      Fscale(varid,ng)=scale
+                      Iinfo(1,varid,ng)=gtype
+                    END DO
+                    WRITE (Vname(1,varid),'(a,i2.2,a,i2.2)')            &
+   &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
+                    WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
+   &                      TRIM(ADJUSTL(Vinfo(2)))                       &
+                          ,', functional group ', j, ', tracer type ', i
+                    WRITE (Vname(3,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(3)))
+                    WRITE (Vname(4,varid),'(a,a)')                      &
+   &                      TRIM(Vname(1,varid)), ', scalar, series'
+                    WRITE (Vname(5,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(5)))
+                  END DO
+                END DO
+                varid=varid+1
+
+              CASE ('idTbry(iwest,iPhyP(i,j))')
+                load=.FALSE.
+                varid=varid-1
+                DO j=1,Nphy
+                  DO i=1,N_Psp
+                    varid=varid+1
+                    idTbry(iwest,iPhyP(i,j))=varid
+                    DO ng=1,Ngrids
+                      Fscale(varid,ng)=scale
+                      Iinfo(1,varid,ng)=gtype
+                    END DO
+                    WRITE (Vname(1,varid),'(a,i2.2,a,i2.2)')            &
+   &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
+                    WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
+   &                      TRIM(ADJUSTL(Vinfo(2)))                       &
+                          ,', functional group ', j, ', tracer type ', i
+                    WRITE (Vname(3,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(3)))
+                    WRITE (Vname(4,varid),'(a,a)')                      &
+   &                      TRIM(Vname(1,varid)), ', scalar, series'
+                    WRITE (Vname(5,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(5)))
+                  END DO
+                END DO
+                varid=varid+1
+              CASE ('idTbry(ieast,iPhyP(i,j))')
+                load=.FALSE.
+                varid=varid-1
+                DO j=1,Nphy
+                  DO i=1,N_Psp
+                    varid=varid+1
+                    idTbry(ieast,iPhyP(i,j))=varid
+                    DO ng=1,Ngrids
+                      Fscale(varid,ng)=scale
+                      Iinfo(1,varid,ng)=gtype
+                    END DO
+                    WRITE (Vname(1,varid),'(a,i2.2,a,i2.2)')            &
+   &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
+                    WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
+   &                      TRIM(ADJUSTL(Vinfo(2)))                       &
+                          ,', functional group ', j, ', tracer type ', i
+                    WRITE (Vname(3,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(3)))
+                    WRITE (Vname(4,varid),'(a,a)')                      &
+   &                      TRIM(Vname(1,varid)), ', scalar, series'
+                    WRITE (Vname(5,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(5)))
+                  END DO
+                END DO
+                varid=varid+1
+              CASE ('idTbry(isouth,iPhyP(i,j))')
+                load=.FALSE.
+                varid=varid-1
+                DO j=1,Nphy
+                  DO i=1,N_Psp
+                    varid=varid+1
+                    idTbry(isouth,iPhyP(i,j))=varid
+                    DO ng=1,Ngrids
+                      Fscale(varid,ng)=scale
+                      Iinfo(1,varid,ng)=gtype
+                    END DO
+                    WRITE (Vname(1,varid),'(a,i2.2,a,i2.2)')            &
+   &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
+                    WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
+   &                      TRIM(ADJUSTL(Vinfo(2)))                       &
+                          ,', functional group ', j, ', tracer type ', i
+                    WRITE (Vname(3,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(3)))
+                    WRITE (Vname(4,varid),'(a,a)')                      &
+   &                      TRIM(Vname(1,varid)), ', scalar, series'
+                    WRITE (Vname(5,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(5)))
+                  END DO
+                END DO
+                varid=varid+1
+              CASE ('idTbry(inorth,iPhyP(i,j))')
+                load=.FALSE.
+                varid=varid-1
+                DO j=1,Nphy
+                  DO i=1,N_Psp
+                    varid=varid+1
+                    idTbry(inorth,iPhyP(i,j))=varid
+                    DO ng=1,Ngrids
+                      Fscale(varid,ng)=scale
+                      Iinfo(1,varid,ng)=gtype
+                    END DO
+                    WRITE (Vname(1,varid),'(a,i2.2,a,i2.2)')            &
+   &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
+                    WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
+   &                      TRIM(ADJUSTL(Vinfo(2)))                       &
+                          ,', functional group ', j, ', tracer type ', i
+                    WRITE (Vname(3,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(3)))
+                    WRITE (Vname(4,varid),'(a,a)')                      &
+   &                      TRIM(Vname(1,varid)), ', scalar, series'
+                    WRITE (Vname(5,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(5)))
+                  END DO
+                END DO
+                varid=varid+1
+
+              CASE ('idTbry(iwest,iZooP(i,j))')
+                load=.FALSE.
+                varid=varid-1
+                DO j=1,Nzoo
+                  DO i=1,N_Psp
+                    varid=varid+1
+                    idTbry(iwest,iZooP(i,j))=varid
+                    DO ng=1,Ngrids
+                      Fscale(varid,ng)=scale
+                      Iinfo(1,varid,ng)=gtype
+                    END DO
+                    WRITE (Vname(1,varid),'(a,i2.2,a,i2.2)')            &
+   &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
+                    WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
+   &                      TRIM(ADJUSTL(Vinfo(2)))                       &
+                          ,', functional group ', j, ', tracer type ', i
+                    WRITE (Vname(3,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(3)))
+                    WRITE (Vname(4,varid),'(a,a)')                      &
+   &                      TRIM(Vname(1,varid)), ', scalar, series'
+                    WRITE (Vname(5,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(5)))
+                  END DO
+                END DO
+                varid=varid+1
+              CASE ('idTbry(ieast,iZooP(i,j))')
+                load=.FALSE.
+                varid=varid-1
+                DO j=1,Nzoo
+                  DO i=1,N_Psp
+                    varid=varid+1
+                    idTbry(ieast,iZooP(i,j))=varid
+                    DO ng=1,Ngrids
+                      Fscale(varid,ng)=scale
+                      Iinfo(1,varid,ng)=gtype
+                    END DO
+                    WRITE (Vname(1,varid),'(a,i2.2,a,i2.2)')            &
+   &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
+                    WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
+   &                      TRIM(ADJUSTL(Vinfo(2)))                       &
+                          ,', functional group ', j, ', tracer type ', i
+                    WRITE (Vname(3,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(3)))
+                    WRITE (Vname(4,varid),'(a,a)')                      &
+   &                      TRIM(Vname(1,varid)), ', scalar, series'
+                    WRITE (Vname(5,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(5)))
+                  END DO
+                END DO
+                varid=varid+1
+              CASE ('idTbry(isouth,iZooP(i,j))')
+                load=.FALSE.
+                varid=varid-1
+                DO j=1,Nzoo
+                  DO i=1,N_Psp
+                    varid=varid+1
+                    idTbry(isouth,iZooP(i,j))=varid
+                    DO ng=1,Ngrids
+                      Fscale(varid,ng)=scale
+                      Iinfo(1,varid,ng)=gtype
+                    END DO
+                    WRITE (Vname(1,varid),'(a,i2.2,a,i2.2)')            &
+   &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
+                    WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
+   &                      TRIM(ADJUSTL(Vinfo(2)))                       &
+                          ,', functional group ', j, ', tracer type ', i
+                    WRITE (Vname(3,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(3)))
+                    WRITE (Vname(4,varid),'(a,a)')                      &
+   &                      TRIM(Vname(1,varid)), ', scalar, series'
+                    WRITE (Vname(5,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(5)))
+                  END DO
+                END DO
+                varid=varid+1
+              CASE ('idTbry(inorth,iZooP(i,j))')
+                load=.FALSE.
+                varid=varid-1
+                DO j=1,Nzoo
+                  DO i=1,N_Psp
+                    varid=varid+1
+                    idTbry(inorth,iZooP(i,j))=varid
+                    DO ng=1,Ngrids
+                      Fscale(varid,ng)=scale
+                      Iinfo(1,varid,ng)=gtype
+                    END DO
+                    WRITE (Vname(1,varid),'(a,i2.2,a,i2.2)')            &
+   &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
+                    WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
+   &                      TRIM(ADJUSTL(Vinfo(2)))                       &
+                          ,', functional group ', j, ', tracer type ', i
+                    WRITE (Vname(3,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(3)))
+                    WRITE (Vname(4,varid),'(a,a)')                      &
+   &                      TRIM(Vname(1,varid)), ', scalar, series'
+                    WRITE (Vname(5,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(5)))
+                  END DO
+                END DO
+                varid=varid+1
+
+              CASE ('idTbry(iwest,iPIC(i,j))')
+                load=.FALSE.
+                varid=varid-1
+                DO j=1,Npim
+                  DO i=1,N_Csp
+                    varid=varid+1
+                    idTbry(iwest,iPIC(i,j))=varid
+                    DO ng=1,Ngrids
+                      Fscale(varid,ng)=scale
+                      Iinfo(1,varid,ng)=gtype
+                    END DO
+                    WRITE (Vname(1,varid),'(a,i2.2,a,i2.2)')            &
+   &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
+                    WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
+   &                      TRIM(ADJUSTL(Vinfo(2)))                       &
+                          ,', functional group ', j, ', tracer type ', i
+                    WRITE (Vname(3,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(3)))
+                    WRITE (Vname(4,varid),'(a,a)')                      &
+   &                      TRIM(Vname(1,varid)), ', scalar, series'
+                    WRITE (Vname(5,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(5)))
+                  END DO
+                END DO
+                varid=varid+1
+              CASE ('idTbry(ieast,iPIC(i,j))')
+                load=.FALSE.
+                varid=varid-1
+                DO j=1,Npim
+                  DO i=1,N_Csp
+                    varid=varid+1
+                    idTbry(ieast,iPIC(i,j))=varid
+                    DO ng=1,Ngrids
+                      Fscale(varid,ng)=scale
+                      Iinfo(1,varid,ng)=gtype
+                    END DO
+                    WRITE (Vname(1,varid),'(a,i2.2,a,i2.2)')            &
+   &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
+                    WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
+   &                      TRIM(ADJUSTL(Vinfo(2)))                       &
+                          ,', functional group ', j, ', tracer type ', i
+                    WRITE (Vname(3,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(3)))
+                    WRITE (Vname(4,varid),'(a,a)')                      &
+   &                      TRIM(Vname(1,varid)), ', scalar, series'
+                    WRITE (Vname(5,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(5)))
+                  END DO
+                END DO
+                varid=varid+1
+              CASE ('idTbry(isouth,iPIC(i,j))')
+                load=.FALSE.
+                varid=varid-1
+                DO j=1,Npim
+                  DO i=1,N_Csp
+                    varid=varid+1
+                    idTbry(isouth,iPIC(i,j))=varid
+                    DO ng=1,Ngrids
+                      Fscale(varid,ng)=scale
+                      Iinfo(1,varid,ng)=gtype
+                    END DO
+                    WRITE (Vname(1,varid),'(a,i2.2,a,i2.2)')            &
+   &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
+                    WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
+   &                      TRIM(ADJUSTL(Vinfo(2)))                       &
+                          ,', functional group ', j, ', tracer type ', i
+                    WRITE (Vname(3,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(3)))
+                    WRITE (Vname(4,varid),'(a,a)')                      &
+   &                      TRIM(Vname(1,varid)), ', scalar, series'
+                    WRITE (Vname(5,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(5)))
+                  END DO
+                END DO
+                varid=varid+1
+              CASE ('idTbry(inorth,iPIC(i,j))')
+                load=.FALSE.
+                varid=varid-1
+                DO j=1,Npim
+                  DO i=1,N_Csp
+                    varid=varid+1
+                    idTbry(inorth,iPIC(i,j))=varid
+                    DO ng=1,Ngrids
+                      Fscale(varid,ng)=scale
+                      Iinfo(1,varid,ng)=gtype
+                    END DO
+                    WRITE (Vname(1,varid),'(a,i2.2,a,i2.2)')            &
+   &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
+                    WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
+   &                      TRIM(ADJUSTL(Vinfo(2)))                       &
+                          ,', functional group ', j, ', tracer type ', i
+                    WRITE (Vname(3,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(3)))
+                    WRITE (Vname(4,varid),'(a,a)')                      &
+   &                      TRIM(Vname(1,varid)), ', scalar, series'
+                    WRITE (Vname(5,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(5)))
+                  END DO
+                END DO
+                varid=varid+1
 
 #if defined COT_STARFISH
               CASE ('idTbry(iwest,iCOTe)')
@@ -3087,340 +3693,429 @@
 /*
 **  Biological tracers point Source/Sinks (river runoff).
 */
-              CASE ('idRtrc(iTIC_)')
-                idRtrc(iTIC_)=varid
-              CASE ('idRtrc(iTAlk)')
-                idRtrc(iTAlk)=varid
-              CASE ('idRtrc(iOxyg)')
-                idRtrc(iOxyg)=varid
-#if defined ORGANIC_MATTER
-              CASE ('idRtrc(iDOC(i))')
+              CASE ('idRtrc(iDO)')
+                idRtrc(iDO)=varid
+              CASE ('idRtrc(iTA)')
+                idRtrc(iTA)=varid
+              CASE ('idRtrc(iDIC(i))')
                 load=.FALSE.
                 varid=varid-1
-                DO i=1,Ndom
+                DO i=1,N_Csp
                   varid=varid+1
-                  idRtrc(iDOC(i))=varid
+                  idRtrc(iDIC(i))=varid
                   DO ng=1,Ngrids
                     Fscale(varid,ng)=scale
                     Iinfo(1,varid,ng)=gtype
                   END DO
-                  WRITE (Vname(1,varid),'(a,i2.2)')                   &
-   &                    TRIM(ADJUSTL(Vinfo(1))), i
+                  WRITE (Vname(1,varid),'(a,a,i2.2)')                 &
+   &                    TRIM(ADJUSTL(Vinfo(1))), '_',i
                   WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', i
+   &                    TRIM(ADJUSTL(Vinfo(2))), ', tracer type ', i
                   WRITE (Vname(3,varid),'(a)')                        &
    &                    TRIM(ADJUSTL(Vinfo(3)))
                   WRITE (Vname(4,varid),'(a,a)')                      &
    &                    TRIM(Vname(1,varid)), ', scalar, series'
                   WRITE (Vname(5,varid),'(a)')                        &
    &                    TRIM(ADJUSTL(Vinfo(5)))
-                END DO
+                END DO             
                 varid=varid+1
-              CASE ('idRtrc(iPOC(i))')
+              CASE ('idRtrc(iNO3(i))')
                 load=.FALSE.
                 varid=varid-1
-                DO i=1,Npom
+                DO i=1,N_Nsp
                   varid=varid+1
-                  idRtrc(iPOC(i))=varid
+                  idRtrc(iNO3(i))=varid
                   DO ng=1,Ngrids
                     Fscale(varid,ng)=scale
                     Iinfo(1,varid,ng)=gtype
                   END DO
-                  WRITE (Vname(1,varid),'(a,i2.2)')                   &
-   &                    TRIM(ADJUSTL(Vinfo(1))), i
+                  WRITE (Vname(1,varid),'(a,a,i2.2)')                 &
+   &                    TRIM(ADJUSTL(Vinfo(1))), '_',i
                   WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', i
+   &                    TRIM(ADJUSTL(Vinfo(2))), ', tracer type ', i
                   WRITE (Vname(3,varid),'(a)')                        &
    &                    TRIM(ADJUSTL(Vinfo(3)))
                   WRITE (Vname(4,varid),'(a,a)')                      &
    &                    TRIM(Vname(1,varid)), ', scalar, series'
                   WRITE (Vname(5,varid),'(a)')                        &
    &                    TRIM(ADJUSTL(Vinfo(5)))
-                END DO
+                END DO             
                 varid=varid+1
-              CASE ('idRtrc(iPhyt(i))')
+              CASE ('idRtrc(iNH4(i))')
                 load=.FALSE.
                 varid=varid-1
-                DO i=1,Nphy
+                DO i=1,N_Nsp
                   varid=varid+1
-                  idRtrc(iPhyt(i))=varid
+                  idRtrc(iNH4(i))=varid
                   DO ng=1,Ngrids
                     Fscale(varid,ng)=scale
                     Iinfo(1,varid,ng)=gtype
                   END DO
-                  WRITE (Vname(1,varid),'(a,i2.2)')                   &
-   &                    TRIM(ADJUSTL(Vinfo(1))), i
+                  WRITE (Vname(1,varid),'(a,a,i2.2)')                 &
+   &                    TRIM(ADJUSTL(Vinfo(1))), '_',i
                   WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', i
+   &                    TRIM(ADJUSTL(Vinfo(2))), ', tracer type ', i
                   WRITE (Vname(3,varid),'(a)')                        &
    &                    TRIM(ADJUSTL(Vinfo(3)))
                   WRITE (Vname(4,varid),'(a,a)')                      &
    &                    TRIM(Vname(1,varid)), ', scalar, series'
                   WRITE (Vname(5,varid),'(a)')                        &
    &                    TRIM(ADJUSTL(Vinfo(5)))
-                END DO
+                END DO             
                 varid=varid+1
-              CASE ('idRtrc(iZoop(i))')
+              CASE ('idRtrc(iPO4(i))')
                 load=.FALSE.
                 varid=varid-1
-                DO i=1,Nzoo
+                DO i=1,N_Psp
                   varid=varid+1
-                  idRtrc(iZoop(i))=varid
+                  idRtrc(iPO4(i))=varid
                   DO ng=1,Ngrids
                     Fscale(varid,ng)=scale
                     Iinfo(1,varid,ng)=gtype
                   END DO
-                  WRITE (Vname(1,varid),'(a,i2.2)')                   &
-   &                    TRIM(ADJUSTL(Vinfo(1))), i
+                  WRITE (Vname(1,varid),'(a,a,i2.2)')                 &
+   &                    TRIM(ADJUSTL(Vinfo(1))), '_',i
                   WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', i
+   &                    TRIM(ADJUSTL(Vinfo(2))), ', tracer type ', i
                   WRITE (Vname(3,varid),'(a)')                        &
    &                    TRIM(ADJUSTL(Vinfo(3)))
                   WRITE (Vname(4,varid),'(a,a)')                      &
    &                    TRIM(Vname(1,varid)), ', scalar, series'
                   WRITE (Vname(5,varid),'(a)')                        &
    &                    TRIM(ADJUSTL(Vinfo(5)))
-                END DO
+                END DO             
                 varid=varid+1
-              CASE ('idRtrc(iPIC(i))')
+
+              CASE ('idRtrc(iDOC(i,j))')
                 load=.FALSE.
                 varid=varid-1
-                DO i=1,Npim
-                  varid=varid+1
-                  idRtrc(iPIC(i))=varid
-                  DO ng=1,Ngrids
-                    Fscale(varid,ng)=scale
-                    Iinfo(1,varid,ng)=gtype
+                DO j=1,Ndom
+                  DO i=1,N_Csp
+                    varid=varid+1
+                    idRtrc(iDOC(i,j))=varid
+                    DO ng=1,Ngrids
+                      Fscale(varid,ng)=scale
+                      Iinfo(1,varid,ng)=gtype
+                    END DO
+                    WRITE (Vname(1,varid),'(a,i2.2,a,i2.2)')            &
+   &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
+                    WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
+   &                      TRIM(ADJUSTL(Vinfo(2)))                       &
+                          ,', functional group ', j, ', tracer type ', i
+                    WRITE (Vname(3,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(3)))
+                    WRITE (Vname(4,varid),'(a,a)')                      &
+   &                      TRIM(Vname(1,varid)), ', scalar, series'
+                    WRITE (Vname(5,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(5)))
                   END DO
-                  WRITE (Vname(1,varid),'(a,i2.2)')                   &
-   &                    TRIM(ADJUSTL(Vinfo(1))), i
-                  WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', i
-                  WRITE (Vname(3,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(3)))
-                  WRITE (Vname(4,varid),'(a,a)')                      &
-   &                    TRIM(Vname(1,varid)), ', scalar, series'
-                  WRITE (Vname(5,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(5)))
                 END DO
                 varid=varid+1
-#endif
-#if defined CARBON_ISOTOPE
-              CASE ('idRtrc(iT13C)')
-                idRtrc(iT13C)=varid
-# if defined ORGANIC_MATTER
-              CASE ('idRtrc(iDO13C(i))')
+              CASE ('idRtrc(iPOC(i,j))')
                 load=.FALSE.
                 varid=varid-1
-                DO i=1,Ndom
-                  varid=varid+1
-                  idRtrc(iDO13C(i))=varid
-                  DO ng=1,Ngrids
-                    Fscale(varid,ng)=scale
-                    Iinfo(1,varid,ng)=gtype
+                DO j=1,Npom
+                  DO i=1,N_Csp
+                    varid=varid+1
+                    idRtrc(iPOC(i,j))=varid
+                    DO ng=1,Ngrids
+                      Fscale(varid,ng)=scale
+                      Iinfo(1,varid,ng)=gtype
+                    END DO
+                    WRITE (Vname(1,varid),'(a,i2.2,a,i2.2)')            &
+   &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
+                    WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
+   &                      TRIM(ADJUSTL(Vinfo(2)))                       &
+                          ,', functional group ', j, ', tracer type ', i
+                    WRITE (Vname(3,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(3)))
+                    WRITE (Vname(4,varid),'(a,a)')                      &
+   &                      TRIM(Vname(1,varid)), ', scalar, series'
+                    WRITE (Vname(5,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(5)))
                   END DO
-                  WRITE (Vname(1,varid),'(a,i2.2)')                   &
-   &                    TRIM(ADJUSTL(Vinfo(1))), i
-                  WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', i
-                  WRITE (Vname(3,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(3)))
-                  WRITE (Vname(4,varid),'(a,a)')                      &
-   &                    TRIM(Vname(1,varid)), ', scalar, series'
-                  WRITE (Vname(5,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(5)))
                 END DO
                 varid=varid+1
-              CASE ('idRtrc(iPO13C(i))')
+              CASE ('idRtrc(iDON(i,j))')
                 load=.FALSE.
                 varid=varid-1
-                DO i=1,Npom
-                  varid=varid+1
-                  idRtrc(iPO13C(i))=varid
-                  DO ng=1,Ngrids
-                    Fscale(varid,ng)=scale
-                    Iinfo(1,varid,ng)=gtype
+                DO j=1,Ndom
+                  DO i=1,N_Nsp
+                    varid=varid+1
+                    idRtrc(iDON(i,j))=varid
+                    DO ng=1,Ngrids
+                      Fscale(varid,ng)=scale
+                      Iinfo(1,varid,ng)=gtype
+                    END DO
+                    WRITE (Vname(1,varid),'(a,i2.2,a,i2.2)')            &
+   &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
+                    WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
+   &                      TRIM(ADJUSTL(Vinfo(2)))                       &
+                          ,', functional group ', j, ', tracer type ', i
+                    WRITE (Vname(3,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(3)))
+                    WRITE (Vname(4,varid),'(a,a)')                      &
+   &                      TRIM(Vname(1,varid)), ', scalar, series'
+                    WRITE (Vname(5,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(5)))
                   END DO
-                  WRITE (Vname(1,varid),'(a,i2.2)')                   &
-   &                    TRIM(ADJUSTL(Vinfo(1))), i
-                  WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', i
-                  WRITE (Vname(3,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(3)))
-                  WRITE (Vname(4,varid),'(a,a)')                      &
-   &                    TRIM(Vname(1,varid)), ', scalar, series'
-                  WRITE (Vname(5,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(5)))
                 END DO
                 varid=varid+1
-              CASE ('idRtrc(iPhyt13C(i))')
+              CASE ('idRtrc(iPON(i,j))')
                 load=.FALSE.
                 varid=varid-1
-                DO i=1,Nphy
-                  varid=varid+1
-                  idRtrc(iPhyt13C(i))=varid
-                  DO ng=1,Ngrids
-                    Fscale(varid,ng)=scale
-                    Iinfo(1,varid,ng)=gtype
+                DO j=1,Npom
+                  DO i=1,N_Nsp
+                    varid=varid+1
+                    idRtrc(iPON(i,j))=varid
+                    DO ng=1,Ngrids
+                      Fscale(varid,ng)=scale
+                      Iinfo(1,varid,ng)=gtype
+                    END DO
+                    WRITE (Vname(1,varid),'(a,i2.2,a,i2.2)')            &
+   &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
+                    WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
+   &                      TRIM(ADJUSTL(Vinfo(2)))                       &
+                          ,', functional group ', j, ', tracer type ', i
+                    WRITE (Vname(3,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(3)))
+                    WRITE (Vname(4,varid),'(a,a)')                      &
+   &                      TRIM(Vname(1,varid)), ', scalar, series'
+                    WRITE (Vname(5,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(5)))
                   END DO
-                  WRITE (Vname(1,varid),'(a,i2.2)')                   &
-   &                    TRIM(ADJUSTL(Vinfo(1))), i
-                  WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', i
-                  WRITE (Vname(3,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(3)))
-                  WRITE (Vname(4,varid),'(a,a)')                      &
-   &                    TRIM(Vname(1,varid)), ', scalar, series'
-                  WRITE (Vname(5,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(5)))
                 END DO
                 varid=varid+1
-              CASE ('idRtrc(iZoop13C(i))')
+              CASE ('idRtrc(iDOP(i,j))')
                 load=.FALSE.
                 varid=varid-1
-                DO i=1,Nzoo
-                  varid=varid+1
-                  idRtrc(iZoop13C(i))=varid
-                  DO ng=1,Ngrids
-                    Fscale(varid,ng)=scale
-                    Iinfo(1,varid,ng)=gtype
+                DO j=1,Ndom
+                  DO i=1,N_Psp
+                    varid=varid+1
+                    idRtrc(iDOP(i,j))=varid
+                    DO ng=1,Ngrids
+                      Fscale(varid,ng)=scale
+                      Iinfo(1,varid,ng)=gtype
+                    END DO
+                    WRITE (Vname(1,varid),'(a,i2.2,a,i2.2)')            &
+   &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
+                    WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
+   &                      TRIM(ADJUSTL(Vinfo(2)))                       &
+                          ,', functional group ', j, ', tracer type ', i
+                    WRITE (Vname(3,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(3)))
+                    WRITE (Vname(4,varid),'(a,a)')                      &
+   &                      TRIM(Vname(1,varid)), ', scalar, series'
+                    WRITE (Vname(5,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(5)))
                   END DO
-                  WRITE (Vname(1,varid),'(a,i2.2)')                   &
-   &                    TRIM(ADJUSTL(Vinfo(1))), i
-                  WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', i
-                  WRITE (Vname(3,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(3)))
-                  WRITE (Vname(4,varid),'(a,a)')                      &
-   &                    TRIM(Vname(1,varid)), ', scalar, series'
-                  WRITE (Vname(5,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(5)))
                 END DO
                 varid=varid+1
-              CASE ('idRtrc(iPI13C(i))')
+              CASE ('idRtrc(iPOP(i,j))')
                 load=.FALSE.
                 varid=varid-1
-                DO i=1,Npim
-                  varid=varid+1
-                  idRtrc(iPI13C(i))=varid
-                  DO ng=1,Ngrids
-                    Fscale(varid,ng)=scale
-                    Iinfo(1,varid,ng)=gtype
+                DO j=1,Npom
+                  DO i=1,N_Psp
+                    varid=varid+1
+                    idRtrc(iPOP(i,j))=varid
+                    DO ng=1,Ngrids
+                      Fscale(varid,ng)=scale
+                      Iinfo(1,varid,ng)=gtype
+                    END DO
+                    WRITE (Vname(1,varid),'(a,i2.2,a,i2.2)')            &
+   &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
+                    WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
+   &                      TRIM(ADJUSTL(Vinfo(2)))                       &
+                          ,', functional group ', j, ', tracer type ', i
+                    WRITE (Vname(3,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(3)))
+                    WRITE (Vname(4,varid),'(a,a)')                      &
+   &                      TRIM(Vname(1,varid)), ', scalar, series'
+                    WRITE (Vname(5,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(5)))
                   END DO
-                  WRITE (Vname(1,varid),'(a,i2.2)')                   &
-   &                    TRIM(ADJUSTL(Vinfo(1))), i
-                  WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', i
-                  WRITE (Vname(3,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(3)))
-                  WRITE (Vname(4,varid),'(a,a)')                      &
-   &                    TRIM(Vname(1,varid)), ', scalar, series'
-                  WRITE (Vname(5,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(5)))
                 END DO
                 varid=varid+1
-# endif
-#endif
-#if defined NUTRIENTS
-              CASE ('idRtrc(iNO3_)')
-                idRtrc(iNO3_)=varid
-!              CASE ('idRtrc(iNO2_)')
-!                idRtrc(iNO2_)=varid
-              CASE ('idRtrc(iNH4_)')
-                idRtrc(iNH4_)=varid
-              CASE ('idRtrc(iPO4_)')
-                idRtrc(iPO4_)=varid
-# if defined ORGANIC_MATTER
-              CASE ('idRtrc(iDON(i))')
+
+              CASE ('idRtrc(iPhyC(i,j))')
                 load=.FALSE.
                 varid=varid-1
-                DO i=1,Ndom
-                  varid=varid+1
-                  idRtrc(iDON(i))=varid
-                  DO ng=1,Ngrids
-                    Fscale(varid,ng)=scale
-                    Iinfo(1,varid,ng)=gtype
+                DO j=1,Nphy
+                  DO i=1,N_Csp
+                    varid=varid+1
+                    idRtrc(iPhyC(i,j))=varid
+                    DO ng=1,Ngrids
+                      Fscale(varid,ng)=scale
+                      Iinfo(1,varid,ng)=gtype
+                    END DO
+                    WRITE (Vname(1,varid),'(a,i2.2,a,i2.2)')            &
+   &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
+                    WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
+   &                      TRIM(ADJUSTL(Vinfo(2)))                       &
+                          ,', functional group ', j, ', tracer type ', i
+                    WRITE (Vname(3,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(3)))
+                    WRITE (Vname(4,varid),'(a,a)')                      &
+   &                      TRIM(Vname(1,varid)), ', scalar, series'
+                    WRITE (Vname(5,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(5)))
                   END DO
-                  WRITE (Vname(1,varid),'(a,i2.2)')                   &
-   &                    TRIM(ADJUSTL(Vinfo(1))), i
-                  WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', i
-                  WRITE (Vname(3,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(3)))
-                  WRITE (Vname(4,varid),'(a,a)')                      &
-   &                    TRIM(Vname(1,varid)), ', scalar, series'
-                  WRITE (Vname(5,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(5)))
                 END DO
                 varid=varid+1
-              CASE ('idRtrc(iPON(i))')
+              CASE ('idRtrc(iZooC(i,j))')
                 load=.FALSE.
                 varid=varid-1
-                DO i=1,Npom
-                  varid=varid+1
-                  idRtrc(iPON(i))=varid
-                  DO ng=1,Ngrids
-                    Fscale(varid,ng)=scale
-                    Iinfo(1,varid,ng)=gtype
+                DO j=1,Nzoo
+                  DO i=1,N_Csp
+                    varid=varid+1
+                    idRtrc(iZooC(i,j))=varid
+                    DO ng=1,Ngrids
+                      Fscale(varid,ng)=scale
+                      Iinfo(1,varid,ng)=gtype
+                    END DO
+                    WRITE (Vname(1,varid),'(a,i2.2,a,i2.2)')            &
+   &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
+                    WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
+   &                      TRIM(ADJUSTL(Vinfo(2)))                       &
+                          ,', functional group ', j, ', tracer type ', i
+                    WRITE (Vname(3,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(3)))
+                    WRITE (Vname(4,varid),'(a,a)')                      &
+   &                      TRIM(Vname(1,varid)), ', scalar, series'
+                    WRITE (Vname(5,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(5)))
                   END DO
-                  WRITE (Vname(1,varid),'(a,i2.2)')                   &
-   &                    TRIM(ADJUSTL(Vinfo(1))), i
-                  WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', i
-                  WRITE (Vname(3,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(3)))
-                  WRITE (Vname(4,varid),'(a,a)')                      &
-   &                    TRIM(Vname(1,varid)), ', scalar, series'
-                  WRITE (Vname(5,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(5)))
                 END DO
                 varid=varid+1
-              CASE ('idRtrc(iDOP(i))')
+              CASE ('idRtrc(iPhyN(i,j))')
                 load=.FALSE.
                 varid=varid-1
-                DO i=1,Ndom
-                  varid=varid+1
-                  idRtrc(iDOP(i))=varid
-                  DO ng=1,Ngrids
-                    Fscale(varid,ng)=scale
-                    Iinfo(1,varid,ng)=gtype
+                DO j=1,Nphy
+                  DO i=1,N_Nsp
+                    varid=varid+1
+                    idRtrc(iPhyN(i,j))=varid
+                    DO ng=1,Ngrids
+                      Fscale(varid,ng)=scale
+                      Iinfo(1,varid,ng)=gtype
+                    END DO
+                    WRITE (Vname(1,varid),'(a,i2.2,a,i2.2)')            &
+   &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
+                    WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
+   &                      TRIM(ADJUSTL(Vinfo(2)))                       &
+                          ,', functional group ', j, ', tracer type ', i
+                    WRITE (Vname(3,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(3)))
+                    WRITE (Vname(4,varid),'(a,a)')                      &
+   &                      TRIM(Vname(1,varid)), ', scalar, series'
+                    WRITE (Vname(5,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(5)))
                   END DO
-                  WRITE (Vname(1,varid),'(a,i2.2)')                   &
-   &                    TRIM(ADJUSTL(Vinfo(1))), i
-                  WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', i
-                  WRITE (Vname(3,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(3)))
-                  WRITE (Vname(4,varid),'(a,a)')                      &
-   &                    TRIM(Vname(1,varid)), ', scalar, series'
-                  WRITE (Vname(5,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(5)))
                 END DO
                 varid=varid+1
-              CASE ('idRtrc(iPOP(i))')
+              CASE ('idRtrc(iZooN(i,j))')
                 load=.FALSE.
                 varid=varid-1
-                DO i=1,Npom
-                  varid=varid+1
-                  idRtrc(iPOP(i))=varid
-                  DO ng=1,Ngrids
-                    Fscale(varid,ng)=scale
-                    Iinfo(1,varid,ng)=gtype
+                DO j=1,Nzoo
+                  DO i=1,N_Nsp
+                    varid=varid+1
+                    idRtrc(iZooN(i,j))=varid
+                    DO ng=1,Ngrids
+                      Fscale(varid,ng)=scale
+                      Iinfo(1,varid,ng)=gtype
+                    END DO
+                    WRITE (Vname(1,varid),'(a,i2.2,a,i2.2)')            &
+   &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
+                    WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
+   &                      TRIM(ADJUSTL(Vinfo(2)))                       &
+                          ,', functional group ', j, ', tracer type ', i
+                    WRITE (Vname(3,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(3)))
+                    WRITE (Vname(4,varid),'(a,a)')                      &
+   &                      TRIM(Vname(1,varid)), ', scalar, series'
+                    WRITE (Vname(5,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(5)))
                   END DO
-                  WRITE (Vname(1,varid),'(a,i2.2)')                   &
-   &                    TRIM(ADJUSTL(Vinfo(1))), i
-                  WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', functional group ', i
-                  WRITE (Vname(3,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(3)))
-                  WRITE (Vname(4,varid),'(a,a)')                      &
-   &                    TRIM(Vname(1,varid)), ', scalar, series'
-                  WRITE (Vname(5,varid),'(a)')                        &
-   &                    TRIM(ADJUSTL(Vinfo(5)))
                 END DO
                 varid=varid+1
-# endif
-#endif
+
+              CASE ('idRtrc(iPhyP(i,j))')
+                load=.FALSE.
+                varid=varid-1
+                DO j=1,Nphy
+                  DO i=1,N_Psp
+                    varid=varid+1
+                    idRtrc(iPhyP(i,j))=varid
+                    DO ng=1,Ngrids
+                      Fscale(varid,ng)=scale
+                      Iinfo(1,varid,ng)=gtype
+                    END DO
+                    WRITE (Vname(1,varid),'(a,i2.2,a,i2.2)')            &
+   &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
+                    WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
+   &                      TRIM(ADJUSTL(Vinfo(2)))                       &
+                          ,', functional group ', j, ', tracer type ', i
+                    WRITE (Vname(3,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(3)))
+                    WRITE (Vname(4,varid),'(a,a)')                      &
+   &                      TRIM(Vname(1,varid)), ', scalar, series'
+                    WRITE (Vname(5,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(5)))
+                  END DO
+                END DO
+                varid=varid+1
+              CASE ('idRtrc(iZooP(i,j))')
+                load=.FALSE.
+                varid=varid-1
+                DO j=1,Nzoo
+                  DO i=1,N_Psp
+                    varid=varid+1
+                    idRtrc(iZooP(i,j))=varid
+                    DO ng=1,Ngrids
+                      Fscale(varid,ng)=scale
+                      Iinfo(1,varid,ng)=gtype
+                    END DO
+                    WRITE (Vname(1,varid),'(a,i2.2,a,i2.2)')            &
+   &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
+                    WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
+   &                      TRIM(ADJUSTL(Vinfo(2)))                       &
+                          ,', functional group ', j, ', tracer type ', i
+                    WRITE (Vname(3,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(3)))
+                    WRITE (Vname(4,varid),'(a,a)')                      &
+   &                      TRIM(Vname(1,varid)), ', scalar, series'
+                    WRITE (Vname(5,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(5)))
+                  END DO
+                END DO
+                varid=varid+1
+
+
+              CASE ('idRtrc(iPIC(i,j))')
+                load=.FALSE.
+                varid=varid-1
+                DO j=1,Npim
+                  DO i=1,N_Csp
+                    varid=varid+1
+                    idRtrc(iPIC(i,j))=varid
+                    DO ng=1,Ngrids
+                      Fscale(varid,ng)=scale
+                      Iinfo(1,varid,ng)=gtype
+                    END DO
+                    WRITE (Vname(1,varid),'(a,i2.2,a,i2.2)')            &
+   &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
+                    WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
+   &                      TRIM(ADJUSTL(Vinfo(2)))                       &
+                          ,', functional group ', j, ', tracer type ', i
+                    WRITE (Vname(3,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(3)))
+                    WRITE (Vname(4,varid),'(a,a)')                      &
+   &                      TRIM(Vname(1,varid)), ', scalar, series'
+                    WRITE (Vname(5,varid),'(a)')                        &
+   &                      TRIM(ADJUSTL(Vinfo(5)))
+                  END DO
+                END DO
+                varid=varid+1
+
 #if defined COT_STARFISH
               CASE ('idRtrc(iCOTe)')
                 idRtrc(iCOTe)=varid

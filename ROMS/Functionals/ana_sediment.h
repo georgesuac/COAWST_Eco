@@ -428,11 +428,15 @@
 !
           DO k=1,Nbed
              bed(i,j,k,iaged)=time(ng)
+#  ifdef SEDIMENT_ECOSYS
              if(p_sand(i,j)>0.1_r8) then
                bed(i,j,k,ithck)=0.1_r8   !10.0_r8
              else
                bed(i,j,k,ithck)=0.0_r8   !
              endif
+#  else
+               bed(i,j,k,ithck)=0.0_r8   !10.0_r8
+#  endif
              bed(i,j,k,iporo)=0.50_r8
              
              bed_frac(i,j,k,1)=0.0_r8  !!! mud_01:   0% (Red soil from Todoroki river)

@@ -64,6 +64,12 @@
 #endif
       USE nf_fwrite2d_mod, ONLY : nf_fwrite2d
       USE strings_mod,     ONLY : FoundError, find_string
+!!! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> TN:Add
+#if defined SEDIMENT_ECOSYS
+      USE mod_reef_ecosys_param, ONLY : Nsed
+      USE mod_sedecosys
+#endif
+!!!<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< TN:Add
 !
       implicit none
 !
@@ -1620,7 +1626,7 @@
 !  Biological sediment layer
 !
       CALL netcdf_put_fvar (ng, model, ncname, 'sed_eco_layer',         &
-     &                      SedEcoLayerDepths(ng, :), (/1/), (/Nsed(ng)/),   &
+     &                      SEDECO(ng)%zr(:), (/1/), (/Nsed/),          &
      &                      ncid = ncid)
       IF (FoundError(exit_flag, NoError, __LINE__,                      &
      &               __FILE__)) RETURN

@@ -694,13 +694,6 @@
 !  Allocate dimension parameters.
 !-----------------------------------------------------------------------
 !
-
-!!! yuta_edits_for_masa >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>YT:Add
-# ifdef SEDIMENT_ECOSYS
-      USE mod_sedecosys, ONLY : Nsed
-# endif
-!!!<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<YT:Add
-
       allocate ( Lm(Ngrids) )
       allocate ( Mm(Ngrids) )
 
@@ -708,12 +701,6 @@
       allocate ( Jm(Ngrids) )
 
       allocate ( N(Ngrids) )
-
-!!! yuta_edits_for_masa >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>YT:Add
-# ifdef SEDIMENT_ECOSYS
-      allocate ( Nsed(Ngrids) )
-# endif
-!!!<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<YT:Add
 
       allocate ( NT(Ngrids) )
 

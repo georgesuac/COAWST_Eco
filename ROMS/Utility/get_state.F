@@ -88,6 +88,11 @@
 #endif
       USE strings_mod,        ONLY : find_string
       USE strings_mod,        ONLY : FoundError
+!!! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> TN:Add
+#if defined SEDIMENT_ECOSYS
+      USE mod_reef_ecosys_param, ONLY : Nsed
+#endif
+!!!<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< TN:Add
 !
       implicit none
 !
@@ -2357,7 +2362,7 @@
             status=nf_fread3d(ng, IDmod, ncname, ncINPid,               &
      &                        Vname(1,iHbiosed3(i)), varid,             &
      &                        InpRec, gtype, Vsize,                     &
-     &                        LBi, UBi, LBj, UBj, 1, Nsed(ng),          &
+     &                        LBi, UBi, LBj, UBj, 1, Nsed,              &
      &                        Fscl, Fmin, Fmax,                         &
 #    ifdef MASKING
      &                        GRID(ng) % rmask,                         &
