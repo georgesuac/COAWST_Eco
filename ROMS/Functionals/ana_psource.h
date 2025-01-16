@@ -76,6 +76,13 @@
       USE distribute_mod, ONLY : mp_bcastf, mp_bcasti
       USE distribute_mod, ONLY : mp_collect, mp_reduce
 #endif
+!!! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> TN:Add
+#if defined REEF_ECOSYS
+      USE mod_biology
+      USE mod_reef_ecosys_param
+      USE mod_geochem
+#endif
+!!!<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< TN:Add
 !
 !  Imported variable declarations.
 !
@@ -113,6 +120,7 @@
 !  Local variable declarations.
 !
       integer :: Npts, NSUB, is, i, j, k, ised
+      integer :: m  !!! <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< TN:Add
 
       real(r8) :: Pspv = 0.0_r8
       real(r8), save :: area_east, area_west
@@ -179,6 +187,20 @@
             SOURCES(ng)%Jsrc(is)=is-Mm(ng)
           END DO
         END IF
+!!! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> TN:Add
+#elif defined SHIRAHO_REEF
+        IF (Master.and.DOMAIN(ng)%SouthWest_Test(tile)) THEN
+          Nsrc(ng)=2
+          is = 1
+          SOURCES(ng)%Dsrc(is)=0.0_r8
+          SOURCES(ng)%Isrc(is)=9
+          SOURCES(ng)%Jsrc(is)=58
+          is = 2  ! Used for SGD input if SGD_ON is activated
+          SOURCES(ng)%Dsrc(is)=0.0_r8
+          SOURCES(ng)%Isrc(is)=-1 ! Set out of the domain
+          SOURCES(ng)%Jsrc(is)=-1 ! Set out of the domain
+        END IF
+!!!<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< TN:Add
 #else
         ana_psource.h: No values provided for Nsrc, Dsrc, Isrc, Jsrc.
 #endif
@@ -411,6 +433,15 @@
 # ifdef DISTRIBUTE
         CALL mp_collect (ng, iNLM, Msrc(ng), Pspv, SOURCES(ng)%Qbar)
 # endif
+!!! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> TN:Add
+#elif defined SHIRAHO_REEF
+        is=1  ! Todoroki river flow rate (m3/s)
+        SOURCES(ng)%Qbar(is)=1.0_r8   ! ~1 m3/s in normal condition
+        is=2  ! SGD rate (m3/s) in each grid cell (50m x 50m) area
+        SOURCES(ng)%Qbar(is)=0.01_r8  !  SGD volume flux in each grid is calculated by:
+                                      !   Qbar*pm(i,j)*pn(i,j)*sgd_src(i,j) 
+                                      !   (sgd_src(i,j) map should be included in the grd file)
+!!!<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< TN:Add
 #else
         ana_psource.h: No values provided for Qbar.
 #endif
@@ -490,6 +521,378 @@
           END DO
         END IF
 #  endif
+!!! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> TN:Add
+# elif defined SHIRAHO_REEF
+#  ifdef ONE_TRACER_SOURCE
+        IF (DOMAIN(ng)%NorthEast_Test(tile)) THEN
+          SOURCES(ng)%Tsrc(itemp)=T0(ng)
+          SOURCES(ng)%Tsrc(isalt)=1.0_r8
+        END IF
+#  elif defined TWO_D_TRACER_SOURCE
+        IF (DOMAIN(ng)%NorthEast_Test(tile)) THEN
+          SOURCES(ng)%Tsrc(is,itemp)=T0(ng)
+          SOURCES(ng)%Tsrc(is,isalt)=1.0_r8
+        END IF
+#  else
+        IF (DOMAIN(ng)%NorthEast_Test(tile)) THEN
+          DO k=1,N(ng)
+!! ========= Todoroki river ================================================
+            is=1
+            SOURCES(ng)%Tsrc(is,k,itemp)=27.0_r8
+            SOURCES(ng)%Tsrc(is,k,isalt)=1.0_r8
+#   if defined SEDIMENT
+            ised=1
+            SOURCES(ng)%Tsrc(is,k,idsed(ised))=0.1_r8  ! SS ~100 mg/L in normal condition = 0.1 kg/m3  
+            DO ised=2,NST
+              SOURCES(ng)%Tsrc(is,k,idsed(ised))=0.0_r8
+            END DO
+#   endif
+#   if defined REEF_ECOSYS
+          ! Initialize all tracer values to be zero
+            SOURCES(ng)%Tsrc(is,k,iDIC (1)  :iDIC (N_Csp)     ) = 0.0_r8
+            SOURCES(ng)%Tsrc(is,k,iNO3 (1)  :iNO3 (N_Nsp)     ) = 0.0_r8
+            SOURCES(ng)%Tsrc(is,k,iNH4 (1)  :iNH4 (N_Nsp)     ) = 0.0_r8
+            SOURCES(ng)%Tsrc(is,k,iPO4 (1)  :iPO4 (N_Psp)     ) = 0.0_r8
+            SOURCES(ng)%Tsrc(is,k,iDOC (1,1):iDOC (N_Csp,Ndom)) = 0.0_r8     ! umolC L-1
+            SOURCES(ng)%Tsrc(is,k,iPOC (1,1):iPOC (N_Csp,Npom)) = 0.0_r8     ! umolC L-1
+            SOURCES(ng)%Tsrc(is,k,iDON (1,1):iDON (N_Nsp,Ndom)) = 0.0_r8     ! umolN L-1
+            SOURCES(ng)%Tsrc(is,k,iPON (1,1):iPON (N_Nsp,Npom)) = 0.0_r8     ! umolN L-1
+            SOURCES(ng)%Tsrc(is,k,iDOP (1,1):iDOP (N_Psp,Ndom)) = 0.0_r8     ! umolP L-1
+            SOURCES(ng)%Tsrc(is,k,iPOP (1,1):iPOP (N_Psp,Npom)) = 0.0_r8     ! umolP L-1
+            SOURCES(ng)%Tsrc(is,k,iPhyC(1,1):iPhyC(N_Csp,Nphy)) = 0.0_r8     ! umolC L-1
+            SOURCES(ng)%Tsrc(is,k,iZooC(1,1):iZooC(N_Csp,Nzoo)) = 0.0_r8     ! umolC L-1
+            SOURCES(ng)%Tsrc(is,k,iPhyN(1,1):iPhyN(N_Nsp,Nphy)) = 0.0_r8     ! umolN L-1
+            SOURCES(ng)%Tsrc(is,k,iZooN(1,1):iZooN(N_Nsp,Nzoo)) = 0.0_r8     ! umolN L-1
+            SOURCES(ng)%Tsrc(is,k,iPhyP(1,1):iPhyP(N_Psp,Nphy)) = 0.0_r8     ! umolP L-1
+            SOURCES(ng)%Tsrc(is,k,iZooP(1,1):iZooP(N_Psp,Nzoo)) = 0.0_r8     ! umolP L-1
+            SOURCES(ng)%Tsrc(is,k,iPIC (1,1):iPIC (N_Csp,Npim)) = 0.0_r8     ! umolC L-1
+  
+          ! TA  
+            SOURCES(ng)%Tsrc(is,k,iTA) = 3000.0_r8
+          ! DIC  
+            SOURCES(ng)%Tsrc(is,k,iDIC(iCt))  = 3000.0_r8
+            SOURCES(ng)%Tsrc(is,k,iDIC(iC13)) = SOURCES(ng)%Tsrc(is,k,iDIC(iCt))  !! River Carbon tracer
+          ! DO  
+            SOURCES(ng)%Tsrc(is,k,iDO) =  200.0_r8
+          ! NO3  
+            SOURCES(ng)%Tsrc(is,k,iNO3(iNt))  = 150.0_r8 ! ~2 mg/L = 150 umol/L
+            SOURCES(ng)%Tsrc(is,k,iNO3(iN15)) = SOURCES(ng)%Tsrc(is,k,iNO3(iNt))  !! River nitrogen tracer
+          ! NH4   
+            SOURCES(ng)%Tsrc(is,k,iNH4(iNt))  = 1.5_r8   ! 0.02 mg/L umol L-1
+            SOURCES(ng)%Tsrc(is,k,iNH4(iN15)) = SOURCES(ng)%Tsrc(is,k,iNH4(iNt))  !! River nitrogen tracer
+          ! PO4
+            SOURCES(ng)%Tsrc(is,k,iPO4(iPt))  = 1.6_r8   !~0.05 mg/L= 1.6 umolP L-1
+            SOURCES(ng)%Tsrc(is,k,iPO4(iP1))  = SOURCES(ng)%Tsrc(is,k,iPO4(iPt))  !! River phosphorus tracer
+          ! DOC
+            SOURCES(ng)%Tsrc(is,k,iDOC(iCt,iLDOM)) = 50.0_r8  ! ~2 mg/L = 170 umolC L-1
+            SOURCES(ng)%Tsrc(is,k,iDOC(iCt,iRDOM)) = 120.0_r8     ! umolC L-1
+          ! POC
+            SOURCES(ng)%Tsrc(is,k,iPOC(iCt,iLPOM)) = 1.0_r8   ! ~0.5 mg/L = 4 umolC L-1
+            SOURCES(ng)%Tsrc(is,k,iPOC(iCt,iRPOM)) = 4.0_r8     ! umolC L-1
+            SOURCES(ng)%Tsrc(is,k,iPOC(iCt,iCPOM)) = 1.7_r8   ! ~1% of DOC+POC ! umolC L-1
+          ! DON
+            DO m=1,Ndom
+              SOURCES(ng)%Tsrc(is,k,iDON(iNt,m)) = SOURCES(ng)%Tsrc(is,k,iDOC(iCt,m))*16.0_r8/106.0_r8     ! umolN L-1
+            END DO
+          ! PON
+            DO m=1,Npom
+              SOURCES(ng)%Tsrc(is,k,iPON(iNt,m)) = SOURCES(ng)%Tsrc(is,k,iPOC(iCt,m))*16.0_r8/106.0_r8     ! umolN L-1
+            END DO
+          ! DOP
+            DO m=1,Ndom
+              SOURCES(ng)%Tsrc(is,k,iDOP(iPt,m)) = SOURCES(ng)%Tsrc(is,k,iDOC(iCt,m))/106.0_r8     ! umolP L-1
+            END DO
+          ! POP
+            DO m=1,Npom
+              SOURCES(ng)%Tsrc(is,k,iPOP(iPt,m)) = SOURCES(ng)%Tsrc(is,k,iPOC(iCt,m))/106.0_r8     ! umolP L-1
+            END DO
+          ! PhyC        
+            DO m=1,Nphy
+              SOURCES(ng)%Tsrc(is,k,iPhyC(iCt,m)) = 0.0_r8
+            END DO
+          ! ZooC
+            DO m=1,Nzoo
+              SOURCES(ng)%Tsrc(is,k,iZooC(iCt,m)) = 0.0_r8
+            END DO
+          ! PhyN        
+            DO m=1,Nphy
+              SOURCES(ng)%Tsrc(is,k,iPhyN(iNt,m)) = 0.0_r8
+            END DO
+          ! ZooN
+            DO m=1,Nzoo
+              SOURCES(ng)%Tsrc(is,k,iZooN(iNt,m)) = 0.0_r8
+            END DO
+          ! PhyP      
+            DO m=1,Nphy
+              SOURCES(ng)%Tsrc(is,k,iPhyP(iPt,m)) = 0.0_r8
+            END DO
+          ! ZooP
+            DO m=1,Nzoo
+              SOURCES(ng)%Tsrc(is,k,iZooP(iPt,m)) = 0.0_r8
+            END DO
+          ! PIC
+            SOURCES(ng)%Tsrc(is,k,iPIC(iCt,iLive)) = 0.0_r8 ! PIC_0(iLive,ng)     ! umolC L-1
+            DO m=2,Npim
+              SOURCES(ng)%Tsrc(is,k,iPIC(iCt,m)) = 0.0_r8     ! umolC L-1
+            END DO
+  
+#    if defined CARBON_ISOTOPE || defined CLUMPED_ISOTOPE
+            SOURCES(ng)%Tsrc(is,k,iDIC(iC13))                                              &
+       &      = Ci_from_Ct_delta(SOURCES(ng)%Tsrc(is,k,iDIC(iCt)),   d13C_DIC_0(ng), R13C_VPDB )
+            DO m=1,Ndom
+              SOURCES(ng)%Tsrc(is,k,iDOC(iC13,m))                                          &
+       &      = Ci_from_Ct_delta(SOURCES(ng)%Tsrc(is,k,iDOC(iCt,m)), d13C_DOC_0(m,ng), R13C_VPDB )
+            END DO
+            DO m=1,Npom
+              SOURCES(ng)%Tsrc(is,k,iPOC(iC13,m))                                          &
+       &      = Ci_from_Ct_delta(SOURCES(ng)%Tsrc(is,k,iPOC(iCt,m)), d13C_POC_0(m,ng), R13C_VPDB )
+            END DO
+            DO m=1,Nphy
+              SOURCES(ng)%Tsrc(is,k,iPhyC(iC13,m))                                          &
+       &      = Ci_from_Ct_delta(SOURCES(ng)%Tsrc(is,k,iPhyC(iCt,m)), d13C_PhyC_0(m,ng), R13C_VPDB )
+            END DO
+            DO m=1,Nzoo
+              SOURCES(ng)%Tsrc(is,k,iZooC(iC13,m))                                          &
+       &      = Ci_from_Ct_delta(SOURCES(ng)%Tsrc(is,k,iZooC(iCt,m)), d13C_ZooC_0(m,ng), R13C_VPDB )
+            END DO
+            DO m=1,Npim
+              SOURCES(ng)%Tsrc(is,k,iPIC(iC13,m))                                          &
+       &      = Ci_from_Ct_delta(SOURCES(ng)%Tsrc(is,k,iPIC(iCt,m)), d13C_PIC_0(m,ng), R13C_VPDB )
+            END DO
+#     if defined CLUMPED_ISOTOPE
+!**************** Under developpment *************************
+            SOURCES(ng)%Tsrc(is,k,iDIC(iD47))                                              &
+       &      = Ci_from_Ct_delta(SOURCES(ng)%Tsrc(is,k,iDIC(iCt)),   D47_DIC_0(ng), R47D_???? )
+            DO m=1,Ndom
+              SOURCES(ng)%Tsrc(is,k,iDOC(iD47,m))                                          &
+       &      = Ci_from_Ct_delta(SOURCES(ng)%Tsrc(is,k,iDOC(iCt,m)), D47_DOC_0(m,ng), R47D_???? )
+            END DO
+            DO m=1,Npom
+              SOURCES(ng)%Tsrc(is,k,iPOC(iD47,m))                                          &
+       &      = Ci_from_Ct_delta(SOURCES(ng)%Tsrc(is,k,iPOC(iCt,m)), D47_POC_0(m,ng), R47D_???? )
+            END DO
+            DO m=1,Nphy
+              SOURCES(ng)%Tsrc(is,k,iPhyC(iD47,m))                                          &
+       &      = Ci_from_Ct_delta(SOURCES(ng)%Tsrc(is,k,iPhyC(iCt,m)), D47_PhyC_0(m,ng), R47D_???? )
+            END DO
+            DO m=1,Nzoo
+              SOURCES(ng)%Tsrc(is,k,iZooC(iD47,m))                                          &
+       &      = Ci_from_Ct_delta(SOURCES(ng)%Tsrc(is,k,iZooC(iCt,m)), D47_ZooC_0(m,ng), R47D_???? )
+            END DO
+            DO m=1,Npim
+              SOURCES(ng)%Tsrc(is,k,iPIC(iD47,m))                                          &
+       &      = Ci_from_Ct_delta(SOURCES(ng)%Tsrc(is,k,iPIC(iCt,m)), D47_PIC_0(m,ng), R47D_???? )
+            END DO
+#     endif
+#    endif
+#    if defined NITROGEN_ISOTOPE
+            SOURCES(ng)%Tsrc(is,k,iNO3(iN15))                                              &
+       &      = Ci_from_Ct_delta(SOURCES(ng)%Tsrc(is,k,iNO3(iNt)),   d15N_NO3_0(ng), R15N_AIR )
+            SOURCES(ng)%Tsrc(is,k,iNH4(iN15))                                              &
+       &      = Ci_from_Ct_delta(SOURCES(ng)%Tsrc(is,k,iNH4(iNt)),   d15N_NH4_0(ng), R15N_AIR )
+            DO m=1,Ndom
+              SOURCES(ng)%Tsrc(is,k,iDON(iN15,m))                                          &
+       &      = Ci_from_Ct_delta(SOURCES(ng)%Tsrc(is,k,iDON(iNt,m)), d15N_DON_0(m,ng), R15N_AIR )
+            END DO
+            DO m=1,Npom
+              SOURCES(ng)%Tsrc(is,k,iPON(iN15,m))                                          &
+       &      = Ci_from_Ct_delta(SOURCES(ng)%Tsrc(is,k,iPON(iNt,m)), d15N_PON_0(m,ng), R15N_AIR )
+            END DO
+            DO m=1,Nphy
+              SOURCES(ng)%Tsrc(is,k,iPhyN(iN15,m))                                          &
+       &      = Ci_from_Ct_delta(SOURCES(ng)%Tsrc(is,k,iPhyN(iNt,m)), d15N_PhyN_0(m,ng), R15N_AIR )
+            END DO
+            DO m=1,Nzoo
+              SOURCES(ng)%Tsrc(is,k,iZooN(iN15,m))                                          &
+       &      = Ci_from_Ct_delta(SOURCES(ng)%Tsrc(is,k,iZooN(iNt,m)), d15N_ZooN_0(m,ng), R15N_AIR )
+            END DO
+#    endif
+#    if defined COT_STARFISH
+            SOURCES(ng)%Tsrc(is,k,iCOTe) = 0.0_r8     ! umolC L-1
+            SOURCES(ng)%Tsrc(is,k,iCOTl) = 0.0_r8     ! umolC L-1
+#    endif
+#   endif
+
+!! ========= SGD ================================================
+            is=2
+            SOURCES(ng)%Tsrc(is,k,itemp)=T0(ng)
+            SOURCES(ng)%Tsrc(is,k,isalt)=1.0_r8
+#   if defined SEDIMENT
+            ised=1
+            SOURCES(ng)%Tsrc(is,k,idsed(ised))=0.0_r8
+            DO ised=2,NST
+              SOURCES(ng)%Tsrc(is,k,idsed(ised))=0.0_r8
+            END DO
+#   endif
+#   if defined REEF_ECOSYS
+          ! Initialize all tracer values to be zero
+            SOURCES(ng)%Tsrc(is,k,iDIC (1)  :iDIC (N_Csp)     ) = 0.0_r8
+            SOURCES(ng)%Tsrc(is,k,iNO3 (1)  :iNO3 (N_Nsp)     ) = 0.0_r8
+            SOURCES(ng)%Tsrc(is,k,iNH4 (1)  :iNH4 (N_Nsp)     ) = 0.0_r8
+            SOURCES(ng)%Tsrc(is,k,iPO4 (1)  :iPO4 (N_Psp)     ) = 0.0_r8
+            SOURCES(ng)%Tsrc(is,k,iDOC (1,1):iDOC (N_Csp,Ndom)) = 0.0_r8     ! umolC L-1
+            SOURCES(ng)%Tsrc(is,k,iPOC (1,1):iPOC (N_Csp,Npom)) = 0.0_r8     ! umolC L-1
+            SOURCES(ng)%Tsrc(is,k,iDON (1,1):iDON (N_Nsp,Ndom)) = 0.0_r8     ! umolN L-1
+            SOURCES(ng)%Tsrc(is,k,iPON (1,1):iPON (N_Nsp,Npom)) = 0.0_r8     ! umolN L-1
+            SOURCES(ng)%Tsrc(is,k,iDOP (1,1):iDOP (N_Psp,Ndom)) = 0.0_r8     ! umolP L-1
+            SOURCES(ng)%Tsrc(is,k,iPOP (1,1):iPOP (N_Psp,Npom)) = 0.0_r8     ! umolP L-1
+            SOURCES(ng)%Tsrc(is,k,iPhyC(1,1):iPhyC(N_Csp,Nphy)) = 0.0_r8     ! umolC L-1
+            SOURCES(ng)%Tsrc(is,k,iZooC(1,1):iZooC(N_Csp,Nzoo)) = 0.0_r8     ! umolC L-1
+            SOURCES(ng)%Tsrc(is,k,iPhyN(1,1):iPhyN(N_Nsp,Nphy)) = 0.0_r8     ! umolN L-1
+            SOURCES(ng)%Tsrc(is,k,iZooN(1,1):iZooN(N_Nsp,Nzoo)) = 0.0_r8     ! umolN L-1
+            SOURCES(ng)%Tsrc(is,k,iPhyP(1,1):iPhyP(N_Psp,Nphy)) = 0.0_r8     ! umolP L-1
+            SOURCES(ng)%Tsrc(is,k,iZooP(1,1):iZooP(N_Psp,Nzoo)) = 0.0_r8     ! umolP L-1
+            SOURCES(ng)%Tsrc(is,k,iPIC (1,1):iPIC (N_Csp,Npim)) = 0.0_r8     ! umolC L-1
+  
+          ! TA  
+            SOURCES(ng)%Tsrc(is,k,iTA) = 3400.0_r8
+          ! DIC  
+            SOURCES(ng)%Tsrc(is,k,iDIC(iCt))  = 3400.0_r8
+            SOURCES(ng)%Tsrc(is,k,iDIC(iC13)) = SOURCES(ng)%Tsrc(is,k,iDIC(iCt))  !! River Carbon tracer
+          ! DO  
+            SOURCES(ng)%Tsrc(is,k,iDO) =  10.0_r8
+          ! NO3  
+            SOURCES(ng)%Tsrc(is,k,iNO3(iNt))  = 260.0_r8 ! Umezawa et al., 2002
+            SOURCES(ng)%Tsrc(is,k,iNO3(iN15)) = SOURCES(ng)%Tsrc(is,k,iNO3(iNt))  !! River nitrogen tracer
+          ! NH4   
+            SOURCES(ng)%Tsrc(is,k,iNH4(iNt))  = 0.1_r8   ! umol L-1
+            SOURCES(ng)%Tsrc(is,k,iNH4(iN15)) = SOURCES(ng)%Tsrc(is,k,iNH4(iNt))  !! River nitrogen tracer
+          ! PO4
+            SOURCES(ng)%Tsrc(is,k,iPO4(iPt))  = 0.25_r8     ! umol L-1
+            SOURCES(ng)%Tsrc(is,k,iPO4(iP1))  = SOURCES(ng)%Tsrc(is,k,iPO4(iPt))  !! River phosphorus tracer
+          ! DOC
+            SOURCES(ng)%Tsrc(is,k,iDOC(iCt,iLDOM)) = 10.0_r8     ! umolC L-1
+            SOURCES(ng)%Tsrc(is,k,iDOC(iCt,iRDOM)) = 100.0_r8     ! umolC L-1
+          ! POC
+            DO m=1,Npom
+              SOURCES(ng)%Tsrc(is,k,iPOC(iCt,m)) = 0.0_r8     ! umolC L-1
+            END DO
+          ! DON
+            DO m=1,Ndom
+              SOURCES(ng)%Tsrc(is,k,iDON(iNt,m)) = SOURCES(ng)%Tsrc(is,k,iDOC(iCt,m))*16.0_r8/106.0_r8     ! umolN L-1
+            END DO
+          ! PON
+            DO m=1,Npom
+              SOURCES(ng)%Tsrc(is,k,iPON(iNt,m)) = SOURCES(ng)%Tsrc(is,k,iPOC(iCt,m))*16.0_r8/106.0_r8     ! umolN L-1
+            END DO
+          ! DOP
+            DO m=1,Ndom
+              SOURCES(ng)%Tsrc(is,k,iDOP(iPt,m)) = SOURCES(ng)%Tsrc(is,k,iDOC(iCt,m))/106.0_r8     ! umolP L-1
+            END DO
+          ! POP
+            DO m=1,Npom
+              SOURCES(ng)%Tsrc(is,k,iPOP(iPt,m)) = SOURCES(ng)%Tsrc(is,k,iPOC(iCt,m))/106.0_r8     ! umolP L-1
+            END DO
+          ! PhyC        
+            DO m=1,Nphy
+              SOURCES(ng)%Tsrc(is,k,iPhyC(iCt,m)) = 0.0_r8
+            END DO
+          ! ZooC
+            DO m=1,Nzoo
+              SOURCES(ng)%Tsrc(is,k,iZooC(iCt,m)) = 0.0_r8
+            END DO
+          ! PhyN        
+            DO m=1,Nphy
+              SOURCES(ng)%Tsrc(is,k,iPhyN(iNt,m)) = 0.0_r8
+            END DO
+          ! ZooN
+            DO m=1,Nzoo
+              SOURCES(ng)%Tsrc(is,k,iZooN(iNt,m)) = 0.0_r8
+            END DO
+          ! PhyP      
+            DO m=1,Nphy
+              SOURCES(ng)%Tsrc(is,k,iPhyP(iPt,m)) = 0.0_r8
+            END DO
+          ! ZooP
+            DO m=1,Nzoo
+              SOURCES(ng)%Tsrc(is,k,iZooP(iPt,m)) = 0.0_r8
+            END DO
+          ! PIC
+            SOURCES(ng)%Tsrc(is,k,iPIC(iCt,iLive)) = 0.0_r8 ! PIC_0(iLive,ng)     ! umolC L-1
+            DO m=2,Npim
+              SOURCES(ng)%Tsrc(is,k,iPIC(iCt,m)) = 0.0_r8     ! umolC L-1
+            END DO
+  
+#    if defined CARBON_ISOTOPE || defined CLUMPED_ISOTOPE
+            SOURCES(ng)%Tsrc(is,k,iDIC(iC13))                                              &
+       &      = Ci_from_Ct_delta(SOURCES(ng)%Tsrc(is,k,iDIC(iCt)),   d13C_DIC_0(ng), R13C_VPDB )
+            DO m=1,Ndom
+              SOURCES(ng)%Tsrc(is,k,iDOC(iC13,m))                                          &
+       &      = Ci_from_Ct_delta(SOURCES(ng)%Tsrc(is,k,iDOC(iCt,m)), d13C_DOC_0(m,ng), R13C_VPDB )
+            END DO
+            DO m=1,Npom
+              SOURCES(ng)%Tsrc(is,k,iPOC(iC13,m))                                          &
+       &      = Ci_from_Ct_delta(SOURCES(ng)%Tsrc(is,k,iPOC(iCt,m)), d13C_POC_0(m,ng), R13C_VPDB )
+            END DO
+            DO m=1,Nphy
+              SOURCES(ng)%Tsrc(is,k,iPhyC(iC13,m))                                          &
+       &      = Ci_from_Ct_delta(SOURCES(ng)%Tsrc(is,k,iPhyC(iCt,m)), d13C_PhyC_0(m,ng), R13C_VPDB )
+            END DO
+            DO m=1,Nzoo
+              SOURCES(ng)%Tsrc(is,k,iZooC(iC13,m))                                          &
+       &      = Ci_from_Ct_delta(SOURCES(ng)%Tsrc(is,k,iZooC(iCt,m)), d13C_ZooC_0(m,ng), R13C_VPDB )
+            END DO
+            DO m=1,Npim
+              SOURCES(ng)%Tsrc(is,k,iPIC(iC13,m))                                          &
+       &      = Ci_from_Ct_delta(SOURCES(ng)%Tsrc(is,k,iPIC(iCt,m)), d13C_PIC_0(m,ng), R13C_VPDB )
+            END DO
+#     if defined CLUMPED_ISOTOPE
+!**************** Under developpment *************************
+            SOURCES(ng)%Tsrc(is,k,iDIC(iD47))                                              &
+       &      = Ci_from_Ct_delta(SOURCES(ng)%Tsrc(is,k,iDIC(iCt)),   D47_DIC_0(ng), R47D_???? )
+            DO m=1,Ndom
+              SOURCES(ng)%Tsrc(is,k,iDOC(iD47,m))                                          &
+       &      = Ci_from_Ct_delta(SOURCES(ng)%Tsrc(is,k,iDOC(iCt,m)), D47_DOC_0(m,ng), R47D_???? )
+            END DO
+            DO m=1,Npom
+              SOURCES(ng)%Tsrc(is,k,iPOC(iD47,m))                                          &
+       &      = Ci_from_Ct_delta(SOURCES(ng)%Tsrc(is,k,iPOC(iCt,m)), D47_POC_0(m,ng), R47D_???? )
+            END DO
+            DO m=1,Nphy
+              SOURCES(ng)%Tsrc(is,k,iPhyC(iD47,m))                                          &
+       &      = Ci_from_Ct_delta(SOURCES(ng)%Tsrc(is,k,iPhyC(iCt,m)), D47_PhyC_0(m,ng), R47D_???? )
+            END DO
+            DO m=1,Nzoo
+              SOURCES(ng)%Tsrc(is,k,iZooC(iD47,m))                                          &
+       &      = Ci_from_Ct_delta(SOURCES(ng)%Tsrc(is,k,iZooC(iCt,m)), D47_ZooC_0(m,ng), R47D_???? )
+            END DO
+            DO m=1,Npim
+              SOURCES(ng)%Tsrc(is,k,iPIC(iD47,m))                                          &
+       &      = Ci_from_Ct_delta(SOURCES(ng)%Tsrc(is,k,iPIC(iCt,m)), D47_PIC_0(m,ng), R47D_???? )
+            END DO
+#     endif
+#    endif
+#    if defined NITROGEN_ISOTOPE
+            SOURCES(ng)%Tsrc(is,k,iNO3(iN15))                                              &
+       &      = Ci_from_Ct_delta(SOURCES(ng)%Tsrc(is,k,iNO3(iNt)),   6.7_r8, R15N_AIR ) ! Umezawa et al., 2002
+            SOURCES(ng)%Tsrc(is,k,iNH4(iN15))                                              &
+       &      = Ci_from_Ct_delta(SOURCES(ng)%Tsrc(is,k,iNH4(iNt)),   d15N_NH4_0(ng), R15N_AIR )
+            DO m=1,Ndom
+              SOURCES(ng)%Tsrc(is,k,iDON(iN15,m))                                          &
+       &      = Ci_from_Ct_delta(SOURCES(ng)%Tsrc(is,k,iDON(iNt,m)), d15N_DON_0(m,ng), R15N_AIR )
+            END DO
+            DO m=1,Npom
+              SOURCES(ng)%Tsrc(is,k,iPON(iN15,m))                                          &
+       &      = Ci_from_Ct_delta(SOURCES(ng)%Tsrc(is,k,iPON(iNt,m)), d15N_PON_0(m,ng), R15N_AIR )
+            END DO
+            DO m=1,Nphy
+              SOURCES(ng)%Tsrc(is,k,iPhyN(iN15,m))                                          &
+       &      = Ci_from_Ct_delta(SOURCES(ng)%Tsrc(is,k,iPhyN(iNt,m)), d15N_PhyN_0(m,ng), R15N_AIR )
+            END DO
+            DO m=1,Nzoo
+              SOURCES(ng)%Tsrc(is,k,iZooN(iN15,m))                                          &
+       &      = Ci_from_Ct_delta(SOURCES(ng)%Tsrc(is,k,iZooN(iNt,m)), d15N_ZooN_0(m,ng), R15N_AIR )
+            END DO
+#    endif
+#    if defined COT_STARFISH
+              SOURCES(ng)%Tsrc(is,k,iCOTe) = 0.0_r8     ! umolC L-1
+              SOURCES(ng)%Tsrc(is,k,iCOTl) = 0.0_r8     ! umolC L-1
+#    endif
+#   endif
+          END DO
+        END IF
+#  endif
+!!!<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< TN:Add
 # else
         ana_psource.h: No values provided for Tsrc.
 # endif

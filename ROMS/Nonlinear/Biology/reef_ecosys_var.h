@@ -49,7 +49,7 @@
                   WRITE (Vname(1,varid),'(a,a,i2.2)')                 &
    &                    TRIM(ADJUSTL(Vinfo(1))), '_',i
                   WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', tracer type ', i
+   &                    TRIM(ADJUSTL(Vinfo(2))), ', tracer ', i
                   WRITE (Vname(3,varid),'(a)')                        &
    &                    TRIM(ADJUSTL(Vinfo(3)))
                   WRITE (Vname(4,varid),'(a,a)')                      &
@@ -71,7 +71,7 @@
                   WRITE (Vname(1,varid),'(a,a,i2.2)')                 &
    &                    TRIM(ADJUSTL(Vinfo(1))), '_',i
                   WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', tracer type ', i
+   &                    TRIM(ADJUSTL(Vinfo(2))), ', tracer ', i
                   WRITE (Vname(3,varid),'(a)')                        &
    &                    TRIM(ADJUSTL(Vinfo(3)))
                   WRITE (Vname(4,varid),'(a,a)')                      &
@@ -93,7 +93,7 @@
                   WRITE (Vname(1,varid),'(a,a,i2.2)')                 &
    &                    TRIM(ADJUSTL(Vinfo(1))), '_',i
                   WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', tracer type ', i
+   &                    TRIM(ADJUSTL(Vinfo(2))), ', tracer ', i
                   WRITE (Vname(3,varid),'(a)')                        &
    &                    TRIM(ADJUSTL(Vinfo(3)))
                   WRITE (Vname(4,varid),'(a,a)')                      &
@@ -115,7 +115,7 @@
                   WRITE (Vname(1,varid),'(a,a,i2.2)')                 &
    &                    TRIM(ADJUSTL(Vinfo(1))), '_',i
                   WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', tracer type ', i
+   &                    TRIM(ADJUSTL(Vinfo(2))), ', tracer ', i
                   WRITE (Vname(3,varid),'(a)')                        &
    &                    TRIM(ADJUSTL(Vinfo(3)))
                   WRITE (Vname(4,varid),'(a,a)')                      &
@@ -140,7 +140,7 @@
    &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
                     WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
    &                      TRIM(ADJUSTL(Vinfo(2)))                       &
-                          ,', functional group ', j, ', tracer type ', i
+                          ,', functional group ', j, ', tracer ', i
                     WRITE (Vname(3,varid),'(a)')                        &
    &                      TRIM(ADJUSTL(Vinfo(3)))
                     WRITE (Vname(4,varid),'(a,a)')                      &
@@ -165,7 +165,7 @@
    &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
                     WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
    &                      TRIM(ADJUSTL(Vinfo(2)))                       &
-                          ,', functional group ', j, ', tracer type ', i
+                          ,', functional group ', j, ', tracer ', i
                     WRITE (Vname(3,varid),'(a)')                        &
    &                      TRIM(ADJUSTL(Vinfo(3)))
                     WRITE (Vname(4,varid),'(a,a)')                      &
@@ -190,7 +190,7 @@
    &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
                     WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
    &                      TRIM(ADJUSTL(Vinfo(2)))                       &
-                          ,', functional group ', j, ', tracer type ', i
+                          ,', functional group ', j, ', tracer ', i
                     WRITE (Vname(3,varid),'(a)')                        &
    &                      TRIM(ADJUSTL(Vinfo(3)))
                     WRITE (Vname(4,varid),'(a,a)')                      &
@@ -215,7 +215,7 @@
    &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
                     WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
    &                      TRIM(ADJUSTL(Vinfo(2)))                       &
-                          ,', functional group ', j, ', tracer type ', i
+                          ,', functional group ', j, ', tracer ', i
                     WRITE (Vname(3,varid),'(a)')                        &
    &                      TRIM(ADJUSTL(Vinfo(3)))
                     WRITE (Vname(4,varid),'(a,a)')                      &
@@ -240,7 +240,7 @@
    &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
                     WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
    &                      TRIM(ADJUSTL(Vinfo(2)))                       &
-                          ,', functional group ', j, ', tracer type ', i
+                          ,', functional group ', j, ', tracer ', i
                     WRITE (Vname(3,varid),'(a)')                        &
    &                      TRIM(ADJUSTL(Vinfo(3)))
                     WRITE (Vname(4,varid),'(a,a)')                      &
@@ -265,7 +265,7 @@
    &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
                     WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
    &                      TRIM(ADJUSTL(Vinfo(2)))                       &
-                          ,', functional group ', j, ', tracer type ', i
+                          ,', functional group ', j, ', tracer ', i
                     WRITE (Vname(3,varid),'(a)')                        &
    &                      TRIM(ADJUSTL(Vinfo(3)))
                     WRITE (Vname(4,varid),'(a,a)')                      &
@@ -290,7 +290,7 @@
    &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
                     WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
    &                      TRIM(ADJUSTL(Vinfo(2)))                       &
-                          ,', functional group ', j, ', tracer type ', i
+                          ,', functional group ', j, ', tracer ', i
                     WRITE (Vname(3,varid),'(a)')                        &
    &                      TRIM(ADJUSTL(Vinfo(3)))
                     WRITE (Vname(4,varid),'(a,a)')                      &
@@ -315,7 +315,7 @@
    &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
                     WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
    &                      TRIM(ADJUSTL(Vinfo(2)))                       &
-                          ,', functional group ', j, ', tracer type ', i
+                          ,', functional group ', j, ', tracer ', i
                     WRITE (Vname(3,varid),'(a)')                        &
    &                      TRIM(ADJUSTL(Vinfo(3)))
                     WRITE (Vname(4,varid),'(a,a)')                      &
@@ -340,7 +340,7 @@
    &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
                     WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
    &                      TRIM(ADJUSTL(Vinfo(2)))                       &
-                          ,', functional group ', j, ', tracer type ', i
+                          ,', functional group ', j, ', tracer ', i
                     WRITE (Vname(3,varid),'(a)')                        &
    &                      TRIM(ADJUSTL(Vinfo(3)))
                     WRITE (Vname(4,varid),'(a,a)')                      &
@@ -365,7 +365,7 @@
    &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
                     WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
    &                      TRIM(ADJUSTL(Vinfo(2)))                       &
-                          ,', functional group ', j, ', tracer type ', i
+                          ,', functional group ', j, ', tracer ', i
                     WRITE (Vname(3,varid),'(a)')                        &
    &                      TRIM(ADJUSTL(Vinfo(3)))
                     WRITE (Vname(4,varid),'(a,a)')                      &
@@ -390,7 +390,7 @@
    &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
                     WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
    &                      TRIM(ADJUSTL(Vinfo(2)))                       &
-                          ,', functional group ', j, ', tracer type ', i
+                          ,', functional group ', j, ', tracer ', i
                     WRITE (Vname(3,varid),'(a)')                        &
    &                      TRIM(ADJUSTL(Vinfo(3)))
                     WRITE (Vname(4,varid),'(a,a)')                      &
@@ -415,7 +415,7 @@
    &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
                     WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
    &                      TRIM(ADJUSTL(Vinfo(2)))                       &
-                          ,', functional group ', j, ', tracer type ', i
+                          ,', functional group ', j, ', tracer ', i
                     WRITE (Vname(3,varid),'(a)')                        &
    &                      TRIM(ADJUSTL(Vinfo(3)))
                     WRITE (Vname(4,varid),'(a,a)')                      &
@@ -440,7 +440,7 @@
    &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
                     WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
    &                      TRIM(ADJUSTL(Vinfo(2)))                       &
-                          ,', functional group ', j, ', tracer type ', i
+                          ,', functional group ', j, ', tracer ', i
                     WRITE (Vname(3,varid),'(a)')                        &
    &                      TRIM(ADJUSTL(Vinfo(3)))
                     WRITE (Vname(4,varid),'(a,a)')                      &
@@ -556,7 +556,7 @@
    &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
                     WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
    &                      TRIM(ADJUSTL(Vinfo(2)))                       &
-                          ,', functional group ', j, ', tracer type ', i
+                          ,', functional group ', j, ', tracer ', i
                     WRITE (Vname(3,varid),'(a)')                        &
    &                      TRIM(ADJUSTL(Vinfo(3)))
                     WRITE (Vname(4,varid),'(a,a)')                      &
@@ -581,7 +581,7 @@
    &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
                     WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
    &                      TRIM(ADJUSTL(Vinfo(2)))                       &
-                          ,', functional group ', j, ', tracer type ', i
+                          ,', functional group ', j, ', tracer ', i
                     WRITE (Vname(3,varid),'(a)')                        &
    &                      TRIM(ADJUSTL(Vinfo(3)))
                     WRITE (Vname(4,varid),'(a,a)')                      &
@@ -628,7 +628,7 @@
    &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
                     WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
    &                      TRIM(ADJUSTL(Vinfo(2)))                       &
-                          ,', functional group ', j, ', tracer type ', i
+                          ,', functional group ', j, ', tracer ', i
                     WRITE (Vname(3,varid),'(a)')                        &
    &                      TRIM(ADJUSTL(Vinfo(3)))
                     WRITE (Vname(4,varid),'(a,a)')                      &
@@ -654,7 +654,7 @@
    &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
                     WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
    &                      TRIM(ADJUSTL(Vinfo(2)))                       &
-                          ,', functional group ', j, ', tracer type ', i
+                          ,', functional group ', j, ', tracer ', i
                     WRITE (Vname(3,varid),'(a)')                        &
    &                      TRIM(ADJUSTL(Vinfo(3)))
                     WRITE (Vname(4,varid),'(a,a)')                      &
@@ -679,7 +679,7 @@
    &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
                     WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
    &                      TRIM(ADJUSTL(Vinfo(2)))                       &
-                          ,', functional group ', j, ', tracer type ', i
+                          ,', functional group ', j, ', tracer ', i
                     WRITE (Vname(3,varid),'(a)')                        &
    &                      TRIM(ADJUSTL(Vinfo(3)))
                     WRITE (Vname(4,varid),'(a,a)')                      &
@@ -750,7 +750,7 @@
    &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
                     WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
    &                      TRIM(ADJUSTL(Vinfo(2)))                       &
-                          ,', functional group ', j, ', tracer type ', i
+                          ,', functional group ', j, ', tracer ', i
                     WRITE (Vname(3,varid),'(a)')                        &
    &                      TRIM(ADJUSTL(Vinfo(3)))
                     WRITE (Vname(4,varid),'(a,a)')                      &
@@ -1142,7 +1142,7 @@
    &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
                     WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
    &                      TRIM(ADJUSTL(Vinfo(2)))                       &
-                          ,', functional group ', j, ', tracer type ', i
+                          ,', functional group ', j, ', tracer ', i
                     WRITE (Vname(3,varid),'(a)')                        &
    &                      TRIM(ADJUSTL(Vinfo(3)))
                     WRITE (Vname(4,varid),'(a,a)')                      &
@@ -1167,7 +1167,7 @@
    &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
                     WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
    &                      TRIM(ADJUSTL(Vinfo(2)))                       &
-                          ,', functional group ', j, ', tracer type ', i
+                          ,', functional group ', j, ', tracer ', i
                     WRITE (Vname(3,varid),'(a)')                        &
    &                      TRIM(ADJUSTL(Vinfo(3)))
                     WRITE (Vname(4,varid),'(a,a)')                      &
@@ -1192,7 +1192,7 @@
    &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
                     WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
    &                      TRIM(ADJUSTL(Vinfo(2)))                       &
-                          ,', functional group ', j, ', tracer type ', i
+                          ,', functional group ', j, ', tracer ', i
                     WRITE (Vname(3,varid),'(a)')                        &
    &                      TRIM(ADJUSTL(Vinfo(3)))
                     WRITE (Vname(4,varid),'(a,a)')                      &
@@ -1612,7 +1612,7 @@
                   WRITE (Vname(1,varid),'(a,a,i2.2)')                 &
    &                    TRIM(ADJUSTL(Vinfo(1))), '_',i
                   WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', tracer type ', i
+   &                    TRIM(ADJUSTL(Vinfo(2))), ', tracer ', i
                   WRITE (Vname(3,varid),'(a)')                        &
    &                    TRIM(ADJUSTL(Vinfo(3)))
                   WRITE (Vname(4,varid),'(a,a)')                      &
@@ -1634,7 +1634,7 @@
                   WRITE (Vname(1,varid),'(a,a,i2.2)')                 &
    &                    TRIM(ADJUSTL(Vinfo(1))), '_',i
                   WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', tracer type ', i
+   &                    TRIM(ADJUSTL(Vinfo(2))), ', tracer ', i
                   WRITE (Vname(3,varid),'(a)')                        &
    &                    TRIM(ADJUSTL(Vinfo(3)))
                   WRITE (Vname(4,varid),'(a,a)')                      &
@@ -1656,7 +1656,7 @@
                   WRITE (Vname(1,varid),'(a,a,i2.2)')                 &
    &                    TRIM(ADJUSTL(Vinfo(1))), '_',i
                   WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', tracer type ', i
+   &                    TRIM(ADJUSTL(Vinfo(2))), ', tracer ', i
                   WRITE (Vname(3,varid),'(a)')                        &
    &                    TRIM(ADJUSTL(Vinfo(3)))
                   WRITE (Vname(4,varid),'(a,a)')                      &
@@ -1678,7 +1678,7 @@
                   WRITE (Vname(1,varid),'(a,a,i2.2)')                 &
    &                    TRIM(ADJUSTL(Vinfo(1))), '_',i
                   WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', tracer type ', i
+   &                    TRIM(ADJUSTL(Vinfo(2))), ', tracer ', i
                   WRITE (Vname(3,varid),'(a)')                        &
    &                    TRIM(ADJUSTL(Vinfo(3)))
                   WRITE (Vname(4,varid),'(a,a)')                      &
@@ -1702,7 +1702,7 @@
    &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
                     WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
    &                      TRIM(ADJUSTL(Vinfo(2)))                       &
-                          ,', functional group ', j, ', tracer type ', i
+                          ,', functional group ', j, ', tracer ', i
                     WRITE (Vname(3,varid),'(a)')                        &
    &                      TRIM(ADJUSTL(Vinfo(3)))
                     WRITE (Vname(4,varid),'(a,a)')                      &
@@ -1727,7 +1727,7 @@
    &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
                     WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
    &                      TRIM(ADJUSTL(Vinfo(2)))                       &
-                          ,', functional group ', j, ', tracer type ', i
+                          ,', functional group ', j, ', tracer ', i
                     WRITE (Vname(3,varid),'(a)')                        &
    &                      TRIM(ADJUSTL(Vinfo(3)))
                     WRITE (Vname(4,varid),'(a,a)')                      &
@@ -1752,7 +1752,7 @@
    &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
                     WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
    &                      TRIM(ADJUSTL(Vinfo(2)))                       &
-                          ,', functional group ', j, ', tracer type ', i
+                          ,', functional group ', j, ', tracer ', i
                     WRITE (Vname(3,varid),'(a)')                        &
    &                      TRIM(ADJUSTL(Vinfo(3)))
                     WRITE (Vname(4,varid),'(a,a)')                      &
@@ -1777,7 +1777,7 @@
    &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
                     WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
    &                      TRIM(ADJUSTL(Vinfo(2)))                       &
-                          ,', functional group ', j, ', tracer type ', i
+                          ,', functional group ', j, ', tracer ', i
                     WRITE (Vname(3,varid),'(a)')                        &
    &                      TRIM(ADJUSTL(Vinfo(3)))
                     WRITE (Vname(4,varid),'(a,a)')                      &
@@ -1802,7 +1802,7 @@
    &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
                     WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
    &                      TRIM(ADJUSTL(Vinfo(2)))                       &
-                          ,', functional group ', j, ', tracer type ', i
+                          ,', functional group ', j, ', tracer ', i
                     WRITE (Vname(3,varid),'(a)')                        &
    &                      TRIM(ADJUSTL(Vinfo(3)))
                     WRITE (Vname(4,varid),'(a,a)')                      &
@@ -1827,7 +1827,7 @@
    &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
                     WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
    &                      TRIM(ADJUSTL(Vinfo(2)))                       &
-                          ,', functional group ', j, ', tracer type ', i
+                          ,', functional group ', j, ', tracer ', i
                     WRITE (Vname(3,varid),'(a)')                        &
    &                      TRIM(ADJUSTL(Vinfo(3)))
                     WRITE (Vname(4,varid),'(a,a)')                      &
@@ -1835,6 +1835,28 @@
                     WRITE (Vname(5,varid),'(a)')                        &
    &                      TRIM(ADJUSTL(Vinfo(5)))
                   END DO
+                END DO
+                varid=varid+1
+              CASE ('iHbiosed3(iSdPIC(i))')
+                load=.FALSE.
+                varid=varid-1
+                DO i=1,N_Csp
+                  varid=varid+1
+                  iHbiosed3(iSdPIC(i))=varid
+                  DO ng=1,Ngrids
+                    Fscale(varid,ng)=scale
+                    Iinfo(1,varid,ng)=gtype
+                  END DO
+                  WRITE (Vname(1,varid),'(a,a,i2.2)')                 &
+   &                    TRIM(ADJUSTL(Vinfo(1))), '_',i
+                  WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
+   &                    TRIM(ADJUSTL(Vinfo(2))), ', tracer ', i
+                  WRITE (Vname(3,varid),'(a)')                        &
+   &                    TRIM(ADJUSTL(Vinfo(3)))
+                  WRITE (Vname(4,varid),'(a,a)')                      &
+   &                    TRIM(Vname(1,varid)), ', scalar, series'
+                  WRITE (Vname(5,varid),'(a)')                        &
+   &                    TRIM(ADJUSTL(Vinfo(5)))
                 END DO
                 varid=varid+1
               CASE ('iHbiosed3(iSdMn2)')
@@ -1856,7 +1878,7 @@
                   WRITE (Vname(1,varid),'(a,a,i2.2)')                 &
    &                    TRIM(ADJUSTL(Vinfo(1))), '_',i
                   WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', tracer type ', i
+   &                    TRIM(ADJUSTL(Vinfo(2))), ', tracer ', i
                   WRITE (Vname(3,varid),'(a)')                        &
    &                    TRIM(ADJUSTL(Vinfo(3)))
                   WRITE (Vname(4,varid),'(a,a)')                      &
@@ -1878,7 +1900,7 @@
                   WRITE (Vname(1,varid),'(a,a,i2.2)')                 &
    &                    TRIM(ADJUSTL(Vinfo(1))), '_',i
                   WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', tracer type ', i
+   &                    TRIM(ADJUSTL(Vinfo(2))), ', tracer ', i
                   WRITE (Vname(3,varid),'(a)')                        &
    &                    TRIM(ADJUSTL(Vinfo(3)))
                   WRITE (Vname(4,varid),'(a,a)')                      &
@@ -1902,7 +1924,7 @@
                   WRITE (Vname(1,varid),'(a,a,i2.2)')                 &
    &                    TRIM(ADJUSTL(Vinfo(1))), '_',i
                   WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', tracer type ', i
+   &                    TRIM(ADJUSTL(Vinfo(2))), ', tracer ', i
                   WRITE (Vname(3,varid),'(a)')                        &
    &                    TRIM(ADJUSTL(Vinfo(3)))
                   WRITE (Vname(4,varid),'(a,a)')                      &
@@ -1924,7 +1946,7 @@
                   WRITE (Vname(1,varid),'(a,a,i2.2)')                 &
    &                    TRIM(ADJUSTL(Vinfo(1))), '_',i
                   WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', tracer type ', i
+   &                    TRIM(ADJUSTL(Vinfo(2))), ', tracer ', i
                   WRITE (Vname(3,varid),'(a)')                        &
    &                    TRIM(ADJUSTL(Vinfo(3)))
                   WRITE (Vname(4,varid),'(a,a)')                      &
@@ -1946,7 +1968,7 @@
                   WRITE (Vname(1,varid),'(a,a,i2.2)')                 &
    &                    TRIM(ADJUSTL(Vinfo(1))), '_',i
                   WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', tracer type ', i
+   &                    TRIM(ADJUSTL(Vinfo(2))), ', tracer ', i
                   WRITE (Vname(3,varid),'(a)')                        &
    &                    TRIM(ADJUSTL(Vinfo(3)))
                   WRITE (Vname(4,varid),'(a,a)')                      &
@@ -1968,7 +1990,7 @@
                   WRITE (Vname(1,varid),'(a,a,i2.2)')                 &
    &                    TRIM(ADJUSTL(Vinfo(1))), '_',i
                   WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', tracer type ', i
+   &                    TRIM(ADJUSTL(Vinfo(2))), ', tracer ', i
                   WRITE (Vname(3,varid),'(a)')                        &
    &                    TRIM(ADJUSTL(Vinfo(3)))
                   WRITE (Vname(4,varid),'(a,a)')                      &
@@ -2014,7 +2036,7 @@
                   WRITE (Vname(1,varid),'(a,a,i2.2)')                 &
    &                    TRIM(ADJUSTL(Vinfo(1))), '_',i
                   WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', tracer type ', i
+   &                    TRIM(ADJUSTL(Vinfo(2))), ', tracer ', i
                   WRITE (Vname(3,varid),'(a)')                        &
    &                    TRIM(ADJUSTL(Vinfo(3)))
                   WRITE (Vname(4,varid),'(a,a)')                      &
@@ -2036,7 +2058,7 @@
                   WRITE (Vname(1,varid),'(a,a,i2.2)')                 &
    &                    TRIM(ADJUSTL(Vinfo(1))), '_',i
                   WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', tracer type ', i
+   &                    TRIM(ADJUSTL(Vinfo(2))), ', tracer ', i
                   WRITE (Vname(3,varid),'(a)')                        &
    &                    TRIM(ADJUSTL(Vinfo(3)))
                   WRITE (Vname(4,varid),'(a,a)')                      &
@@ -2058,7 +2080,7 @@
                   WRITE (Vname(1,varid),'(a,a,i2.2)')                 &
    &                    TRIM(ADJUSTL(Vinfo(1))), '_',i
                   WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', tracer type ', i
+   &                    TRIM(ADJUSTL(Vinfo(2))), ', tracer ', i
                   WRITE (Vname(3,varid),'(a)')                        &
    &                    TRIM(ADJUSTL(Vinfo(3)))
                   WRITE (Vname(4,varid),'(a,a)')                      &
@@ -2080,7 +2102,7 @@
                   WRITE (Vname(1,varid),'(a,a,i2.2)')                 &
    &                    TRIM(ADJUSTL(Vinfo(1))), '_',i
                   WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', tracer type ', i
+   &                    TRIM(ADJUSTL(Vinfo(2))), ', tracer ', i
                   WRITE (Vname(3,varid),'(a)')                        &
    &                    TRIM(ADJUSTL(Vinfo(3)))
                   WRITE (Vname(4,varid),'(a,a)')                      &
@@ -2103,7 +2125,7 @@
                   WRITE (Vname(1,varid),'(a,a,i2.2)')                 &
    &                    TRIM(ADJUSTL(Vinfo(1))), '_',i
                   WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', tracer type ', i
+   &                    TRIM(ADJUSTL(Vinfo(2))), ', tracer ', i
                   WRITE (Vname(3,varid),'(a)')                        &
    &                    TRIM(ADJUSTL(Vinfo(3)))
                   WRITE (Vname(4,varid),'(a,a)')                      &
@@ -2125,7 +2147,7 @@
                   WRITE (Vname(1,varid),'(a,a,i2.2)')                 &
    &                    TRIM(ADJUSTL(Vinfo(1))), '_',i
                   WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', tracer type ', i
+   &                    TRIM(ADJUSTL(Vinfo(2))), ', tracer ', i
                   WRITE (Vname(3,varid),'(a)')                        &
    &                    TRIM(ADJUSTL(Vinfo(3)))
                   WRITE (Vname(4,varid),'(a,a)')                      &
@@ -2147,7 +2169,7 @@
                   WRITE (Vname(1,varid),'(a,a,i2.2)')                 &
    &                    TRIM(ADJUSTL(Vinfo(1))), '_',i
                   WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', tracer type ', i
+   &                    TRIM(ADJUSTL(Vinfo(2))), ', tracer ', i
                   WRITE (Vname(3,varid),'(a)')                        &
    &                    TRIM(ADJUSTL(Vinfo(3)))
                   WRITE (Vname(4,varid),'(a,a)')                      &
@@ -2169,7 +2191,7 @@
                   WRITE (Vname(1,varid),'(a,a,i2.2)')                 &
    &                    TRIM(ADJUSTL(Vinfo(1))), '_',i
                   WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', tracer type ', i
+   &                    TRIM(ADJUSTL(Vinfo(2))), ', tracer ', i
                   WRITE (Vname(3,varid),'(a)')                        &
    &                    TRIM(ADJUSTL(Vinfo(3)))
                   WRITE (Vname(4,varid),'(a,a)')                      &
@@ -2192,7 +2214,7 @@
                   WRITE (Vname(1,varid),'(a,a,i2.2)')                 &
    &                    TRIM(ADJUSTL(Vinfo(1))), '_',i
                   WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', tracer type ', i
+   &                    TRIM(ADJUSTL(Vinfo(2))), ', tracer ', i
                   WRITE (Vname(3,varid),'(a)')                        &
    &                    TRIM(ADJUSTL(Vinfo(3)))
                   WRITE (Vname(4,varid),'(a,a)')                      &
@@ -2214,7 +2236,7 @@
                   WRITE (Vname(1,varid),'(a,a,i2.2)')                 &
    &                    TRIM(ADJUSTL(Vinfo(1))), '_',i
                   WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', tracer type ', i
+   &                    TRIM(ADJUSTL(Vinfo(2))), ', tracer ', i
                   WRITE (Vname(3,varid),'(a)')                        &
    &                    TRIM(ADJUSTL(Vinfo(3)))
                   WRITE (Vname(4,varid),'(a,a)')                      &
@@ -2236,7 +2258,7 @@
                   WRITE (Vname(1,varid),'(a,a,i2.2)')                 &
    &                    TRIM(ADJUSTL(Vinfo(1))), '_',i
                   WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', tracer type ', i
+   &                    TRIM(ADJUSTL(Vinfo(2))), ', tracer ', i
                   WRITE (Vname(3,varid),'(a)')                        &
    &                    TRIM(ADJUSTL(Vinfo(3)))
                   WRITE (Vname(4,varid),'(a,a)')                      &
@@ -2258,7 +2280,7 @@
                   WRITE (Vname(1,varid),'(a,a,i2.2)')                 &
    &                    TRIM(ADJUSTL(Vinfo(1))), '_',i
                   WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', tracer type ', i
+   &                    TRIM(ADJUSTL(Vinfo(2))), ', tracer ', i
                   WRITE (Vname(3,varid),'(a)')                        &
    &                    TRIM(ADJUSTL(Vinfo(3)))
                   WRITE (Vname(4,varid),'(a,a)')                      &
@@ -2281,7 +2303,7 @@
                   WRITE (Vname(1,varid),'(a,a,i2.2)')                 &
    &                    TRIM(ADJUSTL(Vinfo(1))), '_',i
                   WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', tracer type ', i
+   &                    TRIM(ADJUSTL(Vinfo(2))), ', tracer ', i
                   WRITE (Vname(3,varid),'(a)')                        &
    &                    TRIM(ADJUSTL(Vinfo(3)))
                   WRITE (Vname(4,varid),'(a,a)')                      &
@@ -2303,7 +2325,7 @@
                   WRITE (Vname(1,varid),'(a,a,i2.2)')                 &
    &                    TRIM(ADJUSTL(Vinfo(1))), '_',i
                   WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', tracer type ', i
+   &                    TRIM(ADJUSTL(Vinfo(2))), ', tracer ', i
                   WRITE (Vname(3,varid),'(a)')                        &
    &                    TRIM(ADJUSTL(Vinfo(3)))
                   WRITE (Vname(4,varid),'(a,a)')                      &
@@ -2325,7 +2347,7 @@
                   WRITE (Vname(1,varid),'(a,a,i2.2)')                 &
    &                    TRIM(ADJUSTL(Vinfo(1))), '_',i
                   WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', tracer type ', i
+   &                    TRIM(ADJUSTL(Vinfo(2))), ', tracer ', i
                   WRITE (Vname(3,varid),'(a)')                        &
    &                    TRIM(ADJUSTL(Vinfo(3)))
                   WRITE (Vname(4,varid),'(a,a)')                      &
@@ -2347,7 +2369,7 @@
                   WRITE (Vname(1,varid),'(a,a,i2.2)')                 &
    &                    TRIM(ADJUSTL(Vinfo(1))), '_',i
                   WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', tracer type ', i
+   &                    TRIM(ADJUSTL(Vinfo(2))), ', tracer ', i
                   WRITE (Vname(3,varid),'(a)')                        &
    &                    TRIM(ADJUSTL(Vinfo(3)))
                   WRITE (Vname(4,varid),'(a,a)')                      &
@@ -2372,7 +2394,7 @@
    &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
                     WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
    &                      TRIM(ADJUSTL(Vinfo(2)))                       &
-                          ,', functional group ', j, ', tracer type ', i
+                          ,', functional group ', j, ', tracer ', i
                     WRITE (Vname(3,varid),'(a)')                        &
    &                      TRIM(ADJUSTL(Vinfo(3)))
                     WRITE (Vname(4,varid),'(a,a)')                      &
@@ -2397,7 +2419,7 @@
    &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
                     WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
    &                      TRIM(ADJUSTL(Vinfo(2)))                       &
-                          ,', functional group ', j, ', tracer type ', i
+                          ,', functional group ', j, ', tracer ', i
                     WRITE (Vname(3,varid),'(a)')                        &
    &                      TRIM(ADJUSTL(Vinfo(3)))
                     WRITE (Vname(4,varid),'(a,a)')                      &
@@ -2422,7 +2444,7 @@
    &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
                     WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
    &                      TRIM(ADJUSTL(Vinfo(2)))                       &
-                          ,', functional group ', j, ', tracer type ', i
+                          ,', functional group ', j, ', tracer ', i
                     WRITE (Vname(3,varid),'(a)')                        &
    &                      TRIM(ADJUSTL(Vinfo(3)))
                     WRITE (Vname(4,varid),'(a,a)')                      &
@@ -2447,7 +2469,7 @@
    &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
                     WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
    &                      TRIM(ADJUSTL(Vinfo(2)))                       &
-                          ,', functional group ', j, ', tracer type ', i
+                          ,', functional group ', j, ', tracer ', i
                     WRITE (Vname(3,varid),'(a)')                        &
    &                      TRIM(ADJUSTL(Vinfo(3)))
                     WRITE (Vname(4,varid),'(a,a)')                      &
@@ -2473,7 +2495,7 @@
    &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
                     WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
    &                      TRIM(ADJUSTL(Vinfo(2)))                       &
-                          ,', functional group ', j, ', tracer type ', i
+                          ,', functional group ', j, ', tracer ', i
                     WRITE (Vname(3,varid),'(a)')                        &
    &                      TRIM(ADJUSTL(Vinfo(3)))
                     WRITE (Vname(4,varid),'(a,a)')                      &
@@ -2498,7 +2520,7 @@
    &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
                     WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
    &                      TRIM(ADJUSTL(Vinfo(2)))                       &
-                          ,', functional group ', j, ', tracer type ', i
+                          ,', functional group ', j, ', tracer ', i
                     WRITE (Vname(3,varid),'(a)')                        &
    &                      TRIM(ADJUSTL(Vinfo(3)))
                     WRITE (Vname(4,varid),'(a,a)')                      &
@@ -2523,7 +2545,7 @@
    &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
                     WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
    &                      TRIM(ADJUSTL(Vinfo(2)))                       &
-                          ,', functional group ', j, ', tracer type ', i
+                          ,', functional group ', j, ', tracer ', i
                     WRITE (Vname(3,varid),'(a)')                        &
    &                      TRIM(ADJUSTL(Vinfo(3)))
                     WRITE (Vname(4,varid),'(a,a)')                      &
@@ -2548,7 +2570,7 @@
    &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
                     WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
    &                      TRIM(ADJUSTL(Vinfo(2)))                       &
-                          ,', functional group ', j, ', tracer type ', i
+                          ,', functional group ', j, ', tracer ', i
                     WRITE (Vname(3,varid),'(a)')                        &
    &                      TRIM(ADJUSTL(Vinfo(3)))
                     WRITE (Vname(4,varid),'(a,a)')                      &
@@ -2574,7 +2596,7 @@
    &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
                     WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
    &                      TRIM(ADJUSTL(Vinfo(2)))                       &
-                          ,', functional group ', j, ', tracer type ', i
+                          ,', functional group ', j, ', tracer ', i
                     WRITE (Vname(3,varid),'(a)')                        &
    &                      TRIM(ADJUSTL(Vinfo(3)))
                     WRITE (Vname(4,varid),'(a,a)')                      &
@@ -2599,7 +2621,7 @@
    &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
                     WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
    &                      TRIM(ADJUSTL(Vinfo(2)))                       &
-                          ,', functional group ', j, ', tracer type ', i
+                          ,', functional group ', j, ', tracer ', i
                     WRITE (Vname(3,varid),'(a)')                        &
    &                      TRIM(ADJUSTL(Vinfo(3)))
                     WRITE (Vname(4,varid),'(a,a)')                      &
@@ -2624,7 +2646,7 @@
    &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
                     WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
    &                      TRIM(ADJUSTL(Vinfo(2)))                       &
-                          ,', functional group ', j, ', tracer type ', i
+                          ,', functional group ', j, ', tracer ', i
                     WRITE (Vname(3,varid),'(a)')                        &
    &                      TRIM(ADJUSTL(Vinfo(3)))
                     WRITE (Vname(4,varid),'(a,a)')                      &
@@ -2649,7 +2671,7 @@
    &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
                     WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
    &                      TRIM(ADJUSTL(Vinfo(2)))                       &
-                          ,', functional group ', j, ', tracer type ', i
+                          ,', functional group ', j, ', tracer ', i
                     WRITE (Vname(3,varid),'(a)')                        &
    &                      TRIM(ADJUSTL(Vinfo(3)))
                     WRITE (Vname(4,varid),'(a,a)')                      &
@@ -2675,7 +2697,7 @@
    &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
                     WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
    &                      TRIM(ADJUSTL(Vinfo(2)))                       &
-                          ,', functional group ', j, ', tracer type ', i
+                          ,', functional group ', j, ', tracer ', i
                     WRITE (Vname(3,varid),'(a)')                        &
    &                      TRIM(ADJUSTL(Vinfo(3)))
                     WRITE (Vname(4,varid),'(a,a)')                      &
@@ -2700,7 +2722,7 @@
    &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
                     WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
    &                      TRIM(ADJUSTL(Vinfo(2)))                       &
-                          ,', functional group ', j, ', tracer type ', i
+                          ,', functional group ', j, ', tracer ', i
                     WRITE (Vname(3,varid),'(a)')                        &
    &                      TRIM(ADJUSTL(Vinfo(3)))
                     WRITE (Vname(4,varid),'(a,a)')                      &
@@ -2725,7 +2747,7 @@
    &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
                     WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
    &                      TRIM(ADJUSTL(Vinfo(2)))                       &
-                          ,', functional group ', j, ', tracer type ', i
+                          ,', functional group ', j, ', tracer ', i
                     WRITE (Vname(3,varid),'(a)')                        &
    &                      TRIM(ADJUSTL(Vinfo(3)))
                     WRITE (Vname(4,varid),'(a,a)')                      &
@@ -2750,7 +2772,7 @@
    &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
                     WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
    &                      TRIM(ADJUSTL(Vinfo(2)))                       &
-                          ,', functional group ', j, ', tracer type ', i
+                          ,', functional group ', j, ', tracer ', i
                     WRITE (Vname(3,varid),'(a)')                        &
    &                      TRIM(ADJUSTL(Vinfo(3)))
                     WRITE (Vname(4,varid),'(a,a)')                      &
@@ -2776,7 +2798,7 @@
    &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
                     WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
    &                      TRIM(ADJUSTL(Vinfo(2)))                       &
-                          ,', functional group ', j, ', tracer type ', i
+                          ,', functional group ', j, ', tracer ', i
                     WRITE (Vname(3,varid),'(a)')                        &
    &                      TRIM(ADJUSTL(Vinfo(3)))
                     WRITE (Vname(4,varid),'(a,a)')                      &
@@ -2801,7 +2823,7 @@
    &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
                     WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
    &                      TRIM(ADJUSTL(Vinfo(2)))                       &
-                          ,', functional group ', j, ', tracer type ', i
+                          ,', functional group ', j, ', tracer ', i
                     WRITE (Vname(3,varid),'(a)')                        &
    &                      TRIM(ADJUSTL(Vinfo(3)))
                     WRITE (Vname(4,varid),'(a,a)')                      &
@@ -2826,7 +2848,7 @@
    &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
                     WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
    &                      TRIM(ADJUSTL(Vinfo(2)))                       &
-                          ,', functional group ', j, ', tracer type ', i
+                          ,', functional group ', j, ', tracer ', i
                     WRITE (Vname(3,varid),'(a)')                        &
    &                      TRIM(ADJUSTL(Vinfo(3)))
                     WRITE (Vname(4,varid),'(a,a)')                      &
@@ -2851,7 +2873,7 @@
    &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
                     WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
    &                      TRIM(ADJUSTL(Vinfo(2)))                       &
-                          ,', functional group ', j, ', tracer type ', i
+                          ,', functional group ', j, ', tracer ', i
                     WRITE (Vname(3,varid),'(a)')                        &
    &                      TRIM(ADJUSTL(Vinfo(3)))
                     WRITE (Vname(4,varid),'(a,a)')                      &
@@ -2877,7 +2899,7 @@
    &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
                     WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
    &                      TRIM(ADJUSTL(Vinfo(2)))                       &
-                          ,', functional group ', j, ', tracer type ', i
+                          ,', functional group ', j, ', tracer ', i
                     WRITE (Vname(3,varid),'(a)')                        &
    &                      TRIM(ADJUSTL(Vinfo(3)))
                     WRITE (Vname(4,varid),'(a,a)')                      &
@@ -2902,7 +2924,7 @@
    &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
                     WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
    &                      TRIM(ADJUSTL(Vinfo(2)))                       &
-                          ,', functional group ', j, ', tracer type ', i
+                          ,', functional group ', j, ', tracer ', i
                     WRITE (Vname(3,varid),'(a)')                        &
    &                      TRIM(ADJUSTL(Vinfo(3)))
                     WRITE (Vname(4,varid),'(a,a)')                      &
@@ -2927,7 +2949,7 @@
    &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
                     WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
    &                      TRIM(ADJUSTL(Vinfo(2)))                       &
-                          ,', functional group ', j, ', tracer type ', i
+                          ,', functional group ', j, ', tracer ', i
                     WRITE (Vname(3,varid),'(a)')                        &
    &                      TRIM(ADJUSTL(Vinfo(3)))
                     WRITE (Vname(4,varid),'(a,a)')                      &
@@ -2952,7 +2974,7 @@
    &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
                     WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
    &                      TRIM(ADJUSTL(Vinfo(2)))                       &
-                          ,', functional group ', j, ', tracer type ', i
+                          ,', functional group ', j, ', tracer ', i
                     WRITE (Vname(3,varid),'(a)')                        &
    &                      TRIM(ADJUSTL(Vinfo(3)))
                     WRITE (Vname(4,varid),'(a,a)')                      &
@@ -2978,7 +3000,7 @@
    &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
                     WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
    &                      TRIM(ADJUSTL(Vinfo(2)))                       &
-                          ,', functional group ', j, ', tracer type ', i
+                          ,', functional group ', j, ', tracer ', i
                     WRITE (Vname(3,varid),'(a)')                        &
    &                      TRIM(ADJUSTL(Vinfo(3)))
                     WRITE (Vname(4,varid),'(a,a)')                      &
@@ -3003,7 +3025,7 @@
    &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
                     WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
    &                      TRIM(ADJUSTL(Vinfo(2)))                       &
-                          ,', functional group ', j, ', tracer type ', i
+                          ,', functional group ', j, ', tracer ', i
                     WRITE (Vname(3,varid),'(a)')                        &
    &                      TRIM(ADJUSTL(Vinfo(3)))
                     WRITE (Vname(4,varid),'(a,a)')                      &
@@ -3028,7 +3050,7 @@
    &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
                     WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
    &                      TRIM(ADJUSTL(Vinfo(2)))                       &
-                          ,', functional group ', j, ', tracer type ', i
+                          ,', functional group ', j, ', tracer ', i
                     WRITE (Vname(3,varid),'(a)')                        &
    &                      TRIM(ADJUSTL(Vinfo(3)))
                     WRITE (Vname(4,varid),'(a,a)')                      &
@@ -3053,7 +3075,7 @@
    &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
                     WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
    &                      TRIM(ADJUSTL(Vinfo(2)))                       &
-                          ,', functional group ', j, ', tracer type ', i
+                          ,', functional group ', j, ', tracer ', i
                     WRITE (Vname(3,varid),'(a)')                        &
    &                      TRIM(ADJUSTL(Vinfo(3)))
                     WRITE (Vname(4,varid),'(a,a)')                      &
@@ -3079,7 +3101,7 @@
    &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
                     WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
    &                      TRIM(ADJUSTL(Vinfo(2)))                       &
-                          ,', functional group ', j, ', tracer type ', i
+                          ,', functional group ', j, ', tracer ', i
                     WRITE (Vname(3,varid),'(a)')                        &
    &                      TRIM(ADJUSTL(Vinfo(3)))
                     WRITE (Vname(4,varid),'(a,a)')                      &
@@ -3104,7 +3126,7 @@
    &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
                     WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
    &                      TRIM(ADJUSTL(Vinfo(2)))                       &
-                          ,', functional group ', j, ', tracer type ', i
+                          ,', functional group ', j, ', tracer ', i
                     WRITE (Vname(3,varid),'(a)')                        &
    &                      TRIM(ADJUSTL(Vinfo(3)))
                     WRITE (Vname(4,varid),'(a,a)')                      &
@@ -3129,7 +3151,7 @@
    &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
                     WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
    &                      TRIM(ADJUSTL(Vinfo(2)))                       &
-                          ,', functional group ', j, ', tracer type ', i
+                          ,', functional group ', j, ', tracer ', i
                     WRITE (Vname(3,varid),'(a)')                        &
    &                      TRIM(ADJUSTL(Vinfo(3)))
                     WRITE (Vname(4,varid),'(a,a)')                      &
@@ -3154,7 +3176,7 @@
    &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
                     WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
    &                      TRIM(ADJUSTL(Vinfo(2)))                       &
-                          ,', functional group ', j, ', tracer type ', i
+                          ,', functional group ', j, ', tracer ', i
                     WRITE (Vname(3,varid),'(a)')                        &
    &                      TRIM(ADJUSTL(Vinfo(3)))
                     WRITE (Vname(4,varid),'(a,a)')                      &
@@ -3180,7 +3202,7 @@
    &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
                     WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
    &                      TRIM(ADJUSTL(Vinfo(2)))                       &
-                          ,', functional group ', j, ', tracer type ', i
+                          ,', functional group ', j, ', tracer ', i
                     WRITE (Vname(3,varid),'(a)')                        &
    &                      TRIM(ADJUSTL(Vinfo(3)))
                     WRITE (Vname(4,varid),'(a,a)')                      &
@@ -3205,7 +3227,7 @@
    &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
                     WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
    &                      TRIM(ADJUSTL(Vinfo(2)))                       &
-                          ,', functional group ', j, ', tracer type ', i
+                          ,', functional group ', j, ', tracer ', i
                     WRITE (Vname(3,varid),'(a)')                        &
    &                      TRIM(ADJUSTL(Vinfo(3)))
                     WRITE (Vname(4,varid),'(a,a)')                      &
@@ -3230,7 +3252,7 @@
    &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
                     WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
    &                      TRIM(ADJUSTL(Vinfo(2)))                       &
-                          ,', functional group ', j, ', tracer type ', i
+                          ,', functional group ', j, ', tracer ', i
                     WRITE (Vname(3,varid),'(a)')                        &
    &                      TRIM(ADJUSTL(Vinfo(3)))
                     WRITE (Vname(4,varid),'(a,a)')                      &
@@ -3255,7 +3277,7 @@
    &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
                     WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
    &                      TRIM(ADJUSTL(Vinfo(2)))                       &
-                          ,', functional group ', j, ', tracer type ', i
+                          ,', functional group ', j, ', tracer ', i
                     WRITE (Vname(3,varid),'(a)')                        &
    &                      TRIM(ADJUSTL(Vinfo(3)))
                     WRITE (Vname(4,varid),'(a,a)')                      &
@@ -3281,7 +3303,7 @@
    &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
                     WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
    &                      TRIM(ADJUSTL(Vinfo(2)))                       &
-                          ,', functional group ', j, ', tracer type ', i
+                          ,', functional group ', j, ', tracer ', i
                     WRITE (Vname(3,varid),'(a)')                        &
    &                      TRIM(ADJUSTL(Vinfo(3)))
                     WRITE (Vname(4,varid),'(a,a)')                      &
@@ -3306,7 +3328,7 @@
    &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
                     WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
    &                      TRIM(ADJUSTL(Vinfo(2)))                       &
-                          ,', functional group ', j, ', tracer type ', i
+                          ,', functional group ', j, ', tracer ', i
                     WRITE (Vname(3,varid),'(a)')                        &
    &                      TRIM(ADJUSTL(Vinfo(3)))
                     WRITE (Vname(4,varid),'(a,a)')                      &
@@ -3331,7 +3353,7 @@
    &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
                     WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
    &                      TRIM(ADJUSTL(Vinfo(2)))                       &
-                          ,', functional group ', j, ', tracer type ', i
+                          ,', functional group ', j, ', tracer ', i
                     WRITE (Vname(3,varid),'(a)')                        &
    &                      TRIM(ADJUSTL(Vinfo(3)))
                     WRITE (Vname(4,varid),'(a,a)')                      &
@@ -3356,7 +3378,7 @@
    &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
                     WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
    &                      TRIM(ADJUSTL(Vinfo(2)))                       &
-                          ,', functional group ', j, ', tracer type ', i
+                          ,', functional group ', j, ', tracer ', i
                     WRITE (Vname(3,varid),'(a)')                        &
    &                      TRIM(ADJUSTL(Vinfo(3)))
                     WRITE (Vname(4,varid),'(a,a)')                      &
@@ -3382,7 +3404,7 @@
    &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
                     WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
    &                      TRIM(ADJUSTL(Vinfo(2)))                       &
-                          ,', functional group ', j, ', tracer type ', i
+                          ,', functional group ', j, ', tracer ', i
                     WRITE (Vname(3,varid),'(a)')                        &
    &                      TRIM(ADJUSTL(Vinfo(3)))
                     WRITE (Vname(4,varid),'(a,a)')                      &
@@ -3407,7 +3429,7 @@
    &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
                     WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
    &                      TRIM(ADJUSTL(Vinfo(2)))                       &
-                          ,', functional group ', j, ', tracer type ', i
+                          ,', functional group ', j, ', tracer ', i
                     WRITE (Vname(3,varid),'(a)')                        &
    &                      TRIM(ADJUSTL(Vinfo(3)))
                     WRITE (Vname(4,varid),'(a,a)')                      &
@@ -3432,7 +3454,7 @@
    &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
                     WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
    &                      TRIM(ADJUSTL(Vinfo(2)))                       &
-                          ,', functional group ', j, ', tracer type ', i
+                          ,', functional group ', j, ', tracer ', i
                     WRITE (Vname(3,varid),'(a)')                        &
    &                      TRIM(ADJUSTL(Vinfo(3)))
                     WRITE (Vname(4,varid),'(a,a)')                      &
@@ -3457,7 +3479,7 @@
    &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
                     WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
    &                      TRIM(ADJUSTL(Vinfo(2)))                       &
-                          ,', functional group ', j, ', tracer type ', i
+                          ,', functional group ', j, ', tracer ', i
                     WRITE (Vname(3,varid),'(a)')                        &
    &                      TRIM(ADJUSTL(Vinfo(3)))
                     WRITE (Vname(4,varid),'(a,a)')                      &
@@ -3483,7 +3505,7 @@
    &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
                     WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
    &                      TRIM(ADJUSTL(Vinfo(2)))                       &
-                          ,', functional group ', j, ', tracer type ', i
+                          ,', functional group ', j, ', tracer ', i
                     WRITE (Vname(3,varid),'(a)')                        &
    &                      TRIM(ADJUSTL(Vinfo(3)))
                     WRITE (Vname(4,varid),'(a,a)')                      &
@@ -3508,7 +3530,7 @@
    &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
                     WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
    &                      TRIM(ADJUSTL(Vinfo(2)))                       &
-                          ,', functional group ', j, ', tracer type ', i
+                          ,', functional group ', j, ', tracer ', i
                     WRITE (Vname(3,varid),'(a)')                        &
    &                      TRIM(ADJUSTL(Vinfo(3)))
                     WRITE (Vname(4,varid),'(a,a)')                      &
@@ -3533,7 +3555,7 @@
    &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
                     WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
    &                      TRIM(ADJUSTL(Vinfo(2)))                       &
-                          ,', functional group ', j, ', tracer type ', i
+                          ,', functional group ', j, ', tracer ', i
                     WRITE (Vname(3,varid),'(a)')                        &
    &                      TRIM(ADJUSTL(Vinfo(3)))
                     WRITE (Vname(4,varid),'(a,a)')                      &
@@ -3558,7 +3580,7 @@
    &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
                     WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
    &                      TRIM(ADJUSTL(Vinfo(2)))                       &
-                          ,', functional group ', j, ', tracer type ', i
+                          ,', functional group ', j, ', tracer ', i
                     WRITE (Vname(3,varid),'(a)')                        &
    &                      TRIM(ADJUSTL(Vinfo(3)))
                     WRITE (Vname(4,varid),'(a,a)')                      &
@@ -3584,7 +3606,7 @@
    &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
                     WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
    &                      TRIM(ADJUSTL(Vinfo(2)))                       &
-                          ,', functional group ', j, ', tracer type ', i
+                          ,', functional group ', j, ', tracer ', i
                     WRITE (Vname(3,varid),'(a)')                        &
    &                      TRIM(ADJUSTL(Vinfo(3)))
                     WRITE (Vname(4,varid),'(a,a)')                      &
@@ -3609,7 +3631,7 @@
    &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
                     WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
    &                      TRIM(ADJUSTL(Vinfo(2)))                       &
-                          ,', functional group ', j, ', tracer type ', i
+                          ,', functional group ', j, ', tracer ', i
                     WRITE (Vname(3,varid),'(a)')                        &
    &                      TRIM(ADJUSTL(Vinfo(3)))
                     WRITE (Vname(4,varid),'(a,a)')                      &
@@ -3634,7 +3656,7 @@
    &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
                     WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
    &                      TRIM(ADJUSTL(Vinfo(2)))                       &
-                          ,', functional group ', j, ', tracer type ', i
+                          ,', functional group ', j, ', tracer ', i
                     WRITE (Vname(3,varid),'(a)')                        &
    &                      TRIM(ADJUSTL(Vinfo(3)))
                     WRITE (Vname(4,varid),'(a,a)')                      &
@@ -3659,7 +3681,7 @@
    &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
                     WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
    &                      TRIM(ADJUSTL(Vinfo(2)))                       &
-                          ,', functional group ', j, ', tracer type ', i
+                          ,', functional group ', j, ', tracer ', i
                     WRITE (Vname(3,varid),'(a)')                        &
    &                      TRIM(ADJUSTL(Vinfo(3)))
                     WRITE (Vname(4,varid),'(a,a)')                      &
@@ -3710,7 +3732,7 @@
                   WRITE (Vname(1,varid),'(a,a,i2.2)')                 &
    &                    TRIM(ADJUSTL(Vinfo(1))), '_',i
                   WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', tracer type ', i
+   &                    TRIM(ADJUSTL(Vinfo(2))), ', tracer ', i
                   WRITE (Vname(3,varid),'(a)')                        &
    &                    TRIM(ADJUSTL(Vinfo(3)))
                   WRITE (Vname(4,varid),'(a,a)')                      &
@@ -3732,7 +3754,7 @@
                   WRITE (Vname(1,varid),'(a,a,i2.2)')                 &
    &                    TRIM(ADJUSTL(Vinfo(1))), '_',i
                   WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', tracer type ', i
+   &                    TRIM(ADJUSTL(Vinfo(2))), ', tracer ', i
                   WRITE (Vname(3,varid),'(a)')                        &
    &                    TRIM(ADJUSTL(Vinfo(3)))
                   WRITE (Vname(4,varid),'(a,a)')                      &
@@ -3754,7 +3776,7 @@
                   WRITE (Vname(1,varid),'(a,a,i2.2)')                 &
    &                    TRIM(ADJUSTL(Vinfo(1))), '_',i
                   WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', tracer type ', i
+   &                    TRIM(ADJUSTL(Vinfo(2))), ', tracer ', i
                   WRITE (Vname(3,varid),'(a)')                        &
    &                    TRIM(ADJUSTL(Vinfo(3)))
                   WRITE (Vname(4,varid),'(a,a)')                      &
@@ -3776,7 +3798,7 @@
                   WRITE (Vname(1,varid),'(a,a,i2.2)')                 &
    &                    TRIM(ADJUSTL(Vinfo(1))), '_',i
                   WRITE (Vname(2,varid),'(a,a,i2.2)')                 &
-   &                    TRIM(ADJUSTL(Vinfo(2))), ', tracer type ', i
+   &                    TRIM(ADJUSTL(Vinfo(2))), ', tracer ', i
                   WRITE (Vname(3,varid),'(a)')                        &
    &                    TRIM(ADJUSTL(Vinfo(3)))
                   WRITE (Vname(4,varid),'(a,a)')                      &
@@ -3801,7 +3823,7 @@
    &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
                     WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
    &                      TRIM(ADJUSTL(Vinfo(2)))                       &
-                          ,', functional group ', j, ', tracer type ', i
+                          ,', functional group ', j, ', tracer ', i
                     WRITE (Vname(3,varid),'(a)')                        &
    &                      TRIM(ADJUSTL(Vinfo(3)))
                     WRITE (Vname(4,varid),'(a,a)')                      &
@@ -3826,7 +3848,7 @@
    &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
                     WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
    &                      TRIM(ADJUSTL(Vinfo(2)))                       &
-                          ,', functional group ', j, ', tracer type ', i
+                          ,', functional group ', j, ', tracer ', i
                     WRITE (Vname(3,varid),'(a)')                        &
    &                      TRIM(ADJUSTL(Vinfo(3)))
                     WRITE (Vname(4,varid),'(a,a)')                      &
@@ -3851,7 +3873,7 @@
    &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
                     WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
    &                      TRIM(ADJUSTL(Vinfo(2)))                       &
-                          ,', functional group ', j, ', tracer type ', i
+                          ,', functional group ', j, ', tracer ', i
                     WRITE (Vname(3,varid),'(a)')                        &
    &                      TRIM(ADJUSTL(Vinfo(3)))
                     WRITE (Vname(4,varid),'(a,a)')                      &
@@ -3876,7 +3898,7 @@
    &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
                     WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
    &                      TRIM(ADJUSTL(Vinfo(2)))                       &
-                          ,', functional group ', j, ', tracer type ', i
+                          ,', functional group ', j, ', tracer ', i
                     WRITE (Vname(3,varid),'(a)')                        &
    &                      TRIM(ADJUSTL(Vinfo(3)))
                     WRITE (Vname(4,varid),'(a,a)')                      &
@@ -3901,7 +3923,7 @@
    &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
                     WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
    &                      TRIM(ADJUSTL(Vinfo(2)))                       &
-                          ,', functional group ', j, ', tracer type ', i
+                          ,', functional group ', j, ', tracer ', i
                     WRITE (Vname(3,varid),'(a)')                        &
    &                      TRIM(ADJUSTL(Vinfo(3)))
                     WRITE (Vname(4,varid),'(a,a)')                      &
@@ -3926,7 +3948,7 @@
    &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
                     WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
    &                      TRIM(ADJUSTL(Vinfo(2)))                       &
-                          ,', functional group ', j, ', tracer type ', i
+                          ,', functional group ', j, ', tracer ', i
                     WRITE (Vname(3,varid),'(a)')                        &
    &                      TRIM(ADJUSTL(Vinfo(3)))
                     WRITE (Vname(4,varid),'(a,a)')                      &
@@ -3952,7 +3974,7 @@
    &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
                     WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
    &                      TRIM(ADJUSTL(Vinfo(2)))                       &
-                          ,', functional group ', j, ', tracer type ', i
+                          ,', functional group ', j, ', tracer ', i
                     WRITE (Vname(3,varid),'(a)')                        &
    &                      TRIM(ADJUSTL(Vinfo(3)))
                     WRITE (Vname(4,varid),'(a,a)')                      &
@@ -3977,7 +3999,7 @@
    &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
                     WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
    &                      TRIM(ADJUSTL(Vinfo(2)))                       &
-                          ,', functional group ', j, ', tracer type ', i
+                          ,', functional group ', j, ', tracer ', i
                     WRITE (Vname(3,varid),'(a)')                        &
    &                      TRIM(ADJUSTL(Vinfo(3)))
                     WRITE (Vname(4,varid),'(a,a)')                      &
@@ -4002,7 +4024,7 @@
    &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
                     WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
    &                      TRIM(ADJUSTL(Vinfo(2)))                       &
-                          ,', functional group ', j, ', tracer type ', i
+                          ,', functional group ', j, ', tracer ', i
                     WRITE (Vname(3,varid),'(a)')                        &
    &                      TRIM(ADJUSTL(Vinfo(3)))
                     WRITE (Vname(4,varid),'(a,a)')                      &
@@ -4027,7 +4049,7 @@
    &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
                     WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
    &                      TRIM(ADJUSTL(Vinfo(2)))                       &
-                          ,', functional group ', j, ', tracer type ', i
+                          ,', functional group ', j, ', tracer ', i
                     WRITE (Vname(3,varid),'(a)')                        &
    &                      TRIM(ADJUSTL(Vinfo(3)))
                     WRITE (Vname(4,varid),'(a,a)')                      &
@@ -4053,7 +4075,7 @@
    &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
                     WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
    &                      TRIM(ADJUSTL(Vinfo(2)))                       &
-                          ,', functional group ', j, ', tracer type ', i
+                          ,', functional group ', j, ', tracer ', i
                     WRITE (Vname(3,varid),'(a)')                        &
    &                      TRIM(ADJUSTL(Vinfo(3)))
                     WRITE (Vname(4,varid),'(a,a)')                      &
@@ -4078,7 +4100,7 @@
    &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
                     WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
    &                      TRIM(ADJUSTL(Vinfo(2)))                       &
-                          ,', functional group ', j, ', tracer type ', i
+                          ,', functional group ', j, ', tracer ', i
                     WRITE (Vname(3,varid),'(a)')                        &
    &                      TRIM(ADJUSTL(Vinfo(3)))
                     WRITE (Vname(4,varid),'(a,a)')                      &
@@ -4105,7 +4127,7 @@
    &                      TRIM(ADJUSTL(Vinfo(1))), j,'_',i
                     WRITE (Vname(2,varid),'(a,a,i2.2,a,i2.2)')          &
    &                      TRIM(ADJUSTL(Vinfo(2)))                       &
-                          ,', functional group ', j, ', tracer type ', i
+                          ,', functional group ', j, ', tracer ', i
                     WRITE (Vname(3,varid),'(a)')                        &
    &                      TRIM(ADJUSTL(Vinfo(3)))
                     WRITE (Vname(4,varid),'(a,a)')                      &

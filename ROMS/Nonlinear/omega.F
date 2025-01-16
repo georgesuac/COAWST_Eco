@@ -184,9 +184,21 @@
         END DO
         DO k=1,N(ng)
           DO i=Istr,Iend
+!!!>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>TN:Add
+!  Apply SGD mass point sources - Volume influx.
+# ifdef SGD_ON
+            W(i,j,k)=W(i,j,k-1)-                                        &
+     &               (Huon(i+1,j,k)-Huon(i,j,k)+                        &
+     &                Hvom(i,j+1,k)-Hvom(i,j,k))+                       &
+     &               SOURCES(ng)%Qsgd(k)*sgd_src(i,j)
+# else
+!!!<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<TN:Add
             W(i,j,k)=W(i,j,k-1)-                                        &
      &               (Huon(i+1,j,k)-Huon(i,j,k)+                        &
      &                Hvom(i,j+1,k)-Hvom(i,j,k))
+!!!>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>TN:Add
+# endif
+!!!<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<TN:Add
           END DO
         END DO
 !
@@ -205,25 +217,27 @@
      &          ((JstrR.le.jj).and.(jj.le.JendR)).and.                  &
      &          (j.eq.jj)) THEN
               DO k=1,N(ng)
+!!!>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>TN:Add
+!  Apply SGD mass point sources - Volume influx.
+# ifdef SGD_ON
+                W(ii,jj,k)=W(ii,jj,k-1)-                                &
+     &                     (Huon(ii+1,jj,k)-Huon(ii,jj,k)+              &
+     &                      Hvom(ii,jj+1,k)-Hvom(ii,jj,k))+             &
+     &                     SOURCES(ng)%Qsrc(is,k)+                      &
+     &                     SOURCES(ng)%Qsgd(k)*sgd_src(ii,jj)
+# else
+!!!<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<TN:Add
                 W(ii,jj,k)=W(ii,jj,k-1)-                                &
      &                     (Huon(ii+1,jj,k)-Huon(ii,jj,k)+              &
      &                      Hvom(ii,jj+1,k)-Hvom(ii,jj,k))+             &
      &                     SOURCES(ng)%Qsrc(is,k)
+!!!>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>TN:Add
+# endif
+!!!<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<TN:Add
               END DO
             END IF
           END DO
         END IF
-!!!>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>TN:Add
-# ifdef SGD_ON
-!
-!  Apply mass point sources - Volume influx.
-!
-        DO i=Istr,Iend
-!          W(i,j,1)=W(i,j,1)+SOURCES(ng)%Qsgd*sgd_src(i,j)
-          W(i,j,0)=W(i,j,0)+SOURCES(ng)%Qsgd*sgd_src(i,j)
-        END DO
-# endif
-!!!<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<TN:Add
 # if !defined OFFLINE /*<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< TN: add */
         DO i=Istr,Iend
           wrk(i)=W(i,j,N(ng))/(z_w(i,j,N(ng))-z_w(i,j,0))

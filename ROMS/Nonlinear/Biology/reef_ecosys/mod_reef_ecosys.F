@@ -1207,7 +1207,7 @@ END SUBROUTINE allocate_reef_ecosys
           , Fdep_FeS2(:)      &  ! FeS2 depositoin flux (nmol cm-2 s-1)
           , Fdep_S0(:)        &  ! S0 depositoin flux (nmol cm-2 s-1)
 #   if defined SEDECO_SGD && defined SGD_ON
-          , sgd_flux          &   ! sumbarine groundwater discharge rate of sediment (cm s-1)  This flux is assumed to be the same throughout the sediment ecosystem layers (no compression/expansion) So volume flux doesn't change but concentrations of tracers do
+          , sgd_flux/p_sand   &   ! SGD rate (cm s-1) * SGD only occures sand area. 
           , sgd_Tmp           &   ! SGD concentration coming in through bottom: Tmp: Temperature (oC)
           , sgd_Sal           &   ! SGD concentration coming in through bottom: Sal: Salinity (PSU)
           , sgd_DOx           &   ! SGD concentration coming in through bottom: DOx: Dissolved oxygen (umol L-1)

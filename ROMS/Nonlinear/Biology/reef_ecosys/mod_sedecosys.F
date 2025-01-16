@@ -1088,20 +1088,20 @@ CONTAINS
     SEDECO(ng)%NH4(:,Nsed,i,j) = sgd_NH4(:)         ! NH4: NH4 (umol L-1)
     SEDECO(ng)%PO4(:,Nsed,i,j) = sgd_PO4(:)         ! PO4: PO4 (umol L-1)
     SEDECO(ng)%DOC(:,:,Nsed,i,j) = sgd_DOC(:,:)   ! DOC: Dissolved organic carbon (umol L-1)
-    SEDECO(ng)%POC(:,:,Nsed,i,j) = 0.0d0          ! POC: Particulate organic carbon (nmol g-1)
+!    SEDECO(ng)%POC(:,:,Nsed,i,j) = 0.0d0          ! POC: Particulate organic carbon (nmol g-1)
     SEDECO(ng)%DON(:,:,Nsed,i,j) = sgd_DON(:,:)   ! DON: Dissolved organic nitrogen (umol L-1)
-    SEDECO(ng)%PON(:,:,Nsed,i,j) = 0.0d0          ! PON: Particulate organic nitrogen (PON: umol L-1)
+!    SEDECO(ng)%PON(:,:,Nsed,i,j) = 0.0d0          ! PON: Particulate organic nitrogen (PON: umol L-1)
     SEDECO(ng)%DOP(:,:,Nsed,i,j) = sgd_DOP(:,:)   ! DOP: Dissolved organic phosporius (umol L-1)
-    SEDECO(ng)%POP(:,:,Nsed,i,j) = 0.0d0          ! POP: Particulate organic phosporius (POP: umol L-1)
-    SEDECO(ng)%PIC(:,Nsed,i,j)  = 0.0d0    ! PIC: Particulate CaCO3 (nmol g-1)
+!    SEDECO(ng)%POP(:,:,Nsed,i,j) = 0.0d0          ! POP: Particulate organic phosporius (POP: umol L-1)
+!    SEDECO(ng)%PIC(:,Nsed,i,j)  = 0.0d0    ! PIC: Particulate CaCO3 (nmol g-1)
     SEDECO(ng)%Mn2(Nsed,i,j) = 0.0d0         ! Mn2 (umol L-1)
-    SEDECO(ng)%MnO2(Nsed,i,j) = 0.0d0
+!    SEDECO(ng)%MnO2(Nsed,i,j) = 0.0d0
     SEDECO(ng)%Fe2 (Nsed,i,j) = 0.0d0        ! Fe2 (umol L-1)
-    SEDECO(ng)%FeS2(:,Nsed,i,j) = 0.0d0
-    SEDECO(ng)%FeOOH(Nsed,i,j) = 0.0d0
+!    SEDECO(ng)%FeS2(:,Nsed,i,j) = 0.0d0
+!    SEDECO(ng)%FeOOH(Nsed,i,j) = 0.0d0
     SEDECO(ng)%H2S(:,Nsed,i,j) = 0.0d0     ! H2S (umol L-1)
     SEDECO(ng)%SO4(:,Nsed,i,j) = 0.02824d0*sgd_Sal/35.0d0 *1.0d6  ! SO4 (umol L-1)
-    SEDECO(ng)%S0 (:,Nsed,i,j) = 0.0d0
+!    SEDECO(ng)%S0 (:,Nsed,i,j) = 0.0d0
 
 !! === Advection Flux calculation ======================================
 

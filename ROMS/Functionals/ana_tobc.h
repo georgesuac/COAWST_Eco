@@ -402,73 +402,73 @@
 
 # if defined CARBON_ISOTOPE || defined CLUMPED_ISOTOPE
             BOUNDARY(ng)%t_east(j,k,iDIC(iC13))                                              &
-     &        = Ci_from_Ct_delta(BOUNDARY(ng)%t_east(j,k,iDIC(iCt)),   d13C_DIC_0(ng), R13C_VPDB )                    &
+     &        = Ci_from_Ct_delta(BOUNDARY(ng)%t_east(j,k,iDIC(iCt)),   d13C_DIC_0(ng), R13C_VPDB )
             DO m=1,Ndom
               BOUNDARY(ng)%t_east(j,k,iDOC(iC13,m))                                          &
-     &        = Ci_from_Ct_delta(BOUNDARY(ng)%t_east(j,k,iDOC(iCt,m)), d13C_DOC_0(m,ng), R13C_VPDB )                    &
+     &        = Ci_from_Ct_delta(BOUNDARY(ng)%t_east(j,k,iDOC(iCt,m)), d13C_DOC_0(m,ng), R13C_VPDB )
             END DO
             DO m=1,Npom
               BOUNDARY(ng)%t_east(j,k,iPOC(iC13,m))                                          &
-     &        = Ci_from_Ct_delta(BOUNDARY(ng)%t_east(j,k,iPOC(iCt,m)), d13C_POC_0(m,ng), R13C_VPDB )                    &
+     &        = Ci_from_Ct_delta(BOUNDARY(ng)%t_east(j,k,iPOC(iCt,m)), d13C_POC_0(m,ng), R13C_VPDB )
             END DO
             DO m=1,Nphy
               BOUNDARY(ng)%t_east(j,k,iPhyC(iC13,m))                                          &
-     &        = Ci_from_Ct_delta(BOUNDARY(ng)%t_east(j,k,iPhyC(iCt,m)), d13C_PhyC_0(m,ng), R13C_VPDB )                    &
+     &        = Ci_from_Ct_delta(BOUNDARY(ng)%t_east(j,k,iPhyC(iCt,m)), d13C_PhyC_0(m,ng), R13C_VPDB )
             END DO
             DO m=1,Nzoo
               BOUNDARY(ng)%t_east(j,k,iZooC(iC13,m))                                          &
-     &        = Ci_from_Ct_delta(BOUNDARY(ng)%t_east(j,k,iZooC(iCt,m)), d13C_ZooC_0(m,ng), R13C_VPDB )                    &
+     &        = Ci_from_Ct_delta(BOUNDARY(ng)%t_east(j,k,iZooC(iCt,m)), d13C_ZooC_0(m,ng), R13C_VPDB )
             END DO
             DO m=1,Npim
               BOUNDARY(ng)%t_east(j,k,iPIC(iC13,m))                                          &
-     &        = Ci_from_Ct_delta(BOUNDARY(ng)%t_east(j,k,iPIC(iCt,m)), d13C_PIC_0(m,ng), R13C_VPDB )                    &
+     &        = Ci_from_Ct_delta(BOUNDARY(ng)%t_east(j,k,iPIC(iCt,m)), d13C_PIC_0(m,ng), R13C_VPDB )
             END DO
 #  if defined CLUMPED_ISOTOPE
 !**************** Under developpment *************************
             BOUNDARY(ng)%t_east(j,k,iDIC(iD47))                                              &
-     &        = Ci_from_Ct_delta(BOUNDARY(ng)%t_east(j,k,iDIC(iCt)),   D47_DIC_0(ng), R47D_???? )                    &
+     &        = Ci_from_Ct_delta(BOUNDARY(ng)%t_east(j,k,iDIC(iCt)),   D47_DIC_0(ng), R47D_???? )
             DO m=1,Ndom
               BOUNDARY(ng)%t_east(j,k,iDOC(iD47,m))                                          &
-     &        = Ci_from_Ct_delta(BOUNDARY(ng)%t_east(j,k,iDOC(iCt,m)), D47_DOC_0(m,ng), R47D_???? )                    &
+     &        = Ci_from_Ct_delta(BOUNDARY(ng)%t_east(j,k,iDOC(iCt,m)), D47_DOC_0(m,ng), R47D_???? )
             END DO
             DO m=1,Npom
               BOUNDARY(ng)%t_east(j,k,iPOC(iD47,m))                                          &
-     &        = Ci_from_Ct_delta(BOUNDARY(ng)%t_east(j,k,iPOC(iCt,m)), D47_POC_0(m,ng), R47D_???? )                    &
+     &        = Ci_from_Ct_delta(BOUNDARY(ng)%t_east(j,k,iPOC(iCt,m)), D47_POC_0(m,ng), R47D_???? )
             END DO
             DO m=1,Nphy
               BOUNDARY(ng)%t_east(j,k,iPhyC(iD47,m))                                          &
-     &        = Ci_from_Ct_delta(BOUNDARY(ng)%t_east(j,k,iPhyC(iCt,m)), D47_PhyC_0(m,ng), R47D_???? )                    &
+     &        = Ci_from_Ct_delta(BOUNDARY(ng)%t_east(j,k,iPhyC(iCt,m)), D47_PhyC_0(m,ng), R47D_???? )
             END DO
             DO m=1,Nzoo
               BOUNDARY(ng)%t_east(j,k,iZooC(iD47,m))                                          &
-     &        = Ci_from_Ct_delta(BOUNDARY(ng)%t_east(j,k,iZooC(iCt,m)), D47_ZooC_0(m,ng), R47D_???? )                    &
+     &        = Ci_from_Ct_delta(BOUNDARY(ng)%t_east(j,k,iZooC(iCt,m)), D47_ZooC_0(m,ng), R47D_???? )
             END DO
             DO m=1,Npim
               BOUNDARY(ng)%t_east(j,k,iPIC(iD47,m))                                          &
-     &        = Ci_from_Ct_delta(BOUNDARY(ng)%t_east(j,k,iPIC(iCt,m)), D47_PIC_0(m,ng), R47D_???? )                    &
+     &        = Ci_from_Ct_delta(BOUNDARY(ng)%t_east(j,k,iPIC(iCt,m)), D47_PIC_0(m,ng), R47D_???? )
             END DO
 #  endif
 # endif
 # if defined NITROGEN_ISOTOPE
             BOUNDARY(ng)%t_east(j,k,iNO3(iN15))                                              &
-     &        = Ci_from_Ct_delta(BOUNDARY(ng)%t_east(j,k,iNO3(iNt)),   d15N_NO3_0(ng), R15N_AIR )                    &
+     &        = Ci_from_Ct_delta(BOUNDARY(ng)%t_east(j,k,iNO3(iNt)),   d15N_NO3_0(ng), R15N_AIR )
             BOUNDARY(ng)%t_east(j,k,iNH4(iN15))                                              &
-     &        = Ci_from_Ct_delta(BOUNDARY(ng)%t_east(j,k,iNH4(iNt)),   d15N_NH4_0(ng), R15N_AIR )                    &
+     &        = Ci_from_Ct_delta(BOUNDARY(ng)%t_east(j,k,iNH4(iNt)),   d15N_NH4_0(ng), R15N_AIR )
             DO m=1,Ndom
               BOUNDARY(ng)%t_east(j,k,iDON(iN15,m))                                          &
-     &        = Ci_from_Ct_delta(BOUNDARY(ng)%t_east(j,k,iDON(iNt,m)), d15N_DON_0(m,ng), R15N_AIR )                    &
+     &        = Ci_from_Ct_delta(BOUNDARY(ng)%t_east(j,k,iDON(iNt,m)), d15N_DON_0(m,ng), R15N_AIR )
             END DO
             DO m=1,Npom
               BOUNDARY(ng)%t_east(j,k,iPON(iN15,m))                                          &
-     &        = Ci_from_Ct_delta(BOUNDARY(ng)%t_east(j,k,iPON(iNt,m)), d15N_PON_0(m,ng), R15N_AIR )                    &
+     &        = Ci_from_Ct_delta(BOUNDARY(ng)%t_east(j,k,iPON(iNt,m)), d15N_PON_0(m,ng), R15N_AIR )
             END DO
             DO m=1,Nphy
               BOUNDARY(ng)%t_east(j,k,iPhyN(iN15,m))                                          &
-     &        = Ci_from_Ct_delta(BOUNDARY(ng)%t_east(j,k,iPhyN(iNt,m)), d15N_PhyN_0(m,ng), R15N_AIR )                    &
+     &        = Ci_from_Ct_delta(BOUNDARY(ng)%t_east(j,k,iPhyN(iNt,m)), d15N_PhyN_0(m,ng), R15N_AIR )
             END DO
             DO m=1,Nzoo
               BOUNDARY(ng)%t_east(j,k,iZooN(iN15,m))                                          &
-     &        = Ci_from_Ct_delta(BOUNDARY(ng)%t_east(j,k,iZooN(iNt,m)), d15N_ZooN_0(m,ng), R15N_AIR )                    &
+     &        = Ci_from_Ct_delta(BOUNDARY(ng)%t_east(j,k,iZooN(iNt,m)), d15N_ZooN_0(m,ng), R15N_AIR )
             END DO
 # endif
 # if defined COT_STARFISH
@@ -606,73 +606,73 @@
 
 # if defined CARBON_ISOTOPE || defined CLUMPED_ISOTOPE
             BOUNDARY(ng)%t_west(j,k,iDIC(iC13))                                              &
-     &        = Ci_from_Ct_delta(BOUNDARY(ng)%t_west(j,k,iDIC(iCt)),   d13C_DIC_0(ng), R13C_VPDB )                    &
+     &        = Ci_from_Ct_delta(BOUNDARY(ng)%t_west(j,k,iDIC(iCt)),   d13C_DIC_0(ng), R13C_VPDB )
             DO m=1,Ndom
               BOUNDARY(ng)%t_west(j,k,iDOC(iC13,m))                                          &
-     &        = Ci_from_Ct_delta(BOUNDARY(ng)%t_west(j,k,iDOC(iCt,m)), d13C_DOC_0(m,ng), R13C_VPDB )                    &
+     &        = Ci_from_Ct_delta(BOUNDARY(ng)%t_west(j,k,iDOC(iCt,m)), d13C_DOC_0(m,ng), R13C_VPDB )
             END DO
             DO m=1,Npom
               BOUNDARY(ng)%t_west(j,k,iPOC(iC13,m))                                          &
-     &        = Ci_from_Ct_delta(BOUNDARY(ng)%t_west(j,k,iPOC(iCt,m)), d13C_POC_0(m,ng), R13C_VPDB )                    &
+     &        = Ci_from_Ct_delta(BOUNDARY(ng)%t_west(j,k,iPOC(iCt,m)), d13C_POC_0(m,ng), R13C_VPDB )
             END DO
             DO m=1,Nphy
               BOUNDARY(ng)%t_west(j,k,iPhyC(iC13,m))                                          &
-     &        = Ci_from_Ct_delta(BOUNDARY(ng)%t_west(j,k,iPhyC(iCt,m)), d13C_PhyC_0(m,ng), R13C_VPDB )                    &
+     &        = Ci_from_Ct_delta(BOUNDARY(ng)%t_west(j,k,iPhyC(iCt,m)), d13C_PhyC_0(m,ng), R13C_VPDB )
             END DO
             DO m=1,Nzoo
               BOUNDARY(ng)%t_west(j,k,iZooC(iC13,m))                                          &
-     &        = Ci_from_Ct_delta(BOUNDARY(ng)%t_west(j,k,iZooC(iCt,m)), d13C_ZooC_0(m,ng), R13C_VPDB )                    &
+     &        = Ci_from_Ct_delta(BOUNDARY(ng)%t_west(j,k,iZooC(iCt,m)), d13C_ZooC_0(m,ng), R13C_VPDB )
             END DO
             DO m=1,Npim
               BOUNDARY(ng)%t_west(j,k,iPIC(iC13,m))                                          &
-     &        = Ci_from_Ct_delta(BOUNDARY(ng)%t_west(j,k,iPIC(iCt,m)), d13C_PIC_0(m,ng), R13C_VPDB )                    &
+     &        = Ci_from_Ct_delta(BOUNDARY(ng)%t_west(j,k,iPIC(iCt,m)), d13C_PIC_0(m,ng), R13C_VPDB )
             END DO
 #  if defined CLUMPED_ISOTOPE
 !**************** Under developpment *************************
             BOUNDARY(ng)%t_west(j,k,iDIC(iD47))                                              &
-     &        = Ci_from_Ct_delta(BOUNDARY(ng)%t_west(j,k,iDIC(iCt)),   D47_DIC_0(ng), R47D_???? )                    &
+     &        = Ci_from_Ct_delta(BOUNDARY(ng)%t_west(j,k,iDIC(iCt)),   D47_DIC_0(ng), R47D_???? )
             DO m=1,Ndom
               BOUNDARY(ng)%t_west(j,k,iDOC(iD47,m))                                          &
-     &        = Ci_from_Ct_delta(BOUNDARY(ng)%t_west(j,k,iDOC(iCt,m)), D47_DOC_0(m,ng), R47D_???? )                    &
+     &        = Ci_from_Ct_delta(BOUNDARY(ng)%t_west(j,k,iDOC(iCt,m)), D47_DOC_0(m,ng), R47D_???? )
             END DO
             DO m=1,Npom
               BOUNDARY(ng)%t_west(j,k,iPOC(iD47,m))                                          &
-     &        = Ci_from_Ct_delta(BOUNDARY(ng)%t_west(j,k,iPOC(iCt,m)), D47_POC_0(m,ng), R47D_???? )                    &
+     &        = Ci_from_Ct_delta(BOUNDARY(ng)%t_west(j,k,iPOC(iCt,m)), D47_POC_0(m,ng), R47D_???? )
             END DO
             DO m=1,Nphy
               BOUNDARY(ng)%t_west(j,k,iPhyC(iD47,m))                                          &
-     &        = Ci_from_Ct_delta(BOUNDARY(ng)%t_west(j,k,iPhyC(iCt,m)), D47_PhyC_0(m,ng), R47D_???? )                    &
+     &        = Ci_from_Ct_delta(BOUNDARY(ng)%t_west(j,k,iPhyC(iCt,m)), D47_PhyC_0(m,ng), R47D_???? )
             END DO
             DO m=1,Nzoo
               BOUNDARY(ng)%t_west(j,k,iZooC(iD47,m))                                          &
-     &        = Ci_from_Ct_delta(BOUNDARY(ng)%t_west(j,k,iZooC(iCt,m)), D47_ZooC_0(m,ng), R47D_???? )                    &
+     &        = Ci_from_Ct_delta(BOUNDARY(ng)%t_west(j,k,iZooC(iCt,m)), D47_ZooC_0(m,ng), R47D_???? )
             END DO
             DO m=1,Npim
               BOUNDARY(ng)%t_west(j,k,iPIC(iD47,m))                                          &
-     &        = Ci_from_Ct_delta(BOUNDARY(ng)%t_west(j,k,iPIC(iCt,m)), D47_PIC_0(m,ng), R47D_???? )                    &
+     &        = Ci_from_Ct_delta(BOUNDARY(ng)%t_west(j,k,iPIC(iCt,m)), D47_PIC_0(m,ng), R47D_???? )
             END DO
 #  endif
 # endif
 # if defined NITROGEN_ISOTOPE
             BOUNDARY(ng)%t_west(j,k,iNO3(iN15))                                              &
-     &        = Ci_from_Ct_delta(BOUNDARY(ng)%t_west(j,k,iNO3(iNt)),   d15N_NO3_0(ng), R15N_AIR )                    &
+     &        = Ci_from_Ct_delta(BOUNDARY(ng)%t_west(j,k,iNO3(iNt)),   d15N_NO3_0(ng), R15N_AIR )
             BOUNDARY(ng)%t_west(j,k,iNH4(iN15))                                              &
-     &        = Ci_from_Ct_delta(BOUNDARY(ng)%t_west(j,k,iNH4(iNt)),   d15N_NH4_0(ng), R15N_AIR )                    &
+     &        = Ci_from_Ct_delta(BOUNDARY(ng)%t_west(j,k,iNH4(iNt)),   d15N_NH4_0(ng), R15N_AIR )
             DO m=1,Ndom
               BOUNDARY(ng)%t_west(j,k,iDON(iN15,m))                                          &
-     &        = Ci_from_Ct_delta(BOUNDARY(ng)%t_west(j,k,iDON(iNt,m)), d15N_DON_0(m,ng), R15N_AIR )                    &
+     &        = Ci_from_Ct_delta(BOUNDARY(ng)%t_west(j,k,iDON(iNt,m)), d15N_DON_0(m,ng), R15N_AIR )
             END DO
             DO m=1,Npom
               BOUNDARY(ng)%t_west(j,k,iPON(iN15,m))                                          &
-     &        = Ci_from_Ct_delta(BOUNDARY(ng)%t_west(j,k,iPON(iNt,m)), d15N_PON_0(m,ng), R15N_AIR )                    &
+     &        = Ci_from_Ct_delta(BOUNDARY(ng)%t_west(j,k,iPON(iNt,m)), d15N_PON_0(m,ng), R15N_AIR )
             END DO
             DO m=1,Nphy
               BOUNDARY(ng)%t_west(j,k,iPhyN(iN15,m))                                          &
-     &        = Ci_from_Ct_delta(BOUNDARY(ng)%t_west(j,k,iPhyN(iNt,m)), d15N_PhyN_0(m,ng), R15N_AIR )                    &
+     &        = Ci_from_Ct_delta(BOUNDARY(ng)%t_west(j,k,iPhyN(iNt,m)), d15N_PhyN_0(m,ng), R15N_AIR )
             END DO
             DO m=1,Nzoo
               BOUNDARY(ng)%t_west(j,k,iZooN(iN15,m))                                          &
-     &        = Ci_from_Ct_delta(BOUNDARY(ng)%t_west(j,k,iZooN(iNt,m)), d15N_ZooN_0(m,ng), R15N_AIR )                    &
+     &        = Ci_from_Ct_delta(BOUNDARY(ng)%t_west(j,k,iZooN(iNt,m)), d15N_ZooN_0(m,ng), R15N_AIR )
             END DO
 # endif
 # if defined COT_STARFISH

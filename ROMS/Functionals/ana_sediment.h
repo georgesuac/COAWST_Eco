@@ -435,7 +435,7 @@
                bed(i,j,k,ithck)=0.0_r8   !
              endif
 #  else
-               bed(i,j,k,ithck)=0.0_r8   !10.0_r8
+             bed(i,j,k,ithck)=0.0_r8   !10.0_r8
 #  endif
              bed(i,j,k,iporo)=0.50_r8
              

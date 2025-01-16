@@ -257,6 +257,7 @@
       integer :: iSdPON(N_Nsp,Npom)    !! Particulate organic nitrogen   (fast :Labile)      (µmol l-1)
       integer :: iSdDOP(N_Psp,Ndom)    !! Dissolved organic phosphorus   (fast :Labile)      (µmol l-1)
       integer :: iSdPOP(N_Psp,Npom)    !! Particulate organic phosphorus (fast :Labile)      (µmol l-1)
+      integer :: iSdPIC(N_Csp)         !! CaCO3 (nmol g-1)
       integer :: iSdMn2       !! Manganese ion        (µmol l-1)
       integer :: iSdMnO2      !! Manganese dioxide    (nmol g-1)
       integer :: iSdFe2       !! iron(II)          (µmol l-1)
@@ -703,6 +704,10 @@
           iSdPOP(isp,m)=ic
         END DO
       END DO  
+      DO isp=1,N_Csp     
+        ic=ic+1
+        iSdPIC(isp)=ic
+      END DO
       ic=ic+1
       iSdMn2=ic
       ic=ic+1
@@ -1174,6 +1179,7 @@
               SEDECO(ng)%PON (:,m,k,i,j) = OCEAN(ng)%HisBiosed3d(i,j,k,iSdPON(1,m):iSdPON(N_Nsp,m) ) 
               SEDECO(ng)%POP (:,m,k,i,j) = OCEAN(ng)%HisBiosed3d(i,j,k,iSdPOP(1,m):iSdPOP(N_Psp,m) ) 
             END DO 
+            SEDECO(ng)%PIC (:,k,i,j) = OCEAN(ng)%HisBiosed3d(i,j,k,iSdPIC(1):iSdPIC(N_Csp) ) 
             SEDECO(ng)%Mn2 (k,i,j) = OCEAN(ng)%HisBiosed3d(i,j,k,iSdMn2 ) 
             SEDECO(ng)%MnO2(k,i,j) = OCEAN(ng)%HisBiosed3d(i,j,k,iSdMnO2) 
             SEDECO(ng)%Fe2 (k,i,j) = OCEAN(ng)%HisBiosed3d(i,j,k,iSdFe2 ) 
@@ -1307,6 +1313,7 @@
               OCEAN(ng)%HisBiosed3d(i,j,k,iSdPON(1,m):iSdPON(N_Nsp,m) ) = SEDECO(ng)%PON (:,m,k,i,j)
               OCEAN(ng)%HisBiosed3d(i,j,k,iSdPOP(1,m):iSdPOP(N_Psp,m) ) = SEDECO(ng)%POP (:,m,k,i,j)
             END DO 
+            OCEAN(ng)%HisBiosed3d(i,j,k,iSdPIC(1):iSdPIC(N_Csp) ) = SEDECO(ng)%PIC (:,k,i,j)
             OCEAN(ng)%HisBiosed3d(i,j,k,iSdMn2 ) = SEDECO(ng)%Mn2 (k,i,j)
             OCEAN(ng)%HisBiosed3d(i,j,k,iSdMnO2) = SEDECO(ng)%MnO2(k,i,j)
             OCEAN(ng)%HisBiosed3d(i,j,k,iSdFe2 ) = SEDECO(ng)%Fe2 (k,i,j)

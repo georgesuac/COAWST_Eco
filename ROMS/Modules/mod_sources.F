@@ -82,7 +82,7 @@
 #endif
 !!!>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>TN:Add
 # ifdef SGD_ON
-          real(r8), pointer :: Qsgd
+          real(r8), pointer :: Qsgd(:)
           real(r8), pointer :: Tsgd(:)
 # endif
 !!!<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<TN:Add
@@ -216,7 +216,7 @@
 #endif
 !!!>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>TN:Add
 #ifdef SGD_ON
-      allocate ( SOURCES(ng) % Qsgd )
+      allocate ( SOURCES(ng) % Qsgd(N(ng)) )
       allocate ( SOURCES(ng) % Tsgd(NT(ng)) )
 #endif
 !
@@ -272,7 +272,7 @@
       END DO
 !!!>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>TN:Add
 #ifdef SGD_ON
-      SOURCES(ng) % Qsgd = IniVal
+      SOURCES(ng) % Qsgd(:) = IniVal
       DO itrc=1,NT(ng)
         SOURCES(ng) % Tsgd(itrc) = IniVal
       END DO

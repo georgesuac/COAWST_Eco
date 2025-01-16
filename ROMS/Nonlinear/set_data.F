@@ -1483,11 +1483,6 @@
      &                    update)
           IF (FoundError(exit_flag, NoError, __LINE__,                  &
      &                   __FILE__)) RETURN
-!!!>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>TN:add
-#  ifdef SGD_ON
-          SOURCES(ng)%Qsgd=SOURCES(ng)%Qbar(Nsrc(ng))
-#  endif
-!!!<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<TN:Add
 #  ifdef SOLVE3D
           DO k=1,N(ng)
             DO i=1,Nsrc(ng)
@@ -1524,49 +1519,19 @@
      &                     __FILE__)) RETURN
           END IF
         END DO
-!!!>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>TN:add
-#   ifdef REEF_ECOSYS
-#    if defined CARBON_ISOTOPE && !defined CARBON_TRACE
-        DO k=1,N(ng)
-          DO is=1,Nsrc(ng)
-            SOURCES(ng)%Tsrc(is,k,iT13C)=R13C_fromd13C(                 &
-     &                                 SOURCES(ng)%Tsrc(is,k,iT13C)     &
-     &                               )*SOURCES(ng)%Tsrc(is,k,iTIC_)
-#     if defined ORGANIC_MATTER
-            DO itrc=1,Ndom
-              SOURCES(ng)%Tsrc(is,k,iDO13C(itrc)) = R13C_fromd13C(      &
-     &          SOURCES(ng)%Tsrc(is,k,iDO13C(itrc)) )*SOURCES(ng)%Tsrc(is,k,iDOC(itrc)) 
-            END DO
-            DO itrc=1,Npom
-              SOURCES(ng)%Tsrc(is,k,iPO13C(itrc)) = R13C_fromd13C(      &
-     &                   SOURCES(ng)%Tsrc(is,k,iPO13C(itrc)) )*SOURCES(ng)%Tsrc(is,k,iPOC(itrc))
-            END DO
-!            DO itrc=1,Nphy
-!              SOURCES(ng)%Tsrc(is,k,iPhyt13C(itrc)) = R13C_fromd13C(    &
-!     &                  SOURCES(ng)%Tsrc(is,k,iPhyt13C(itrc)) )*SOURCES(ng)%Tsrc(is,k,iPhyt(itrc))
-!            END DO
-!            DO itrc=1,Nzoo
-!              SOURCES(ng)%Tsrc(is,k,iZoop13C(itrc)) = R13C_fromd13C(     &
-!     &                  SOURCES(ng)%Tsrc(is,k,iZoop13C(itrc)) )*SOURCES(ng)%Tsrc(is,k,iZoop(itrc))
-!            END DO
-            DO itrc=1,Npim
-              SOURCES(ng)%Tsrc(is,k,iPI13C(itrc)) = R13C_fromd13C(       &
-     &                  SOURCES(ng)%Tsrc(is,k,iPI13C(itrc)) )*SOURCES(ng)%Tsrc(is,k,iPIC(itrc))
-            END DO
-#     endif
-          END DO
-        END DO
-#    endif
-#   endif
-#   if defined SGD_ON
-        DO itrc=1,NT(ng)
-          SOURCES(ng)%Tsgd(itrc)=SOURCES(ng)%Tsrc(Nsrc(ng),1,itrc)  !!!!!!!!!!!!!!!!!!!!!!!!!!Test case
-        END DO
-#   endif
-!!!<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<TN:Add
 #  endif
       END IF
 # endif
+!!!>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>TN:add
+# ifdef SGD_ON
+!  The last point source index (Nsrc) is used for the SGD source
+      SOURCES(ng)%Qsgd(1)=SOURCES(ng)%Qbar(Nsrc(ng))
+      SOURCES(ng)%Qsgd(2:N(ng))=0.0_r8
+      DO itrc=1,NT(ng)
+        SOURCES(ng)%Tsgd(itrc)=SOURCES(ng)%Tsrc(Nsrc(ng),1,itrc)  !!!!!!!!!!!!!!!!!!!!!!!!!!Test case
+      END DO
+# endif
+!!!<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<TN:Add
 
 # ifdef HYPOXIA_SRM
 !

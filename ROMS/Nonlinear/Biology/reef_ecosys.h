@@ -95,7 +95,7 @@
      &                   GRID(ng) % sgd_src,                            &
      &                   GRID(ng) % pm,                                 &
      &                   GRID(ng) % pn,                                 &
-     &                   SOURCES(ng) % Qsgd,                            &
+     &                   SOURCES(ng) % Qsgd(1),                         &
      &                   SOURCES(ng) % Tsgd,                            &
 # endif
 #endif

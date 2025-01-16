@@ -1306,7 +1306,7 @@
             ![m mol/L]      = [m mol/L]          +
             t(i,j,1,nnew,itrc)=t(i,j,1,nnew,itrc)+                 &
             !                  [s/m2][m3/s]           []           [mol/L]
-     &                         cff   *SOURCES(ng)%Qsgd*sgd_src(i,j)*  &
+     &                         cff   *SOURCES(ng)%Qsgd(1)*sgd_src(i,j)*  &
      &                         cff3
 !  Old version
 !            FC(i,0)=FC(i,0)+SOURCES(ng)%Qsgd*                           &

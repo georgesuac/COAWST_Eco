@@ -1100,8 +1100,8 @@
       DO j=Jstr,Jend
         DO i=Istr,Iend
           zeta(i,j,knew)=zeta(i,j,knew)+                                &
-     &                   SOURCES(ng)%Qsgd*pm(i,j)*pn(i,j)*              &
-     &                   dtfast(ng)*sgd_src(i,j)
+     &                   SOURCES(ng)%Qsgd(1)*sgd_src(i,j)*              &
+     &                   pm(i,j)*pn(i,j)*dtfast(ng)
         END DO
       END DO
 # endif

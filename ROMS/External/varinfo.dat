@@ -10992,7 +10992,7 @@
 
 'sediment_O2'                                             ! Input/Output
   'SedEco: dissolved oxygen'
-  'umolO2 L-1'                                 ! (µmol l-1)
+  'umolO2 L-1'                                 ! (umol l-1)
   'sediment_O2, scalar, series'
   'ocean_time'
   'iHbiosed3(iSdO2)'
@@ -11001,7 +11001,7 @@
 
 'sediment_TA'                                             ! Input/Output
   'SedEco: total alkalinity'
-  'umol kg-1'                                 ! (µmol kg-1)
+  'umol kg-1'                                 ! (umol kg-1)
   'sediment_TA, scalar, series'
   'ocean_time'
   'iHbiosed3(iSdTA)'
@@ -11010,7 +11010,7 @@
 
 'sediment_DIC'                                             ! Input/Output
   'SedEco: dissolved inorganic carbon'
-  'umolC kg-1'                                 ! (µmol kg-1)
+  'umolC kg-1'                                 ! (umol kg-1)
   'sediment_DIC, scalar, series'
   'ocean_time'
   'iHbiosed3(iSdDIC(i))'
@@ -11019,7 +11019,7 @@
 
 'sediment_NO3'                                             ! Input/Output
   'SedEco: nitrate'
-  'umolNO3 L-1'                                 ! (µmol l-1)
+  'umolNO3 L-1'                                 ! (umol l-1)
   'sediment_NO3, scalar, series'
   'ocean_time'
   'iHbiosed3(iSdNO3(i))'
@@ -11028,7 +11028,7 @@
 
 'sediment_NH4'                                             ! Input/Output
   'SedEco: ammonium'
-  'umolNH4 L-1'                                 ! (µmol l-1)
+  'umolNH4 L-1'                                 ! (umol l-1)
   'sediment_NH4, scalar, series'
   'ocean_time'
   'iHbiosed3(iSdNH4(i))'
@@ -11037,7 +11037,7 @@
 
 'sediment_PO4'                                             ! Input/Output
   'SedEco: phosphate'
-  'umolPO4 L-1'                                 ! (µmol l-1)
+  'umolPO4 L-1'                                 ! (umol l-1)
   'sediment_PO4, scalar, series'
   'ocean_time'
   'iHbiosed3(iSdPO4(i))'
@@ -11046,7 +11046,7 @@
 
 'sediment_DOC'                                             ! Input/Output
   'SedEco: dissolved organic carbon'
-  'µmolC L-1'                                 ! (µmol l-1)
+  'umolC L-1'                                 ! (umol l-1)
   'sediment_DOC, scalar, series'
   'ocean_time'
   'iHbiosed3(iSdDOC(i,j))'
@@ -11064,7 +11064,7 @@
 
 'sediment_DON'                                             ! Input/Output
   'SedEco: dissolved organic nitrogen'
-  'umolN L-1'                                 ! (µmol l-1)
+  'umolN L-1'                                 ! (umol l-1)
   'sediment_DON, scalar, series'
   'ocean_time'
   'iHbiosed3(iSdDON(i,j))'
@@ -11082,7 +11082,7 @@
 
 'sediment_DOP'                                             ! Input/Output
   'SedEco: dissolved organic phosphorus'
-  'umolN L-1'                                 ! (µmol l-1)
+  'umolN L-1'                                 ! (umol l-1)
   'sediment_DOP, scalar, series'
   'ocean_time'
   'iHbiosed3(iSdDOP(i,j))'
@@ -11098,9 +11098,18 @@
   'd3dvar'
   1.0d0
 
+'sediment_PIC'                                             ! Input/Output
+  'SedEco: CaCO3 particule'
+  'nmolC g-1'                                 ! (nmolC g-1)
+  'sediment_PIC, scalar, series'
+  'ocean_time'
+  'iHbiosed3(iSdPIC(i))'
+  'd3dvar'
+  1.0d0
+
 'sediment_Mn2'                                             ! Input/Output
   'SedEco: manganese ion'
-  'umolMn L-1'                                 ! (µmol l-1)
+  'umolMn L-1'                                 ! (umol l-1)
   'sediment_Mn2, scalar, series'
   'ocean_time'
   'iHbiosed3(iSdMn2)'
@@ -11118,7 +11127,7 @@
 
 'sediment_Fe2'                                             ! Input/Output
   'SedEco: iron(II)'
-  'umolFe L-1'                                 ! (µmol l-1)
+  'umolFe L-1'                                 ! (umol l-1)
   'sediment_Fe2, scalar, series'
   'ocean_time'
   'iHbiosed3(iSdFe2)'
@@ -11163,7 +11172,7 @@
 
 'sediment_H2S'                                             ! Input/Output
   'SedEco: hydrogen sulfide'
-  'umolH2S L-1'                                 ! (µmol l-1)
+  'umolH2S L-1'                                 ! (umol l-1)
   'sediment_H2S, scalar, series'
   'ocean_time'
   'iHbiosed3(iSdH2S(i))'
@@ -11172,7 +11181,7 @@
 
 'sediment_SO4'                                             ! Input/Output
   'SedEco: sulfate'
-  'umolSO4 L-1'                                 ! (µmol l-1)
+  'umolSO4 L-1'                                 ! (umol l-1)
   'sediment_SO4, scalar, series'
   'ocean_time'
   'iHbiosed3(iSdSO4(i))'
