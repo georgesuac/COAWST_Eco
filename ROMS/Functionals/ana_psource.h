@@ -438,7 +438,7 @@
         is=1  ! Todoroki river flow rate (m3/s)
         SOURCES(ng)%Qbar(is)=1.0_r8   ! ~1 m3/s in normal condition
         is=2  ! SGD rate (m3/s) in each grid cell (50m x 50m) area
-        SOURCES(ng)%Qbar(is)=0.01_r8  !  SGD volume flux in each grid is calculated by:
+        SOURCES(ng)%Qbar(is)=0.001_r8 !  SGD volume flux in each grid is calculated by:
                                       !   Qbar*pm(i,j)*pn(i,j)*sgd_src(i,j) 
                                       !   (sgd_src(i,j) map should be included in the grd file)
 !!!<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< TN:Add

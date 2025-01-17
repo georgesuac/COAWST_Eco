@@ -895,6 +895,10 @@ MODULE mod_seagrass
     ! leaf-root biomass translocation
     real(8)               :: translocatable_mass        ! [mol.C]                     Biomass that can be translocated between leaf and root as limited by the translocation rate
 
+    real(8)               :: ocnDIC                     ! [umol/L] 
+    real(8)               :: ocnNO3                     ! [umol/L] 
+    real(8)               :: ocnNH4                     ! [umol/L] 
+    real(8)               :: ocnPO4                     ! [umol/L] 
     real(8)               :: rDIC_ocn(N_Csp)            ! [no dim.] 
     real(8)               :: rNO3_ocn(N_Nsp)            ! [no dim.] 
     real(8)               :: rNH4_ocn(N_Nsp)            ! [no dim.] 
@@ -903,9 +907,13 @@ MODULE mod_seagrass
     real(8)               :: rSgNBm  (N_Nsp)            ! [no dim.] 
     real(8)               :: rSgPBm  (N_Psp)            ! [no dim.] 
 # if defined SEAGRASS_ROOT_CARBON_OXYGEN_EXCHANGE
+    real(8)               :: sedDIC                     ! [umol/L] 
     real(8)               :: rDIC_sed(N_Csp,Nsed)       ! [no dim.] 
 # endif
 # if defined SEAGRASS_ROOT_NUTRIENT_UPTAKE
+    real(8)               :: sedNO3                     ! [umol/L] 
+    real(8)               :: sedNH4                     ! [umol/L] 
+    real(8)               :: sedPO4                     ! [umol/L] 
     real(8)               :: rNO3_sed(N_Nsp,Nsed)       ! [no dim.] 
     real(8)               :: rNH4_sed(N_Nsp,Nsed)       ! [no dim.] 
     real(8)               :: rPO4_sed(N_Psp,Nsed)       ! [no dim.] 
@@ -1130,8 +1138,13 @@ MODULE mod_seagrass
 
     ! f_abv_cur                   [g.lf.drywt g-1.tot.drywt]  also [mol.C.lf mol-1.C.tot] current above ground biomass to total biomass fraction, calculated on the last growth interval
     ! f_blw_cur                   [g.rt.drywt g-1.tot.drywt]  also [mol.C.rt mol-1.C.tot] current below ground biomass to total biomass fraction, calculated on the last growth interval
-    f_abv_cur = TotLfCBm/TotSgCBm
-    f_blw_cur = TotRtCBm/TotSgCBm
+    if(TotSgCBm>0) then   !!! <<<<<<<<<<<<<<<<< TN: added for safe calculation
+      f_abv_cur = TotLfCBm/TotSgCBm
+      f_blw_cur = TotRtCBm/TotSgCBm
+    else                  !!! <<<<<<<<<<<<<<<<< TN: added for safe calculation
+      f_abv_cur = 0.0d0   !!! <<<<<<<<<<<<<<<<< TN: added for safe calculation
+      f_blw_cur = 0.0d0   !!! <<<<<<<<<<<<<<<<< TN: added for safe calculation
+    endif                 !!! <<<<<<<<<<<<<<<<< TN: added for safe calculation
 
 # if defined SEAGRASS_ROOT_CARBON_OXYGEN_EXCHANGE || defined SEAGRASS_ROOT_NUTRIENT_UPTAKE || defined SEAGRASS_ROOT_POM
     ! sgrass_per_sedmnt           [m2.sg.hab m-2.sedmnt]      (0~1)  Seagrass coverage per sediment coverage
@@ -1234,9 +1247,10 @@ MODULE mod_seagrass
     ! k_lf_DIC                  [umol.DIC L-1]              Half saturation consentration of DIC in water column for growth
 
     ! [umol.DIC/m2.hab s]  = [umol.DIC/m2.lf s] [m2.lf/m2.hab] ( Michaelis-Menten term                      )
-    DIC_uptake_possible(0) = Lf_DIC_uptake_max  * LAI          * ocean_DIC_conc(iCt) / (k_lf_DIC + ocean_DIC_conc(iCt))
+    ocnDIC = max(ocean_DIC_conc(iCt),0.0d0)
+    DIC_uptake_possible(0) = Lf_DIC_uptake_max  * LAI          * ocnDIC / (k_lf_DIC + ocnDIC)
     ! [umol.DIC/m2.hab s]  = min( [umol.DIC/m2.hab s]   ,       [umol.DIC/L]   [m/s](1000L/m3)
-    DIC_uptake_possible(0) = min( DIC_uptake_possible(0), 0.5d0*ocean_DIC_conc(iCt)*dz/dt*1000.0d0 ) ! first order interpolation at low concentration limit to prevent overdraw
+    DIC_uptake_possible(0) = min( DIC_uptake_possible(0), 0.5d0*ocnDIC*dz/dt*1000.0d0 ) ! first order interpolation at low concentration limit to prevent overdraw
 
 # if defined SEAGRASS_ROOT_CARBON_OXYGEN_EXCHANGE
     ! DIC_uptake_possible(:)      [umol.DIC m-2.sg.hab s-1]   DIC uptake rate possible in each layer; 0 = water column, 1-Nsed = sediment layers
@@ -1246,10 +1260,13 @@ MODULE mod_seagrass
     ! sed_DIC(Nsed)               [umol.DIC L-1]              DIC consentration of sediment (in each sediment layer)
     ! k_rt_DIC                    [umol.DIC L-1]              Half saturation consentration of DIC in soil pore water for growth
     ! [umol.DIC/m2.hab s]       = [umol.DIC/g.rt s] []                     [g.rt/m2.hab] []
-    DIC_uptake_possible(1:Nsed) = Rt_DIC_flux_max   * root_mass_profile(:) * RtDryBm     &
-      * ( sed_DIC(:) / (k_rt_DIC + sed_DIC(:)) )
-    ! [umol.DIC/m2.hab s]       = min( [umol.DIC/m2.hab s]        ,      [umol.DO/L] [mm                   /s](1000L/m3)(m/1000mm)
-    DIC_uptake_possible(1:Nsed) = min( DIC_uptake_possible(1:Nsed), 0.5d0*sed_DIC(:)*sed_layer_thickness(:)/dt) ! first order interpolation at low concentration limit to prevent overdraw
+    do k=1,Nsed
+      sedDIC = max(sed_DIC(iCt,k),0.0d0) !!! <<<<<<<<<<<<<<<<< TN: added for safe calculation
+      DIC_uptake_possible(k) = Rt_DIC_flux_max   * root_mass_profile(k) * RtDryBm     &
+        * ( sedDIC / (k_rt_DIC + sedDIC ) )
+      ! [umol.DIC/m2.hab s]       = min( [umol.DIC/m2.hab s]        ,      [umol.DO/L] [mm                   /s](1000L/m3)(m/1000mm)
+      DIC_uptake_possible(k) = min( DIC_uptake_possible(k), 0.5d0*sedDIC*sed_layer_thickness(k)/dt) ! first order interpolation at low concentration limit to prevent overdraw
+    end do
 # endif
 
     ! DIC_uptake_possible(:)      [umol.DIC m-2.sg.hab s-1]   DIC uptake rate possible in each layer; 0 = water column, 1-Nsed = sediment layers
@@ -1271,13 +1288,16 @@ MODULE mod_seagrass
     ! k_lf_CHM                  [umol.CHM L-1]              Half saturation consentration of CHM in water column for growth
 
     ! [umol.CHM/m2.hab s]  = [umol.CHM/m2.lf s] [m2.lf/m2.hab] ( Michaelis-Menten term                      )
-    NO3_uptake_possible(0) = Lf_NO3_uptake_max * LAI           * ocean_NO3_conc(iNt) / (k_lf_NO3 + ocean_NO3_conc(iNt))
-    NH4_uptake_possible(0) = Lf_NH4_uptake_max * LAI           * ocean_NH4_conc(iNt) / (k_lf_NH4 + ocean_NH4_conc(iNt))
-    PO4_uptake_possible(0) = Lf_PO4_uptake_max * LAI           * ocean_PO4_conc(iPt) / (k_lf_PO4 + ocean_PO4_conc(iPt))
+    ocnNO3 = max( ocean_NO3_conc(iNt), 0.0d0 ) !!! <<<<<<<<<<<<<<<<< TN: added for safe calculation
+    ocnNH4 = max( ocean_NH4_conc(iNt), 0.0d0 ) !!! <<<<<<<<<<<<<<<<< TN: added for safe calculation
+    ocnPO4 = max( ocean_PO4_conc(iPt), 0.0d0 ) !!! <<<<<<<<<<<<<<<<< TN: added for safe calculation
+    NO3_uptake_possible(0) = Lf_NO3_uptake_max * LAI           * ocnNO3 / (k_lf_NO3 + ocnNO3)
+    NH4_uptake_possible(0) = Lf_NH4_uptake_max * LAI           * ocnNH4 / (k_lf_NH4 + ocnNH4)
+    PO4_uptake_possible(0) = Lf_PO4_uptake_max * LAI           * ocnPO4 / (k_lf_PO4 + ocnPO4)
     ! [umol.CHM/m2.hab s]  = min( [umol.CHM/m2.hab s]   ,      [umol.CHM/L]    [m/s](1000L/m3)
-    NO3_uptake_possible(0) = min( NO3_uptake_possible(0), 0.5d0*ocean_NO3_conc(iNt)*dz/dt*1000.0d0 ) ! first order interpolation at low concentration limit to prevent overdraw
-    NH4_uptake_possible(0) = min( NH4_uptake_possible(0), 0.5d0*ocean_NH4_conc(iNt)*dz/dt*1000.0d0 ) ! first order interpolation at low concentration limit to prevent overdraw
-    PO4_uptake_possible(0) = min( PO4_uptake_possible(0), 0.5d0*ocean_PO4_conc(iPt)*dz/dt*1000.0d0 ) ! first order interpolation at low concentration limit to prevent overdraw
+    NO3_uptake_possible(0) = min( NO3_uptake_possible(0), 0.5d0*ocnNO3*dz/dt*1000.0d0 ) ! first order interpolation at low concentration limit to prevent overdraw
+    NH4_uptake_possible(0) = min( NH4_uptake_possible(0), 0.5d0*ocnNH4*dz/dt*1000.0d0 ) ! first order interpolation at low concentration limit to prevent overdraw
+    PO4_uptake_possible(0) = min( PO4_uptake_possible(0), 0.5d0*ocnPO4*dz/dt*1000.0d0 ) ! first order interpolation at low concentration limit to prevent overdraw
 # endif
 
 # if defined SEAGRASS_ROOT_NUTRIENT_UPTAKE
@@ -1287,17 +1307,22 @@ MODULE mod_seagrass
     ! sed_CHM(Nsed)               [umol.CHM L-1]              CHM consentration of sediment (in each sediment layer)
     ! k_rt_CHM                    [umol.CHM L-1]              Half saturation consentration of CHM in soil pore water for growth
     ! [umol.CHM/m2.hab s]       = [umol.CHM/g.rt s] []                     [g.rt/m2.hab] []
-    NO3_uptake_possible(1:Nsed) = Rt_NO3_flux_max   * root_mass_profile(:) * RtDryBm     &
-      * ( sed_NO3(iNt,:) / (k_rt_NO3 + sed_NO3(iNt,:)) )
-    NH4_uptake_possible(1:Nsed) = Rt_NH4_flux_max   * root_mass_profile(:) * RtDryBm     &
-      * ( sed_NH4(iNt,:) / (k_rt_NH4 + sed_NH4(iNt,:)) )
-    PO4_uptake_possible(1:Nsed) = Rt_PO4_flux_max   * root_mass_profile(:) * RtDryBm     &
-      * ( sed_PO4(iPt,:) / (k_rt_PO4 + sed_PO4(iPt,:)) )
-    ! [umol.CHM/m2.hab s]       = min( [umol.CHM/m2.hab s]        ,      [umol.CHM/L] [mm                   /s](1000L/m3)(m/1000mm)
-    NO3_uptake_possible(1:Nsed) = min( NO3_uptake_possible(1:Nsed), 0.5d0*sed_NO3(iNt,:)*sed_layer_thickness(:)/dt) ! first order interpolation at low concentration limit to prevent overdraw
-    NH4_uptake_possible(1:Nsed) = min( NH4_uptake_possible(1:Nsed), 0.5d0*sed_NH4(iNt,:)*sed_layer_thickness(:)/dt) ! first order interpolation at low concentration limit to prevent overdraw
-    PO4_uptake_possible(1:Nsed) = min( PO4_uptake_possible(1:Nsed), 0.5d0*sed_PO4(iPt,:)*sed_layer_thickness(:)/dt) ! first order interpolation at low concentration limit to prevent overdraw
-    ! write(*,*) 'yt_debug: j = ', j, ( sed_PO4(1) )
+    do k=1,Nsed !!! <<<<<<<<<<<<<<<<< TN: added for safe calculation
+      sedNO3 = max(sed_NO3(iNt,k),0.0d0) !!! <<<<<<<<<<<<<<<<< TN: added for safe calculation
+      sedNH4 = max(sed_NH4(iNt,k),0.0d0) !!! <<<<<<<<<<<<<<<<< TN: added for safe calculation
+      sedPO4 = max(sed_PO4(iPt,k),0.0d0) !!! <<<<<<<<<<<<<<<<< TN: added for safe calculation
+      NO3_uptake_possible(k) = Rt_NO3_flux_max   * root_mass_profile(k) * RtDryBm     &
+        * ( sedNO3 / (k_rt_NO3 + sedNO3) )
+      NH4_uptake_possible(k) = Rt_NH4_flux_max   * root_mass_profile(k) * RtDryBm     &
+        * ( sedNH4 / (k_rt_NH4 + sedNH4) )
+      PO4_uptake_possible(k) = Rt_PO4_flux_max   * root_mass_profile(k) * RtDryBm     &
+        * ( sedPO4 / (k_rt_PO4 + sedPO4) )
+      ! [umol.CHM/m2.hab s]       = min( [umol.CHM/m2.hab s]        ,      [umol.CHM/L] [mm                   /s](1000L/m3)(m/1000mm)
+      NO3_uptake_possible(k) = min( NO3_uptake_possible(k), 0.5d0*sedNO3*sed_layer_thickness(k)/dt) ! first order interpolation at low concentration limit to prevent overdraw
+      NH4_uptake_possible(k) = min( NH4_uptake_possible(k), 0.5d0*sedNH4*sed_layer_thickness(k)/dt) ! first order interpolation at low concentration limit to prevent overdraw
+      PO4_uptake_possible(k) = min( PO4_uptake_possible(k), 0.5d0*sedPO4*sed_layer_thickness(k)/dt) ! first order interpolation at low concentration limit to prevent overdraw
+      ! write(*,*) 'yt_debug: j = ', j, ( sed_PO4(1) )
+    end do !!! <<<<<<<<<<<<<<<<< TN: added for safe calculation
 # endif
 
 # if defined SEAGRASS_LEAF_NUTRIENT_UPTAKE || defined SEAGRASS_ROOT_NUTRIENT_UPTAKE
@@ -2088,7 +2113,7 @@ MODULE mod_seagrass
       ! [mol.C] = [umol.C/m2.hab] [m2.hab]  (mol/1000000umol)
       TotSgCBm  = SgCBmF(iCt)     * HabArea * 0.000001d0
 
-
+      if(TotSgCBm>0) then
 ! allocate growth ------------------------------------------------------------------------------------
 
       ! TotLfCBm                    [mol.C.lf]                  Total seagrass leaf carbon-biomass in grid cell
@@ -2099,26 +2124,26 @@ MODULE mod_seagrass
       ! oldTotRtCBm                 [mol.C.rt]                  Old total seagrass root carbon-biomass in grid cell
       ! f_above                     [g.lf.drywt g-1.tot.drywt]  also [mol.C.lf mol-1.C.tot] Ideal above ground biomass to total biomass fraction  
       ! mass_to_allocate            [mol.C]                     mass to allocate in growth or death to either leaves or roots
-      mass_to_allocate = TotSgCBm - oldTotSgCBm
-      if (mass_to_allocate .ge. 0d0) then                                 ! if growth is positive 
-        if ((oldTotLfCBm + mass_to_allocate)/TotSgCBm .lt. f_above) then  !   if adding all growth to the leaves and f_above is still below ideal, 
-          TotLfCBm = oldTotLfCBm + mass_to_allocate                       !     add all growth to leaves
-        elseif ((oldTotLfCBm)/TotSgCBm .gt. f_above) then                 !   elif adding all growth to the roots and f_above is still above ideal, 
-          TotRtCBm = oldTotRtCBm + mass_to_allocate                       !     add all growth to roots
-        else                                                              !   else
-          TotLfCBm = f_above * TotSgCBm                                   !     add growth to leaves and roots to achieve ideal ratio 
-          TotRtCBm = TotSgCBm - TotLfCBm
+        mass_to_allocate = TotSgCBm - oldTotSgCBm
+        if (mass_to_allocate .ge. 0d0) then                                 ! if growth is positive 
+          if ((oldTotLfCBm + mass_to_allocate)/TotSgCBm .lt. f_above) then  !   if adding all growth to the leaves and f_above is still below ideal, 
+            TotLfCBm = oldTotLfCBm + mass_to_allocate                       !     add all growth to leaves
+          elseif ((oldTotLfCBm)/TotSgCBm .gt. f_above) then                 !   elif adding all growth to the roots and f_above is still above ideal, 
+            TotRtCBm = oldTotRtCBm + mass_to_allocate                       !     add all growth to roots
+          else                                                              !   else
+            TotLfCBm = f_above * TotSgCBm                                   !     add growth to leaves and roots to achieve ideal ratio 
+            TotRtCBm = TotSgCBm - TotLfCBm
+          endif
+        else                                                                ! if growth is negative (death)
+          if ((oldTotLfCBm + mass_to_allocate)/TotSgCBm .gt. f_above) then  !   if subtracting all death from the leaves and f_above is still above ideal, 
+            TotLfCBm = oldTotLfCBm + mass_to_allocate                       !     subtract all death from leaves
+          elseif ((oldTotLfCBm)/TotSgCBm .lt. f_above) then                 !   elif subtracting all death from the roots and f_above is still below ideal, 
+            TotRtCBm = oldTotRtCBm + mass_to_allocate                       !     subtract all death from roots
+          else                                                              !   else
+            TotLfCBm = f_above * TotSgCBm                                   !     subtract death from leaves and roots to achieve ideal ratio 
+            TotRtCBm = TotSgCBm - TotLfCBm
+          endif
         endif
-      else                                                                ! if growth is negative (death)
-        if ((oldTotLfCBm + mass_to_allocate)/TotSgCBm .gt. f_above) then  !   if subtracting all death from the leaves and f_above is still above ideal, 
-          TotLfCBm = oldTotLfCBm + mass_to_allocate                       !     subtract all death from leaves
-        elseif ((oldTotLfCBm)/TotSgCBm .lt. f_above) then                 !   elif subtracting all death from the roots and f_above is still below ideal, 
-          TotRtCBm = oldTotRtCBm + mass_to_allocate                       !     subtract all death from roots
-        else                                                              !   else
-          TotLfCBm = f_above * TotSgCBm                                   !     subtract death from leaves and roots to achieve ideal ratio 
-          TotRtCBm = TotSgCBm - TotLfCBm
-        endif
-      endif
 
       
 
@@ -2149,37 +2174,37 @@ MODULE mod_seagrass
       ! TotSgCBm / desiredHabArea = opt_sg_bed_C_density
       ! desiredHabArea = TotSgCBm / opt_sg_bed_C_density
 
-      desiredHabArea = TotSgCBm / (opt_sg_bed_density/SgMperC)
-
-      if ( (TotSgCBm / HabArea) .lt. (opt_sg_bed_density/SgMperC) ) then  ! if density is too low, then shrink hab area
-        ! [m2]               = [mol.C]             [m2/mol.C]
-        ! translocatableArea = translocatable_mass     / current_density
-        translocatableArea   = (TotSgCBm * trans_rate) / (TotSgCBm / HabArea)
-        if (HabArea - translocatableArea .lt. desiredHabArea) then
-          HabArea = desiredHabArea
-        else
-          HabArea = HabArea - translocatableArea
-        endif
-        if (HabArea .lt. 0d0) then 
-          HabArea = 0d0
-        endif
-      else                                                        ! if density is too high, then expand hab area
+        desiredHabArea = TotSgCBm / (opt_sg_bed_density/SgMperC)
+  
+        if ( (TotSgCBm / HabArea) .lt. (opt_sg_bed_density/SgMperC) ) then  ! if density is too low, then shrink hab area
+          ! [m2]               = [mol.C]             [m2/mol.C]
+          ! translocatableArea = translocatable_mass     / current_density
+          translocatableArea   = (TotSgCBm * trans_rate) / (TotSgCBm / HabArea)
+          if (HabArea - translocatableArea .lt. desiredHabArea) then
+            HabArea = desiredHabArea
+          else
+            HabArea = HabArea - translocatableArea
+          endif
+          if (HabArea .lt. 0d0) then 
+            HabArea = 0d0
+          endif
+        else                                                        ! if density is too high, then expand hab area
         ! [m2]               = [mol.C]             [m2/mol.C]
         ! translocatableArea = translocatable_mass     / optimal_density
-        translocatableArea   = (TotSgCBm * trans_rate) / (opt_sg_bed_density / SgMperC)
-        if (HabArea + translocatableArea .gt. desiredHabArea) then
-          HabArea = desiredHabArea
-        else
-          HabArea = HabArea + translocatableArea
+          translocatableArea   = (TotSgCBm * trans_rate) / (opt_sg_bed_density / SgMperC)
+          if (HabArea + translocatableArea .gt. desiredHabArea) then
+            HabArea = desiredHabArea
+          else
+            HabArea = HabArea + translocatableArea
+          endif
+          if (HabArea .gt. GridArea) then ! yt_edit need to fix this to interact with other habitat types
+            HabArea = GridArea
+          endif
         endif
-        if (HabArea .gt. GridArea) then ! yt_edit need to fix this to interact with other habitat types
-          HabArea = GridArea
-        endif
-      endif
 
       ! update seagrass fraction 
       ! p_sgrass(Nsg)               [m2.sg.hab m-2.grid]        (0~1)  Seagrass coverage (every species)
-      p_sgrass(species) = HabArea / GridArea ! yt_edit need to fix this to interact with other habitat types
+        p_sgrass(species) = HabArea / GridArea ! yt_edit need to fix this to interact with other habitat types
 # endif
 
 
@@ -2195,33 +2220,44 @@ MODULE mod_seagrass
       ! TotRtCBm                    [mol.C.rt]                  Total seagrass root carbon-biomass in grid cell
       ! f_above                     [g.lf.drywt g-1.tot.drywt]  also [mol.C.lf mol-1.C.tot] Ideal above ground biomass to total biomass fraction  
 
-      translocatable_mass = TotSgCBm * trans_rate
-
-      ! write(*,*) 'yt_debug: f_actual =', TotLfCBm / TotSgCBm, '   f_above =', f_above
-
-      if (TotLfCBm / TotSgCBm .lt. f_above) then                              ! translocate from root to leaf if leaf ratio is below optimum
-        if ( (TotLfCBm + translocatable_mass) / TotSgCBm .lt. f_above) then   ! if leaf needs more than translocatable amount
-          ! write(*,*) 'yt_debug: LEAF needs MORE than translocatable amount'
-          TotLfCBm = TotLfCBm + translocatable_mass
-        else                                                                  ! if leaf needs less than translocatable amount
-          ! write(*,*) 'yt_debug: LEAF needs LESS than translocatable amount'
-          TotLfCBm = TotSgCBm * f_above
+        translocatable_mass = TotSgCBm * trans_rate
+  
+        ! write(*,*) 'yt_debug: f_actual =', TotLfCBm / TotSgCBm, '   f_above =', f_above
+  
+        if (TotLfCBm / TotSgCBm .lt. f_above) then                              ! translocate from root to leaf if leaf ratio is below optimum
+          if ( (TotLfCBm + translocatable_mass) / TotSgCBm .lt. f_above) then   ! if leaf needs more than translocatable amount
+            ! write(*,*) 'yt_debug: LEAF needs MORE than translocatable amount'
+            TotLfCBm = TotLfCBm + translocatable_mass
+          else                                                                  ! if leaf needs less than translocatable amount
+            ! write(*,*) 'yt_debug: LEAF needs LESS than translocatable amount'
+            TotLfCBm = TotSgCBm * f_above
+          endif
+          TotRtCBm = TotSgCBm - TotLfCBm
+        else                                                                    ! translocate from leef to root if leaf ratio is above optimum
+          if ( (TotLfCBm - translocatable_mass) / TotSgCBm .gt. f_above) then   ! if root needs more than translocatable amount
+            ! write(*,*) 'yt_debug: ROOT needs MORE than translocatable amount'
+            TotRtCBm = TotRtCBm + translocatable_mass
+          else                                                                  ! if root needs less than translocatable amount
+            ! write(*,*) 'yt_debug: ROOT needs LESS than translocatable amount'
+            TotRtCBm = TotSgCBm * (1.0d0 - f_above)
+          endif
+          TotLfCBm = TotSgCBm - TotRtCBm
         endif
-        TotRtCBm = TotSgCBm - TotLfCBm
-      else                                                                    ! translocate from leef to root if leaf ratio is above optimum
-        if ( (TotLfCBm - translocatable_mass) / TotSgCBm .gt. f_above) then   ! if root needs more than translocatable amount
-          ! write(*,*) 'yt_debug: ROOT needs MORE than translocatable amount'
-          TotRtCBm = TotRtCBm + translocatable_mass
-        else                                                                  ! if root needs less than translocatable amount
-          ! write(*,*) 'yt_debug: ROOT needs LESS than translocatable amount'
-          TotRtCBm = TotSgCBm * (1.0d0 - f_above)
-        endif
-        TotLfCBm = TotSgCBm - TotRtCBm
-      endif
-
+  
       ! write(*,*) 'yt_debug: f_actual =', TotLfCBm / TotSgCBm, '   f_above =', f_above
       ! write(*,*) '  '
 
+      else !=== if TotSgCBm <=0 ========================================================
+        
+        SgCBmF(:) = 0.0d0
+        TotSgCBm  = 0.0d0
+        TotLfCBm  = 0.0d0
+        TotRtCBm  = 0.0d0
+# if defined DYNAMIC_COVERAGE
+        p_sgrass(species) = 0.0d0
+        HabArea           = 0.0d0
+# endif
+      endif
 
 ! update carbon-biomass per area ---------------------------------------------------------------------
 

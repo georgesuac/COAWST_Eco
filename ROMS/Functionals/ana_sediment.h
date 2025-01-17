@@ -429,8 +429,8 @@
           DO k=1,Nbed
              bed(i,j,k,iaged)=time(ng)
 #  ifdef SEDIMENT_ECOSYS
-             if(p_sand(i,j)>0.1_r8) then
-               bed(i,j,k,ithck)=0.1_r8   !10.0_r8
+             if(p_sand(i,j)>0.05_r8) then
+               bed(i,j,k,ithck)=0.1_r8*p_sand(i,j)   !10.0_r8
              else
                bed(i,j,k,ithck)=0.0_r8   !
              endif
