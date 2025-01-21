@@ -1264,8 +1264,8 @@
 #ifdef SEAGRASS
           DO m=1,Nsg
             OCEAN(ng)%HisBio2d(i,j, iSgSgCBm(1,m):iSgSgCBm(N_Csp,m) ) = SGRASS(ng)%SgCBmF(:,m,i,j)
-            OCEAN(ng)%HisBio2d(i,j, iSgSgNBm(1,m):iSgSgNBm(N_Nsp,m) ) = SGRASS(ng)%SgCBmF(:,m,i,j)
-            OCEAN(ng)%HisBio2d(i,j, iSgSgPBm(1,m):iSgSgPBm(N_Psp,m) ) = SGRASS(ng)%SgCBmF(:,m,i,j)
+            OCEAN(ng)%HisBio2d(i,j, iSgSgNBm(1,m):iSgSgNBm(N_Nsp,m) ) = SGRASS(ng)%SgNBmF(:,m,i,j)
+            OCEAN(ng)%HisBio2d(i,j, iSgSgPBm(1,m):iSgSgPBm(N_Psp,m) ) = SGRASS(ng)%SgPBmF(:,m,i,j)
             OCEAN(ng)%HisBio2d(i,j, iSgLfCBm      (m) ) = SGRASS(ng)%LfCBm      (m,i,j)
             OCEAN(ng)%HisBio2d(i,j, iSgRtCBm      (m) ) = SGRASS(ng)%RtCBm      (m,i,j)
             OCEAN(ng)%HisBio2d(i,j, iSgTotSgCBmS  (m) ) = SGRASS(ng)%TotSgCBm   (m,i,j)
