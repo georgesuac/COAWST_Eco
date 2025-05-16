@@ -98,6 +98,7 @@ MODULE mod_sedecosys
 # if defined SEAGRASS
 #  if defined SEAGRASS_ROOT_CARBON_OXYGEN_EXCHANGE
     real(8), pointer :: sg_dDIC_dt(:,:,:,:,:) ! (umol L-1 s-1) change in DIC due to flux from seagrass (positive means seagrass to sediment)
+    real(8), pointer :: sg_dDOC_dt(:,:,:,:,:) ! (umol L-1 s-1) change in DOC due to flux from seagrass (positive means seagrass to sediment)
     real(8), pointer :: sg_dO2_dt (:,:,:,:) ! (umol L-1 s-1) change in DO due to flux from seagrass (positive means seagrass to sediment)
 #  endif
 #  if defined SEAGRASS_ROOT_NUTRIENT_UPTAKE
@@ -175,6 +176,7 @@ CONTAINS
 # if defined SEAGRASS
 #  if defined SEAGRASS_ROOT_CARBON_OXYGEN_EXCHANGE
     allocate( SEDECO(ng)%sg_dDIC_dt(N_Csp,Nsed,Nsg,LBi:UBi,LBj:UBj) ) ! (umol L-1 s-1) change in DIC due to flux from seagrass (positive means seagrass to sediment)
+    allocate( SEDECO(ng)%sg_dDOC_dt(N_Csp,Nsed,Nsg,LBi:UBi,LBj:UBj) ) ! (umol L-1 s-1) change in DOC due to flux from seagrass (positive means seagrass to sediment)
     allocate( SEDECO(ng)%sg_dO2_dt       (Nsed,Nsg,LBi:UBi,LBj:UBj) ) ! (nmol g-1 s-1) change in DO due to flux from seagrass (positive means seagrass to sediment)
 #  endif
 #  if defined SEAGRASS_ROOT_NUTRIENT_UPTAKE
@@ -375,7 +377,7 @@ CONTAINS
           DO k=0,Nsed
             SEDECO(ng)%Tmp(k,i,j)  = 25.0d0     
             SEDECO(ng)%Sal(k,i,j)  = 34.0d0
-            SEDECO(ng)%O2 (k,i,j)  = 50.0d0        !DO  (umol L-1)
+            SEDECO(ng)%O2 (k,i,j)  =  0.0d0        !DO  (umol L-1)
             SEDECO(ng)%TA(k,i,j)  = 2232.0d0 ! TA (umol kg-1)
             cSO4 = 0.02824d0*34.0d0/35.0d0 *1.0d6  ! SO4 (umol L-1)
       
@@ -767,6 +769,7 @@ CONTAINS
     real(8) :: R_SO4(N_Ssp,Nsed)
 
     real(8) :: cff, cff2, cff3, cfdd, cfsd, cfss
+    real(8) :: pH, Wcal, Warg
 
 !!  Output ------------------------------------------------------------------
 # if defined SEDIMENT_TESTMODE
@@ -1292,6 +1295,10 @@ CONTAINS
         , R_H2S(:,k)        &   ! d[H2S]/dt (umol L-1 s-1)
         , R_S0(:,k)         &   ! d[S]/dt (nmol g(DW)-1 s-1) *solid
         , R_SO4(:,k)        &   ! d[SO42-]/dt (umol L-1 s-1)
+       ! output parameters
+        , pH                &   ! pH (total scale)
+        , Wcal              &   ! Calcite saturation state
+        , Warg              &   ! Aragonite saturation state
         )
 
     ENDDO
@@ -1307,6 +1314,7 @@ CONTAINS
       R_O2 (k) = R_O2 (k) + sum(SEDECO(ng)%sg_dO2_dt (k,:,i,j)) ! (umol L-1 s-1) change in DO  due to flux from seagrass (positive means seagrass to sediment)
       DO isp=1,N_Csp
         R_DIC(isp,k) = R_DIC(isp,k) + sum(SEDECO(ng)%sg_dDIC_dt(isp,k,:,i,j)) ! (umol L-1 s-1) change in DIC due to flux from seagrass (positive means seagrass to sediment)
+        R_DOC(isp,iLDOM,k) = R_DOC(isp,iLDOM,k) + sum(SEDECO(ng)%sg_dDOC_dt(isp,k,:,i,j)) ! (umol L-1 s-1) change in DOC due to flux from seagrass (positive means seagrass to sediment)
       ENDDO
 #  endif
 #  if defined SEAGRASS_ROOT_NUTRIENT_UPTAKE

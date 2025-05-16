@@ -152,6 +152,15 @@
           cff1 = 0.00000936_r8 * TaK*TaK              ! Swinbank (1963)
           cff2 = cff1*(1.0_r8+0.22_r8*cloud(i,j))     ! Ångström (1915)
           lrflx(i,j) = cff2 * StefBo*TaK*TaK*TaK*TaK
+# if defined JMAMSM_FLUXES
+          lrflx(i,j)=(lrflx(i,j)-16.7_r8)/0.977_r8  ! bias correction for JMAMSM
+# elif defined JMAOBS_FLUXES
+          lrflx(i,j)=(lrflx(i,j)+39.0_r8)/1.16_r8   ! bias correction for JMA weather station data
+# endif
+          lrflx(i,j)=cff*lrflx(i,j)
+        END DO
+      END DO
+      
 #elif defined ANA_LONGWAVE_DOWN_TVA
       DO j=JstrT,JendT
         DO i=IstrT,IendT
